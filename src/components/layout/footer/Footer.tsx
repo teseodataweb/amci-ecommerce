@@ -1,7 +1,6 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import Logo from "public/img/logo/logo.png";
+import AmciLogo from "@/components/layout/brand/AmciLogo";
 
 const Footer = () => {
   return (
@@ -15,14 +14,13 @@ const Footer = () => {
                 <div className="col-xl-5 col-lg-4 col-md-5 col-sm-6">
                   <div className="footer__widget mb-55">
                     <div className="footer__logo mb-20">
-                      <Link href="index.html">
-                        <Image src={Logo} alt="logo not found" />
-                      </Link>
+                      <AmciLogo size="small" />
                     </div>
                     <div className="footer__contact mb-30">
-                      <span>Boise, Idaho Office</span>
-                      <span>1150 W. State Street, Suite 240,</span>
-                      <span>Boise, Idaho 83702 USA</span>
+                      <span>AMCI - Suministros Industriales</span>
+                      <span>Ciudad de México, México</span>
+                      <span>soporte@amci.com</span>
+                      <span>+52 55 1234 5678</span>
                     </div>
                     <div className="touch__social">
                       <Link href="/">
@@ -43,24 +41,21 @@ const Footer = () => {
                 <div className="col-xl-2 col-lg-2 col-md-4 col-sm-6">
                   <div className="footer__widget footer__col-1 mb-55">
                     <div className="footer__title">
-                      <h3>About us</h3>
+                      <h3>Empresa</h3>
                     </div>
                     <div className="footer__link">
                       <ul>
                         <li>
-                          <Link href="/">About Us</Link>
+                          <Link href="/about">Nosotros</Link>
                         </li>
                         <li>
-                          <Link href="/">Community Blog</Link>
+                          <Link href="/catalogo">Catálogo</Link>
                         </li>
                         <li>
-                          <Link href="/">Rewards</Link>
+                          <Link href="/contact">Contacto</Link>
                         </li>
                         <li>
-                          <Link href="/">Work with Us</Link>
-                        </li>
-                        <li>
-                          <Link href="/">Contact Us</Link>
+                          <Link href="/panel/proveedor">Ser Proveedor</Link>
                         </li>
                       </ul>
                     </div>
@@ -69,24 +64,21 @@ const Footer = () => {
                 <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6">
                   <div className="footer__widget footer__col-5 mb-55">
                     <div className="footer__title">
-                      <h3>Explore Softim</h3>
+                      <h3>Soporte</h3>
                     </div>
                     <div className="footer__link">
                       <ul>
                         <li>
-                          <Link href="/">Account</Link>
+                          <Link href="/panel/cliente">Mi Cuenta</Link>
                         </li>
                         <li>
-                          <Link href="/">Privacy Policy</Link>
+                          <Link href="/ordenes">Mis Órdenes</Link>
                         </li>
                         <li>
-                          <Link href="/">Affilitate </Link>
+                          <Link href="/contact">Ayuda</Link>
                         </li>
                         <li>
-                          <Link href="/">Program</Link>
-                        </li>
-                        <li>
-                          <Link href="/">Our Partner</Link>
+                          <Link href="/carrito">Carrito</Link>
                         </li>
                       </ul>
                     </div>
@@ -95,24 +87,18 @@ const Footer = () => {
                 <div className="col-xl-2 col-lg-3 col-md-6 col-sm-6">
                   <div className="footer__widget footer__col-6 mb-55">
                     <div className="footer__title">
-                      <h3>Quick lInks</h3>
+                      <h3>Legal</h3>
                     </div>
                     <div className="footer__link">
                       <ul>
                         <li>
-                          <Link href="/">About us</Link>
+                          <Link href="/terminos">Términos y Condiciones</Link>
                         </li>
                         <li>
-                          <Link href="/">News & press</Link>
+                          <Link href="/privacidad">Política de Privacidad</Link>
                         </li>
                         <li>
-                          <Link href="/">Blog</Link>
-                        </li>
-                        <li>
-                          <Link href="/">FAQs</Link>
-                        </li>
-                        <li>
-                          <Link href="/">Careers</Link>
+                          <Link href="/disclaimer">Exención de Responsabilidad</Link>
                         </li>
                       </ul>
                     </div>
@@ -124,7 +110,12 @@ const Footer = () => {
               <div className="col-12">
                 <div className="footer__copyright">
                   <div className="copyright__text text-center">
-                    <p>Copyright © 2023 Digitek All Rights Reserved.</p>
+                    <p>Copyright © 2024 AMCI - Suministros Industriales. Todos los derechos reservados.</p>
+                    <p className="mt-2">
+                      <Link href="/terminos" className="text-muted me-3">Términos</Link>
+                      <Link href="/privacidad" className="text-muted me-3">Privacidad</Link>
+                      <Link href="/disclaimer" className="text-muted">Disclaimer</Link>
+                    </p>
                   </div>
                 </div>
               </div>

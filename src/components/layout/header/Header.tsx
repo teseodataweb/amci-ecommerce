@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
-import Image from "next/image";
-
-import Logo from "public/img/logo/logo.png";
+import AmciLogo from "@/components/layout/brand/AmciLogo";
 
 const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -68,9 +66,7 @@ const Header = () => {
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
-                  <Link href="/">
-                    <Image src={Logo} alt="logo not found" priority />
-                  </Link>
+                  <AmciLogo size="medium" />
                 </div>
                 <div className="offcanvas__close">
                   <button
@@ -103,88 +99,45 @@ const Header = () => {
                           className={`nul ${isSubMenuButton("home")}`}
                           onClick={() => handleSubmenu("home")}
                         >
-                          Home
+                          Inicio
                           <span className="mean-expand">
                             <i className="fal fa-plus"></i>
                           </span>
                         </button>
-                        <ul className={`sub-menu ${isSubMenuOpen("home")}`}>
-                          <li>
-                            <Link href="/">SEO Agency 01</Link>
-                          </li>
-                          <li>
-                            <Link href="/index-2">Digital Agency</Link>
-                          </li>
-                          <li>
-                            <Link href="/index-3">SEO Agency 02</Link>
-                          </li>
-                          <li>
-                            <Link href="/index-4">Creative Agency</Link>
-                          </li>
-                        </ul>
                       </li>
                       <li>
-                        <Link href="/about">About</Link>
+                        <Link href="/about">Nosotros</Link>
                       </li>
                       <li>
-                        <Link href="/service">Services</Link>
-                      </li>
-                      <li>
-                        <Link href="/project">Portfolio</Link>
+                        <Link href="/catalogo">Catálogo</Link>
                       </li>
                       <li className="has-dropdown">
                         <button
-                          className={`${isSubMenuButton("pages")}`}
-                          onClick={() => handleSubmenu("pages")}
+                          className={`${isSubMenuButton("cuenta")}`}
+                          onClick={() => handleSubmenu("cuenta")}
                         >
-                          Pages
+                          Mi Cuenta
                           <span className="mean-expand">
                             <i className="fal fa-plus"></i>
                           </span>
                         </button>
-                        <ul className={`sub-menu ${isSubMenuOpen("pages")}`}>
-                          <li className="has-dropdown">
-                            <Link href="/about">about us</Link>
+                        <ul className={`sub-menu ${isSubMenuOpen("cuenta")}`}>
+                          <li>
+                            <Link href="/ordenes">Mis Órdenes</Link>
                           </li>
                           <li>
-                            <Link href="/service">service</Link>
+                            <Link href="/panel/proveedor">Panel Proveedor</Link>
                           </li>
                           <li>
-                            <Link href="/technical">Technical</Link>
-                          </li>
-                          <li>
-                            <Link href="/project">Portfolio</Link>
-                          </li>
-                          <li>
-                            <Link href="/analys">Analys</Link>
-                          </li>
-                          <li>
-                            <Link href="/team">team</Link>
+                            <Link href="/panel/admin">Panel Admin</Link>
                           </li>
                         </ul>
                       </li>
-                      <li className="has-dropdown">
-                        <button
-                          aria-label="select dropdown"
-                          className={`${isSubMenuButton("blog")}`}
-                          onClick={() => handleSubmenu("blog")}
-                        >
-                          Blog
-                          <span className="mean-expand">
-                            <i className="fal fa-plus"></i>
-                          </span>
-                        </button>
-                        <ul className={`sub-menu ${isSubMenuOpen("blog")}`}>
-                          <li>
-                            <Link href="/blog">blog</Link>
-                          </li>
-                          <li>
-                            <Link href="/blog-details">blog Details</Link>
-                          </li>
-                        </ul>
+                      <li>
+                        <Link href="/carrito">Carrito</Link>
                       </li>
                       <li className="mean-last">
-                        <Link href="/contact">Contact</Link>
+                        <Link href="/contact">Contacto</Link>
                       </li>
                     </ul>
                   </nav>
@@ -274,9 +227,7 @@ const Header = () => {
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-2 col-6">
                 <div className="header__logo">
-                  <Link href="/">
-                    <Image src={Logo} alt="logo not found" priority />
-                  </Link>
+                  <AmciLogo size="medium" />
                 </div>
               </div>
               <div className="col-xl-8 col-lg-8 d-none d-lg-block">
@@ -284,69 +235,34 @@ const Header = () => {
                   <div className="main-menu main-menu-3 d-none d-lg-block">
                     <nav id="mobile-menu">
                       <ul>
+                        <li>
+                          <Link href="/">Inicio</Link>
+                        </li>
+                        <li>
+                          <Link href="/about">Nosotros</Link>
+                        </li>
+                        <li>
+                          <Link href="/catalogo">Catálogo</Link>
+                        </li>
+                        <li>
+                          <Link href="/service">Servicios</Link>
+                        </li>
                         <li className="has-dropdown">
-                          <button aria-label="Select dropdown">Home</button>
+                          <button aria-label="Select Dropdown">Mi Cuenta</button>
                           <ul className="submenu">
                             <li>
-                              <Link href="/">SEO Agency 01</Link>
+                              <Link href="/ordenes">Mis Órdenes</Link>
                             </li>
                             <li>
-                              <Link href="/index-2">Digital Agency</Link>
+                              <Link href="/panel/proveedor">Panel Proveedor</Link>
                             </li>
                             <li>
-                              <Link href="/index-3">SEO Agency 02</Link>
-                            </li>
-                            <li>
-                              <Link href="/index-4">Creative Agency</Link>
+                              <Link href="/panel/admin">Panel Admin</Link>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <Link href="/about">About</Link>
-                        </li>
-                        <li>
-                          <Link href="/service">Services</Link>
-                        </li>
-
-                        <li>
-                          <Link href="/project">Portfolio</Link>
-                        </li>
-                        <li className="has-dropdown">
-                          <button aria-label="Select Dropdown">Pages</button>
-                          <ul className="submenu">
-                            <li className="has-dropdown">
-                              <Link href="about">about us</Link>
-                            </li>
-                            <li>
-                              <Link href="/service">service</Link>
-                            </li>
-                            <li>
-                              <Link href="/technical">Technical</Link>
-                            </li>
-                            <li>
-                              <Link href="/project">Portfolio</Link>
-                            </li>
-                            <li>
-                              <Link href="/analys">Analys</Link>
-                            </li>
-                            <li>
-                              <Link href="/team">team</Link>
-                            </li>
-                          </ul>
-                        </li>
-                        <li className="has-dropdown">
-                          <button aria-label="Select Dropdown">Blog</button>
-                          <ul className="submenu">
-                            <li>
-                              <Link href="/blog">blog</Link>
-                            </li>
-                            <li>
-                              <Link href="/blog-details">blog Details</Link>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <Link href="/contact">Contact</Link>
+                          <Link href="/contact">Contacto</Link>
                         </li>
                       </ul>
                     </nav>
@@ -355,9 +271,25 @@ const Header = () => {
               </div>
               <div className="col-xl-2 col-lg-2 col-6">
                 <div className="header__right d-flex align-items-center justify-content-end">
+                  <div className="header__cart me-3">
+                    <Link href="/carrito" className="cart-icon position-relative">
+                      <i className="fal fa-shopping-cart fs-4"></i>
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        0
+                      </span>
+                    </Link>
+                  </div>
                   <div className="header__btn d-none d-xl-block">
-                    <Link className="border__btn s-3" href="/contact">
-                      GET STARTED
+                    <Link className="border__btn s-3" href="/catalogo">
+                      VER CATÁLOGO
+                    </Link>
+                  </div>
+                  <div className="header__cart d-xl-none me-2">
+                    <Link href="/carrito" className="cart-icon position-relative">
+                      <i className="fal fa-shopping-cart fs-5"></i>
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        0
+                      </span>
                     </Link>
                   </div>
                   <div className="header__toggle d-xl-none">

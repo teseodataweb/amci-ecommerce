@@ -1,0 +1,340 @@
+// AMCI Brand Theme Variables
+// ==============================================
+
+// Primary brand colors
+:root {
+  // AMCI Primary Colors
+  --amci-primary: #1e40af;        // Blue primary
+  --amci-primary-dark: #1e3a8a;   // Darker blue for hover
+  --amci-primary-light: #3b82f6;  // Light blue for accents
+  
+  // AMCI Secondary Colors  
+  --amci-secondary: #059669;      // Green secondary
+  --amci-secondary-dark: #047857; // Dark green
+  --amci-secondary-light: #10b981; // Light green
+  
+  // AMCI Accent Colors
+  --amci-warning: #f59e0b;        // Orange/yellow for alerts
+  --amci-danger: #dc2626;         // Red for errors
+  --amci-info: #0ea5e9;           // Light blue for info
+  --amci-success: #059669;        // Green for success (same as secondary)
+  
+  // AMCI Neutral Colors
+  --amci-gray-50: #f9fafb;
+  --amci-gray-100: #f3f4f6;
+  --amci-gray-200: #e5e7eb;
+  --amci-gray-300: #d1d5db;
+  --amci-gray-400: #9ca3af;
+  --amci-gray-500: #6b7280;
+  --amci-gray-600: #4b5563;
+  --amci-gray-700: #374151;
+  --amci-gray-800: #1f2937;
+  --amci-gray-900: #111827;
+  
+  // AMCI Text Colors
+  --amci-text-primary: #1f2937;   // Dark gray for main text
+  --amci-text-secondary: #4b5563; // Medium gray for secondary text
+  --amci-text-muted: #6b7280;     // Light gray for muted text
+  --amci-text-light: #9ca3af;     // Very light gray
+  
+  // AMCI Background Colors
+  --amci-bg-primary: #ffffff;     // White background
+  --amci-bg-secondary: #f9fafb;   // Light gray background
+  --amci-bg-dark: #1f2937;        // Dark background for contrasts
+  
+  // AMCI Border Colors
+  --amci-border-light: #e5e7eb;   // Light borders
+  --amci-border-medium: #d1d5db;  // Medium borders
+  --amci-border-dark: #9ca3af;    // Dark borders
+  
+  // AMCI Industrial Theme Colors
+  --amci-industrial-orange: #ea580c;  // Industrial orange
+  --amci-industrial-steel: #64748b;   // Steel gray
+  --amci-industrial-yellow: #eab308;  // Safety yellow
+}
+
+// Override Bootstrap variables for AMCI theme
+$primary: var(--amci-primary);
+$secondary: var(--amci-secondary);
+$success: var(--amci-success);
+$info: var(--amci-info);
+$warning: var(--amci-warning);
+$danger: var(--amci-danger);
+$light: var(--amci-gray-100);
+$dark: var(--amci-gray-800);
+
+// AMCI Button Styles
+.btn-amci-primary {
+  background-color: var(--amci-primary);
+  border-color: var(--amci-primary);
+  color: white;
+  
+  &:hover {
+    background-color: var(--amci-primary-dark);
+    border-color: var(--amci-primary-dark);
+    color: white;
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+  }
+}
+
+.btn-amci-secondary {
+  background-color: var(--amci-secondary);
+  border-color: var(--amci-secondary);
+  color: white;
+  
+  &:hover {
+    background-color: var(--amci-secondary-dark);
+    border-color: var(--amci-secondary-dark);
+    color: white;
+  }
+}
+
+// AMCI Text Colors
+.text-amci-primary { color: var(--amci-primary) !important; }
+.text-amci-secondary { color: var(--amci-secondary) !important; }
+.text-amci-muted { color: var(--amci-text-muted) !important; }
+
+// AMCI Background Colors
+.bg-amci-primary { background-color: var(--amci-primary) !important; }
+.bg-amci-secondary { background-color: var(--amci-secondary) !important; }
+.bg-amci-light { background-color: var(--amci-bg-secondary) !important; }
+
+// AMCI Border Colors
+.border-amci-primary { border-color: var(--amci-primary) !important; }
+.border-amci-secondary { border-color: var(--amci-secondary) !important; }
+
+// AMCI Card Styles
+.card-amci {
+  border: 1px solid var(--amci-border-light);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+// AMCI Header specific styles
+.header__area-3 {
+  .border__btn.s-3 {
+    background-color: var(--amci-primary);
+    border-color: var(--amci-primary);
+    color: white;
+    
+    &:hover {
+      background-color: var(--amci-primary-dark);
+      border-color: var(--amci-primary-dark);
+      color: white;
+    }
+  }
+}
+
+// AMCI Footer styles
+footer {
+  .footer__border {
+    background-color: var(--amci-gray-800);
+    color: var(--amci-gray-200);
+  }
+  
+  .footer__title h3 {
+    color: var(--amci-primary-light);
+  }
+  
+  .footer__link a {
+    color: var(--amci-gray-300);
+    
+    &:hover {
+      color: var(--amci-primary-light);
+    }
+  }
+}
+
+// AMCI Product Cards
+.product__item {
+  @extend .card-amci;
+  
+  .product__title a {
+    color: var(--amci-text-primary);
+    text-decoration: none;
+    
+    &:hover {
+      color: var(--amci-primary);
+    }
+  }
+  
+  .current-price {
+    color: var(--amci-secondary) !important;
+  }
+  
+  .quote-price {
+    color: var(--amci-warning) !important;
+  }
+}
+
+// AMCI Form styles
+.form-control {
+  border-color: var(--amci-border-light);
+  
+  &:focus {
+    border-color: var(--amci-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+  }
+}
+
+.form-select {
+  border-color: var(--amci-border-light);
+  
+  &:focus {
+    border-color: var(--amci-primary);
+    box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+  }
+}
+
+// AMCI Table styles
+.table {
+  th {
+    background-color: var(--amci-bg-secondary);
+    color: var(--amci-text-primary);
+    border-color: var(--amci-border-light);
+  }
+  
+  td {
+    border-color: var(--amci-border-light);
+  }
+  
+  &.table-hover tbody tr:hover {
+    background-color: var(--amci-gray-50);
+  }
+}
+
+// AMCI Badge styles
+.badge {
+  &.bg-primary { background-color: var(--amci-primary) !important; }
+  &.bg-secondary { background-color: var(--amci-secondary) !important; }
+  &.bg-warning { background-color: var(--amci-warning) !important; }
+  &.bg-danger { background-color: var(--amci-danger) !important; }
+  &.bg-info { background-color: var(--amci-info) !important; }
+  &.bg-success { background-color: var(--amci-success) !important; }
+}
+
+// AMCI Alert styles
+.alert {
+  &.alert-primary {
+    background-color: rgba(30, 64, 175, 0.1);
+    border-color: var(--amci-primary);
+    color: var(--amci-primary-dark);
+  }
+  
+  &.alert-success {
+    background-color: rgba(5, 150, 105, 0.1);
+    border-color: var(--amci-secondary);
+    color: var(--amci-secondary-dark);
+  }
+  
+  &.alert-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-color: var(--amci-warning);
+    color: #92400e;
+  }
+  
+  &.alert-danger {
+    background-color: rgba(220, 38, 38, 0.1);
+    border-color: var(--amci-danger);
+    color: #991b1b;
+  }
+  
+  &.alert-info {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-color: var(--amci-info);
+    color: #0369a1;
+  }
+}
+
+// AMCI Typography
+.hero__title {
+  font-weight: 700;
+  color: var(--amci-text-primary);
+}
+
+.section__title h2 {
+  color: var(--amci-text-primary);
+  font-weight: 600;
+}
+
+.provider__name {
+  color: var(--amci-primary);
+  font-weight: 600;
+}
+
+.feature__title {
+  color: var(--amci-text-primary);
+  font-weight: 600;
+}
+
+// AMCI Logo text styles (temporary until we get the actual logo)
+.amci-logo-text {
+  font-family: 'Arial', sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--amci-primary);
+  text-decoration: none;
+  
+  &:hover {
+    color: var(--amci-primary-dark);
+    text-decoration: none;
+  }
+}
+
+// AMCI Status badges
+.status-badge {
+  &.status-recibido { background-color: var(--amci-info) !important; }
+  &.status-confirmado { background-color: var(--amci-warning) !important; }
+  &.status-enviado { background-color: var(--amci-primary) !important; }
+  &.status-entregado { background-color: var(--amci-success) !important; }
+  &.status-cerrado { background-color: var(--amci-gray-500) !important; }
+  &.status-cancelado { background-color: var(--amci-danger) !important; }
+}
+
+// AMCI Industrial theme elements
+.provider__icon i {
+  color: var(--amci-industrial-orange);
+}
+
+.feature__icon i {
+  color: var(--amci-primary);
+}
+
+.stat-number {
+  font-weight: 700;
+  color: var(--amci-primary);
+}
+
+// AMCI specific spacing
+.section-spacing {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+// AMCI Cart icon styles
+.cart-icon {
+  color: var(--amci-primary);
+  text-decoration: none;
+  
+  &:hover {
+    color: var(--amci-primary-dark);
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
