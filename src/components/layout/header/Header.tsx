@@ -244,9 +244,6 @@ const Header = () => {
                         <li>
                           <Link href="/catalogo">Catálogo</Link>
                         </li>
-                        <li>
-                          <Link href="/service">Servicios</Link>
-                        </li>
                         <li className="has-dropdown">
                           <button aria-label="Select Dropdown">Mi Cuenta</button>
                           <ul className="submenu">
