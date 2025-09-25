@@ -1,86 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
 
 interface Product {
-  id: number;
+  id: string;
   nombre: string;
-  categoria: string;
-  proveedor: string;
-  precio: number | null;
-  precio_modo: 'precio' | 'cotizar';
-  imagen: string;
   descripcion: string;
+  precio: number | null;
+  pricing_mode: 'PRECIO' | 'COTIZAR';
+  stock: number;
+  slug: string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  provider: {
+    id: string;
+    razon_social: string;
+  };
+  images: Array<{
+    id: string;
+    url: string;
+    alt: string;
+  }>;
+}
+
+interface Category {
+  id: string;
+  name: string;
   slug: string;
 }
 
-const sampleProducts: Product[] = [
-  {
-    id: 1,
-    nombre: "Kit EPP Básico - 1 Persona",
-    categoria: "Seguridad",
-    proveedor: "AP Safety",
-    precio: 450,
-    precio_modo: 'precio',
-    imagen: "/img/products/epp-kit-1.jpg",
-    descripcion: "Kit básico de equipo de protección personal para 1 persona",
-    slug: "kit-epp-basico-1-persona"
-  },
-  {
-    id: 2,
-    nombre: "Bomba Sumergible Industrial",
-    categoria: "Equipos",
-    proveedor: "Pumping Team",
-    precio: null,
-    precio_modo: 'cotizar',
-    imagen: "/img/products/bomba-sumergible.jpg",
-    descripcion: "Bomba sumergible de alta capacidad para uso industrial",
-    slug: "bomba-sumergible-industrial"
-  },
-  {
-    id: 3,
-    nombre: "Refacciones Hidráulicas",
-    categoria: "Refacciones",
-    proveedor: "MTM",
-    precio: 250,
-    precio_modo: 'precio',
-    imagen: "/img/products/refacciones-hidraulicas.jpg",
-    descripcion: "Conjunto de refacciones para sistemas hidráulicos",
-    slug: "refacciones-hidraulicas"
-  },
-  {
-    id: 4,
-    nombre: "Plafones LED Pack x10",
-    categoria: "Iluminación",
-    proveedor: "Plásticos Torres",
-    precio: 1200,
-    precio_modo: 'precio',
-    imagen: "/img/products/plafones-led.jpg",
-    descripcion: "Pack de 10 plafones LED de alta eficiencia",
-    slug: "plafones-led-pack-10"
-  }
-];
-
 const Catalogo = () => {
-  const [products] = useState<Product[]>(sampleProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categoria: '',
-    proveedor: '',
-    precio_modo: '',
-    busqueda: ''
+    busqueda: '',
+    pricing_mode: ''
   });
 
-  const categorias = [...new Set(products.map(p => p.categoria))];
-  const proveedores = [...new Set(products.map(p => p.proveedor))];
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts();
+  }, [filters]);
 
-  const filteredProducts = products.filter(product => {
-    return (
-      (filters.categoria === '' || product.categoria === filters.categoria) &&
-      (filters.proveedor === '' || product.proveedor === filters.proveedor) &&
-      (filters.precio_modo === '' || product.precio_modo === filters.precio_modo) &&
-      (filters.busqueda === '' || product.nombre.toLowerCase().includes(filters.busqueda.toLowerCase()))
-    );
-  });
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/categories');
+      const data = await response.json();
+      if (data.categories) {
+        setCategories(data.categories);
+      }
+    } catch (error) {
+      console.error('Error al cargar categorías:', error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const queryParams = new URLSearchParams();
+      if (filters.categoria) queryParams.append('category', filters.categoria);
+      if (filters.busqueda) queryParams.append('search', filters.busqueda);
+      if (filters.pricing_mode) queryParams.append('pricing_mode', filters.pricing_mode);
+
+      const response = await fetch(`/api/products?${queryParams.toString()}`);
+      const data = await response.json();
+
+      if (data.products) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -116,44 +114,29 @@ const Catalogo = () => {
                   {/* Categoría */}
                   <div className="filter__group mb-30">
                     <h5>Categoría</h5>
-                    <select 
+                    <select
                       className="form-select"
                       value={filters.categoria}
                       onChange={(e) => handleFilterChange('categoria', e.target.value)}
                     >
                       <option value="">Todas las categorías</option>
-                      {categorias.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.slug}>{cat.name}</option>
                       ))}
                     </select>
                   </div>
-                  
-                  {/* Proveedor */}
-                  <div className="filter__group mb-30">
-                    <h5>Proveedor</h5>
-                    <select 
-                      className="form-select"
-                      value={filters.proveedor}
-                      onChange={(e) => handleFilterChange('proveedor', e.target.value)}
-                    >
-                      <option value="">Todos los proveedores</option>
-                      {proveedores.map(prov => (
-                        <option key={prov} value={prov}>{prov}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
+
                   {/* Tipo de precio */}
                   <div className="filter__group mb-30">
                     <h5>Disponibilidad</h5>
-                    <select 
+                    <select
                       className="form-select"
-                      value={filters.precio_modo}
-                      onChange={(e) => handleFilterChange('precio_modo', e.target.value)}
+                      value={filters.pricing_mode}
+                      onChange={(e) => handleFilterChange('pricing_mode', e.target.value)}
                     >
                       <option value="">Todos</option>
-                      <option value="precio">Con precio</option>
-                      <option value="cotizar">Solo cotizar</option>
+                      <option value="PRECIO">Con precio</option>
+                      <option value="COTIZAR">Solo cotizar</option>
                     </select>
                   </div>
                 </div>
@@ -162,84 +145,98 @@ const Catalogo = () => {
             
             {/* Productos */}
             <div className="col-xl-9 col-lg-8">
-              <div className="catalog__results mb-40">
-                <h4>Mostrando {filteredProducts.length} productos</h4>
-              </div>
-              
-              <div className="row">
-                {filteredProducts.map(product => (
-                  <div key={product.id} className="col-xl-4 col-md-6 mb-40">
-                    <div className="product__item card h-100">
-                      <div className="product__thumb">
-                        <img 
-                          src={product.imagen} 
-                          alt={product.nombre}
-                          className="card-img-top"
-                          style={{ height: '200px', objectFit: 'cover' }}
-                        />
-                        <div className="product__badges">
-                          {product.precio_modo === 'cotizar' && (
-                            <span className="badge bg-warning">Cotizar</span>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="card-body d-flex flex-column">
-                        <div className="product__content flex-grow-1">
-                          <span className="product__category text-muted small">
-                            {product.categoria} • {product.proveedor}
-                          </span>
-                          <h5 className="product__title mt-2">
-                            <a href={`/producto/${product.slug}`}>
-                              {product.nombre}
-                            </a>
-                          </h5>
-                          <p className="product__desc text-muted">
-                            {product.descripcion}
-                          </p>
-                        </div>
-                        
-                        <div className="product__meta mt-auto">
-                          <div className="product__price mb-3">
-                            {product.precio_modo === 'precio' ? (
-                              <span className="current-price h5 text-primary">
-                                ${product.precio?.toLocaleString('es-MX')} MXN
-                              </span>
-                            ) : (
-                              <span className="quote-price h5 text-warning">
-                                Solicitar cotización
-                              </span>
-                            )}
-                          </div>
-                          
-                          <div className="product__btn">
-                            {product.precio_modo === 'precio' ? (
-                              <button className="btn btn-primary w-100">
-                                <i className="fal fa-shopping-cart me-2"></i>
-                                Agregar al carrito
-                              </button>
-                            ) : (
-                              <a 
-                                href={`/producto/${product.slug}`}
-                                className="btn btn-outline-warning w-100"
-                              >
-                                <i className="fal fa-envelope me-2"></i>
-                                Solicitar cotización
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {filteredProducts.length === 0 && (
+              {loading ? (
                 <div className="text-center py-5">
-                  <h4>No se encontraron productos</h4>
-                  <p>Intenta ajustar los filtros de búsqueda</p>
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                  <p className="mt-2">Cargando productos...</p>
                 </div>
+              ) : (
+                <>
+                  <div className="catalog__results mb-40">
+                    <h4>Mostrando {products.length} productos</h4>
+                  </div>
+
+                  <div className="row">
+                    {products.map(product => (
+                      <div key={product.id} className="col-xl-4 col-md-6 mb-40">
+                        <div className="product__item card h-100">
+                          <div className="product__thumb">
+                            <img
+                              src={product.images?.[0]?.url || 'https://via.placeholder.com/300x200?text=Sin+Imagen'}
+                              alt={product.images?.[0]?.alt || product.nombre}
+                              className="card-img-top"
+                              style={{ height: '200px', objectFit: 'cover' }}
+                            />
+                            <div className="product__badges">
+                              {product.pricing_mode === 'COTIZAR' && (
+                                <span className="badge bg-warning">Cotizar</span>
+                              )}
+                              {product.stock > 0 && product.pricing_mode === 'PRECIO' && (
+                                <span className="badge bg-success">En stock</span>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="card-body d-flex flex-column">
+                            <div className="product__content flex-grow-1">
+                              <span className="product__category text-muted small">
+                                {product.category?.name} • {product.provider?.razon_social}
+                              </span>
+                              <h5 className="product__title mt-2">
+                                <a href={`/producto/${product.slug}`}>
+                                  {product.nombre}
+                                </a>
+                              </h5>
+                              <p className="product__desc text-muted">
+                                {product.descripcion}
+                              </p>
+                            </div>
+
+                            <div className="product__meta mt-auto">
+                              <div className="product__price mb-3">
+                                {product.pricing_mode === 'PRECIO' ? (
+                                  <span className="current-price h5 text-primary">
+                                    ${product.precio?.toLocaleString('es-MX')} MXN
+                                  </span>
+                                ) : (
+                                  <span className="quote-price h5 text-warning">
+                                    Solicitar cotización
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="product__btn">
+                                {product.pricing_mode === 'PRECIO' ? (
+                                  <button className="btn btn-primary w-100">
+                                    <i className="fal fa-shopping-cart me-2"></i>
+                                    Agregar al carrito
+                                  </button>
+                                ) : (
+                                  <a
+                                    href={`/producto/${product.slug}`}
+                                    className="btn btn-outline-warning w-100"
+                                  >
+                                    <i className="fal fa-envelope me-2"></i>
+                                    Solicitar cotización
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {products.length === 0 && (
+                    <div className="text-center py-5">
+                      <h4>No se encontraron productos</h4>
+                      <p>Intenta ajustar los filtros de búsqueda</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

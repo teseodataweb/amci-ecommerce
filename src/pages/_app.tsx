@@ -11,6 +11,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import type { AppProps } from "next/app";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,7 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <Suspense>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </Suspense>
   );
 }

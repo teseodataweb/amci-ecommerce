@@ -1,0 +1,358 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enum para roles de usuario
+enum UserRole {
+  CLIENTE
+  PROVEEDOR
+  ADMIN
+}
+
+// Enum para estados de orden
+enum OrderStatus {
+  RECIBIDO
+  CONFIRMADO
+  ENVIADO
+  ENTREGADO
+  CERRADO
+  CANCELADO
+  DEVUELTO
+}
+
+// Enum para modo de precio
+enum PricingMode {
+  PRECIO
+  COTIZAR
+}
+
+// Enum para emisor de factura
+enum InvoiceIssuer {
+  AMCI
+  PROVEEDOR
+}
+
+// Tabla de usuarios (autenticación con Supabase Auth)
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String?
+  phone        String?
+  role         UserRole  @default(CLIENTE)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relaciones
+  proveedor    Provider?  @relation("UserProvider")
+  ordersAsClient Order[]  @relation("ClientOrders")
+  addresses    Address[]
+  cart         CartItem[]
+
+  @@map("users")
+}
+
+// Tabla de proveedores
+model Provider {
+  id                    String    @id @default(uuid())
+  userId                String    @unique
+  razonSocial           String
+  rfc                   String    @unique
+  contactoOperativo     String?
+  contactoFacturacion   String?
+  clabe                 String?
+  emisorFacturaDefault  InvoiceIssuer @default(PROVEEDOR)
+  active                Boolean   @default(false) // Requiere aprobación de ADMIN
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relaciones
+  user                  User      @relation("UserProvider", fields: [userId], references: [id])
+  products              Product[]
+  dispersions           Dispersion[]
+
+  @@map("providers")
+}
+
+// Tabla de categorías de productos
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  parentId    String?
+  parent      Category? @relation("CategorySubcategories", fields: [parentId], references: [id])
+  children    Category[] @relation("CategorySubcategories")
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+// Tabla de productos
+model Product {
+  id              String        @id @default(uuid())
+  providerId      String
+  categoryId      String
+  nombre          String
+  slug            String        @unique
+  descripcion     String?
+  precio          Float?
+  pricingMode     PricingMode   @default(PRECIO)
+  emisorFactura   InvoiceIssuer @default(AMCI)
+  visible         Boolean       @default(false) // Requiere aprobación
+  approved        Boolean       @default(false)
+  validUntil      DateTime?
+  stock           Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relaciones
+  provider        Provider      @relation(fields: [providerId], references: [id])
+  category        Category      @relation(fields: [categoryId], references: [id])
+  images          ProductImage[]
+  variants        ProductVariant[]
+  bundles         ProductBundle[]
+  orderItems      OrderItem[]
+  cartItems       CartItem[]
+
+  @@index([slug])
+  @@index([providerId])
+  @@index([categoryId])
+  @@map("products")
+}
+
+// Tabla de imágenes de productos
+model ProductImage {
+  id          String    @id @default(uuid())
+  productId   String
+  url         String
+  alt         String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// Tabla de variantes de productos
+model ProductVariant {
+  id          String    @id @default(uuid())
+  productId   String
+  nombre      String
+  opciones    Json      // Array de opciones disponibles
+  precio      Float?
+  createdAt   DateTime  @default(now())
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+}
+
+// Tabla de bundles/paquetes
+model ProductBundle {
+  id          String    @id @default(uuid())
+  productId   String
+  tipo        String    // Ej: "Kit 5 personas", "Paquete 10 unidades"
+  tamanos     Json      // Configuración del bundle
+  precio      Float?
+  descuento   Float?
+  createdAt   DateTime  @default(now())
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_bundles")
+}
+
+// Tabla de direcciones de envío
+model Address {
+  id            String    @id @default(uuid())
+  userId        String
+  alias         String?   // "Casa", "Oficina", etc.
+  nombre        String
+  calle         String
+  numero        String
+  colonia       String
+  ciudad        String
+  estado        String
+  codigoPostal  String
+  referencias   String?
+  isDefault     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation(fields: [userId], references: [id])
+  orders        Order[]
+
+  @@map("addresses")
+}
+
+// Tabla de órdenes
+model Order {
+  id                    String        @id @default(uuid())
+  clienteId             String
+  addressId             String?
+  total                 Float
+  subtotal              Float
+  envio                 Float
+  impuestos             Float
+  estado                OrderStatus   @default(RECIBIDO)
+  emisorFacturaResumen  Json?         // Resumen de emisores de factura en la orden
+  paymentId             String?       // ID de pago en Mercado Pago
+  paymentStatus         String?
+  notes                 String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  // Relaciones
+  cliente               User          @relation("ClientOrders", fields: [clienteId], references: [id])
+  address               Address?      @relation(fields: [addressId], references: [id])
+  items                 OrderItem[]
+  estados               OrderStatusHistory[]
+  envios                Shipping[]
+  pagos                 Payment[]
+  facturas              Invoice[]
+
+  @@index([clienteId])
+  @@index([estado])
+  @@map("orders")
+}
+
+// Tabla de items de orden
+model OrderItem {
+  id          String    @id @default(uuid())
+  orderId     String
+  productId   String
+  qty         Int
+  precioUnit  Float
+  subtotal    Float
+  variantData Json?     // Si seleccionó una variante
+  bundleData  Json?     // Si seleccionó un bundle
+  createdAt   DateTime  @default(now())
+
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// Tabla de estados de orden (historial)
+model OrderStatusHistory {
+  id          String        @id @default(uuid())
+  orderId     String
+  estado      OrderStatus
+  reason      String?
+  userId      String?       // Quien hizo el cambio
+  at          DateTime      @default(now())
+
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_status_history")
+}
+
+// Tabla de envíos
+model Shipping {
+  id            String    @id @default(uuid())
+  orderId       String
+  carrier       String    // DHL, FedEx, etc.
+  tracking      String
+  trackingUrl   String?
+  fechaEnvio    DateTime?
+  fechaEntrega  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("shippings")
+}
+
+// Tabla de pagos
+model Payment {
+  id            String    @id @default(uuid())
+  orderId       String
+  pasarela      String    // "mercadopago"
+  status        String    // approved, pending, rejected
+  payloadJson   Json      // Respuesta completa de MP
+  amount        Float
+  createdAt     DateTime  @default(now())
+
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// Tabla de facturas
+model Invoice {
+  id        String        @id @default(uuid())
+  orderId   String
+  issuer    InvoiceIssuer // AMCI o PROVEEDOR
+  uuid      String?
+  pdfUrl    String?
+  xmlUrl    String?
+  status    String        @default("PENDIENTE")
+  createdAt DateTime      @default(now())
+
+  order     Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}
+
+// Tabla de dispersiones
+model Dispersion {
+  id                String    @id @default(uuid())
+  providerId        String
+  periodo           String    // "2024-01"
+  totalVenta        Float
+  comisionAmci      Float
+  netoProveedor     Float
+  estado            String    @default("PENDIENTE")
+  fechaDispersion   DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  provider          Provider  @relation(fields: [providerId], references: [id])
+
+  @@unique([providerId, periodo])
+  @@map("dispersions")
+}
+
+// Tabla de configuraciones del sistema
+model Settings {
+  id                      String    @id @default(uuid())
+  amciCommissionPercent   Float     @default(10)
+  amciCommissionBase      Float     @default(0)
+  disbursementPeriod      Int       @default(15) // días
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@map("settings")
+}
+
+// Tabla para el carrito (opcional, puede manejarse en frontend)
+model CartItem {
+  id          String    @id @default(uuid())
+  userId      String
+  productId   String
+  quantity    Int       @default(1)
+  variantData Json?
+  bundleData  Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}

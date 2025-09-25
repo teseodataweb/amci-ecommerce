@@ -1,12 +1,21 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import AmciLogo from "@/components/layout/brand/AmciLogo";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const { user, profile, signOut } = useAuth();
+  const router = useRouter();
 
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/');
   };
 
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
@@ -244,20 +253,58 @@ const Header = () => {
                         <li>
                           <Link href="/catalogo">Catálogo</Link>
                         </li>
-                        <li className="has-dropdown">
-                          <button aria-label="Select Dropdown">Mi Cuenta</button>
-                          <ul className="submenu">
-                            <li>
-                              <Link href="/ordenes">Mis Órdenes</Link>
-                            </li>
-                            <li>
-                              <Link href="/panel/proveedor">Panel Proveedor</Link>
-                            </li>
-                            <li>
-                              <Link href="/panel/admin">Panel Admin</Link>
-                            </li>
-                          </ul>
-                        </li>
+                        {user ? (
+                          <li className="has-dropdown">
+                            <button aria-label="Select Dropdown">
+                              <i className="fas fa-user-circle me-2"></i>
+                              {profile?.name || profile?.email?.split('@')[0] || 'Mi Cuenta'}
+                            </button>
+                            <ul className="submenu">
+                              <li>
+                                <Link href="/ordenes">Mis Órdenes</Link>
+                              </li>
+                              {profile?.role === 'PROVEEDOR' && (
+                                <li>
+                                  <Link href="/panel/proveedor">Panel Proveedor</Link>
+                                </li>
+                              )}
+                              {profile?.role === 'ADMIN' && (
+                                <>
+                                  <li>
+                                    <Link href="/panel/admin">Panel Admin</Link>
+                                  </li>
+                                  <li>
+                                    <Link href="/reportes">Reportes</Link>
+                                  </li>
+                                </>
+                              )}
+                              <li>
+                                <button onClick={handleLogout} className="btn-logout">
+                                  <i className="fas fa-sign-out-alt me-2"></i>
+                                  Cerrar Sesión
+                                </button>
+                              </li>
+                            </ul>
+                          </li>
+                        ) : (
+                          <li className="has-dropdown">
+                            <button aria-label="Select Dropdown">
+                              <i className="fas fa-user me-2"></i>
+                              Cuenta
+                            </button>
+                            <ul className="submenu">
+                              <li>
+                                <Link href="/login">Iniciar Sesión</Link>
+                              </li>
+                              <li>
+                                <Link href="/registro">Registrarse</Link>
+                              </li>
+                              <li>
+                                <Link href="/registro-proveedor">Soy Proveedor</Link>
+                              </li>
+                            </ul>
+                          </li>
+                        )}
                         <li>
                           <Link href="/contact">Contacto</Link>
                         </li>
@@ -308,6 +355,24 @@ const Header = () => {
           </div>
         </div>
       </header>
+      <style jsx>{`
+        .btn-logout {
+          background: none;
+          border: none;
+          color: inherit;
+          padding: 0;
+          font: inherit;
+          cursor: pointer;
+          text-align: left;
+          width: 100%;
+        }
+        .btn-logout:hover {
+          color: #1e40af;
+        }
+        .cart-icon {
+          color: inherit;
+        }
+      `}</style>
     </Fragment>
   );
 };

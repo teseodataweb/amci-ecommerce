@@ -2,6 +2,28 @@
 
 Plataforma e-commerce para AMCI basada en la plantilla Digitek, con funcionalidades completas de marketplace, gestión de proveedores y reportes de conciliación.
 
+## 🎯 Estado Actual del Proyecto (25 Enero 2025)
+
+### ✅ Completado
+- **Autenticación con Supabase** - Login/registro funcional con roles (CLIENTE, PROVEEDOR, ADMIN)
+- **Base de datos PostgreSQL** - Esquema completo con todas las tablas necesarias
+- **Datos de prueba** - 6 categorías, 1 proveedor, 7 productos con imágenes
+- **Catálogo funcional** - Muestra productos reales desde Supabase con filtros
+- **APIs REST** - Endpoints para productos, categorías y autenticación
+- **Row Level Security** - Políticas de seguridad configuradas en Supabase
+
+### 🔄 En Progreso
+- **Panel de administración** - Para gestión de productos y órdenes
+- **Carrito de compras** - Integración con base de datos
+- **Proceso de checkout** - Con integración de Mercado Pago
+
+### 📝 Pendiente
+- **Panel de proveedores** - Para gestión de sus productos y órdenes
+- **Sistema de órdenes** - Estados y flujo completo
+- **Sistema de notificaciones** - Email con SendGrid
+- **Reportes y dispersión** - CSV con cálculos de comisiones
+- **Integración de pagos** - Mercado Pago en producción
+
 ## 🚀 Características Principales
 
 ### Para Clientes
@@ -85,24 +107,39 @@ cd amci-ecommerce
 npm install
 ```
 
-### 3. Configura las variables de entorno
-```bash
-cp .env.example .env.local
-```
+### 3. Configura Supabase
 
-Edita el archivo `.env.local` con tus configuraciones:
+#### Crear cuenta en Supabase
+1. Ve a [https://supabase.com](https://supabase.com) y crea una cuenta
+2. Crea un nuevo proyecto
+3. Guarda las credenciales que te proporciona
+
+#### Configurar base de datos
+1. Ve al SQL Editor en tu dashboard de Supabase
+2. Ejecuta los scripts SQL en este orden:
+   - `supabase-init.sql` - Crea todas las tablas
+   - `enable-rls.sql` - Configura políticas de seguridad
+   - `setup-data-simple.sql` - Crea datos de prueba (actualiza el email en línea 8)
+
+### 4. Configura las variables de entorno
+
+Crea un archivo `.env.local` con tus credenciales de Supabase:
 ```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://TU_PROYECTO.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_aqui
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_aqui
+DATABASE_URL=postgresql://postgres:TU_PASSWORD@db.TU_PROYECTO.supabase.co:5432/postgres
+
+# App
 NEXT_PUBLIC_APP_NAME=AMCI E-commerce
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# Mercado Pago (Sandbox)
+# Mercado Pago (futuro)
 NEXT_PUBLIC_MP_PUBLIC_KEY=tu_public_key_de_sandbox
 MP_SECRET_KEY=tu_secret_key_de_sandbox
 
-# Base de datos (cuando se implemente)
-DATABASE_URL=postgresql://usuario:password@localhost:5432/amci_ecommerce
-
-# Email (cuando se implemente)
+# Email (futuro)
 SENDGRID_API_KEY=tu_sendgrid_api_key
 SENDGRID_FROM_EMAIL=noreply@amci.com
 
@@ -111,7 +148,7 @@ AMCI_COMMISSION_PERCENT=10
 AMCI_DISBURSEMENT_PERIOD=15
 ```
 
-### 4. Ejecuta el servidor de desarrollo
+### 5. Ejecuta el servidor de desarrollo
 ```bash
 npm run dev
 ```
@@ -120,20 +157,23 @@ La aplicación estará disponible en [http://localhost:3000](http://localhost:30
 
 ## 🌐 Rutas Principales
 
-### Públicas
-- `/` - Homepage con branding AMCI
-- `/catalogo` - Catálogo de productos con filtros
-- `/producto/[slug]` - Detalle de producto
-- `/carrito` - Carrito de compras
-- `/checkout` - Proceso de pago
-- `/about` - Información sobre AMCI
-- `/contact` - Contacto
+### Públicas (Funcionales)
+- ✅ `/` - Homepage con branding AMCI
+- ✅ `/catalogo` - Catálogo de productos con filtros (FUNCIONANDO CON DB)
+- ✅ `/login` - Inicio de sesión
+- ✅ `/registro` - Registro de clientes
+- ✅ `/registro-proveedor` - Registro de proveedores
+- 🔄 `/producto/[slug]` - Detalle de producto
+- 🔄 `/carrito` - Carrito de compras
+- 📝 `/checkout` - Proceso de pago
+- ✅ `/about` - Información sobre AMCI
+- ✅ `/contact` - Contacto
 
-### Privadas
-- `/panel/proveedor` - Panel de gestión para proveedores
-- `/panel/admin` - Panel de administración AMCI
-- `/reportes` - Reportes de ventas y dispersión
-- `/ordenes` - Historial de órdenes del cliente
+### Privadas (En desarrollo)
+- 📝 `/panel/admin` - Panel de administración AMCI
+- 📝 `/panel/proveedor` - Panel de gestión para proveedores
+- 📝 `/reportes` - Reportes de ventas y dispersión
+- 📝 `/ordenes` - Historial de órdenes del cliente
 
 ## 💳 Integración de Pagos
 
@@ -265,6 +305,39 @@ El video de demostración debe mostrar:
 1. **Compra con precio visible** - Flujo completo del cliente
 2. **Proveedor confirma y sube guía** - Panel de proveedor
 3. **Admin filtra reportes y exporta CSV** - Panel administrativo
+
+## 🛠️ Próximos Pasos de Desarrollo
+
+### Inmediato (Próxima sesión)
+1. **Panel de Administración** (`/panel/admin`)
+   - CRUD de productos con aprobación
+   - Gestión de categorías
+   - Gestión de proveedores
+   - Dashboard con métricas
+
+2. **Carrito Funcional**
+   - Persistencia en base de datos
+   - Sincronización con usuario logueado
+   - Cálculo de totales y envío
+   - Validaciones de stock
+
+3. **Proceso de Checkout**
+   - Formulario de dirección de envío
+   - Integración con Mercado Pago
+   - Creación de órdenes
+   - Confirmación por email
+
+### Corto Plazo (Semana 1-2)
+- **Panel de Proveedores** - Gestión de productos y órdenes
+- **Sistema de Órdenes** - Estados y tracking completo
+- **Sistema de Notificaciones** - Templates de email
+- **Reportes de Dispersión** - CSV con comisiones
+
+### Mediano Plazo (Semana 3-4)
+- **Búsqueda avanzada** - Con filtros múltiples
+- **Sistema de reseñas** - Ratings y comentarios
+- **Wishlist** - Lista de deseos del usuario
+- **Cupones y descuentos** - Sistema promocional
 
 ## 🔄 Próximas Fases
 
