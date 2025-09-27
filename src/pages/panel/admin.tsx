@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Product {
-  id: number;
+  id: string;
   nombre: string;
   categoria: string;
   proveedor: string;
@@ -16,7 +18,7 @@ interface Product {
 }
 
 interface Order {
-  id: number;
+  id: string;
   cliente_nombre: string;
   cliente_email: string;
   proveedor: string;
@@ -26,73 +28,101 @@ interface Order {
   productos: string[];
 }
 
+interface Provider {
+  id: string;
+  razon_social: string;
+  rfc: string;
+  email: string;
+  name: string;
+  phone: string;
+  active: boolean;
+  created_at: string;
+}
+
 const AdminPanel = () => {
-  // Estado para navegación entre pestañas
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'settings'>('products');
-  
-  // Productos pendientes de aprobación
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      nombre: "Kit EPP Avanzado - 5 Personas",
-      categoria: "Seguridad",
-      proveedor: "AP Safety",
-      precio: 2200,
-      precio_modo: 'precio',
-      estado: 'pendiente',
-      imagen: "/img/products/epp-kit-5.jpg",
-      created_at: "2024-01-15T10:30:00Z",
-      descripcion: "Kit completo de equipo de protección personal para 5 personas con certificaciones internacionales"
-    },
-    {
-      id: 2,
-      nombre: "Sistema Hidráulico Industrial",
-      categoria: "Equipos",
-      proveedor: "MTM",
-      precio: null,
-      precio_modo: 'cotizar',
-      estado: 'pendiente',
-      imagen: "/img/products/sistema-hidraulico.jpg",
-      created_at: "2024-01-14T14:20:00Z",
-      descripcion: "Sistema hidráulico completo para aplicaciones industriales pesadas"
-    },
-    {
-      id: 3,
-      nombre: "Plafones LED Premium x25",
-      categoria: "Iluminación",
-      proveedor: "Plásticos Torres",
-      precio: 3500,
-      precio_modo: 'precio',
-      estado: 'aprobado',
-      imagen: "/img/products/plafones-premium.jpg",
-      created_at: "2024-01-13T09:15:00Z",
-      descripcion: "Pack premium de 25 plafones LED de alta eficiencia energética"
+  const { user, profile } = useAuth();
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'providers' | 'settings'>('products');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    totalSales: 0,
+    pendingProducts: 0,
+    activeProducts: 0,
+    pendingProviders: 0
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [productsRes, ordersRes, statsRes, providersRes] = await Promise.all([
+          fetch('/api/admin/products'),
+          fetch('/api/admin/orders'),
+          fetch('/api/admin/stats'),
+          fetch('/api/admin/providers')
+        ]);
+
+        if (productsRes.ok) {
+          const productsData = await productsRes.json();
+          setProducts(productsData.products.map((p: any) => ({
+            id: p.id,
+            nombre: p.nombre,
+            categoria: p.categoria,
+            proveedor: p.proveedor,
+            precio: p.precio,
+            precio_modo: p.precio_modo,
+            estado: p.estado,
+            imagen: p.imagen,
+            created_at: p.created_at,
+            descripcion: p.descripcion
+          })));
+        }
+
+        if (ordersRes.ok) {
+          const ordersData = await ordersRes.json();
+          setOrders(ordersData.orders.map((o: any) => ({
+            id: o.numero_orden,
+            cliente_nombre: o.cliente_nombre,
+            cliente_email: o.cliente_email,
+            proveedor: o.proveedor,
+            total: o.total,
+            estado: o.estado,
+            created_at: o.created_at,
+            productos: o.productos
+          })));
+        }
+
+        if (providersRes.ok) {
+          const providersData = await providersRes.json();
+          setProviders(providersData.providers);
+        }
+
+        if (statsRes.ok) {
+          const statsData = await statsRes.json();
+          const pendingProviders = providers.filter(p => !p.active).length;
+          setStats({
+            totalOrders: statsData.totalOrders,
+            totalSales: statsData.totalSales,
+            pendingProducts: statsData.pendingProducts,
+            activeProducts: statsData.activeProducts,
+            pendingProviders: pendingProviders
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && profile?.role === 'ADMIN') {
+      fetchData();
     }
-  ]);
-  
-  // Órdenes recientes
-  const [orders] = useState<Order[]>([
-    {
-      id: 1001,
-      cliente_nombre: "Juan Pérez García",
-      cliente_email: "juan@empresa.com",
-      proveedor: "AP Safety",
-      total: 900,
-      estado: 'CONFIRMADO',
-      created_at: "2024-01-15T10:30:00Z",
-      productos: ["Kit EPP Básico - 1 Persona (x2)"]
-    },
-    {
-      id: 1002,
-      cliente_nombre: "María González",
-      cliente_email: "maria@construcciones.com",
-      proveedor: "Pumping Team",
-      total: 15000,
-      estado: 'ENVIADO',
-      created_at: "2024-01-14T14:20:00Z",
-      productos: ["Bomba Sumergible Industrial (x1)"]
-    }
-  ]);
+  }, [user, profile]);
 
   // Configuraciones
   const [settings, setSettings] = useState({
@@ -103,30 +133,69 @@ const AdminPanel = () => {
   });
 
   // Funciones para productos
-  const approveProduct = (productId: number) => {
-    setProducts(prevProducts =>
-      prevProducts.map(product =>
-        product.id === productId ? { ...product, estado: 'aprobado' as const } : product
-      )
-    );
-    alert('Producto aprobado exitosamente');
+  const approveProduct = async (productId: string) => {
+    try {
+      const response = await fetch('/api/admin/products', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, action: 'approve' })
+      });
+
+      if (response.ok) {
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
+            product.id === productId ? { ...product, estado: 'aprobado' as const } : product
+          )
+        );
+        alert('Producto aprobado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error approving product:', error);
+      alert('Error al aprobar el producto');
+    }
   };
 
-  const pauseProduct = (productId: number) => {
-    setProducts(prevProducts =>
-      prevProducts.map(product =>
-        product.id === productId ? { ...product, estado: 'pausado' as const } : product
-      )
-    );
-    alert('Producto pausado exitosamente');
+  const pauseProduct = async (productId: string) => {
+    try {
+      const response = await fetch('/api/admin/products', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, action: 'pause' })
+      });
+
+      if (response.ok) {
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
+            product.id === productId ? { ...product, estado: 'pausado' as const } : product
+          )
+        );
+        alert('Producto pausado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error pausing product:', error);
+      alert('Error al pausar el producto');
+    }
   };
 
-  const rejectProduct = (productId: number) => {
+  const rejectProduct = async (productId: string) => {
     if (confirm('¿Estás seguro de rechazar este producto? Esta acción no se puede deshacer.')) {
-      setProducts(prevProducts => 
-        prevProducts.filter(product => product.id !== productId)
-      );
-      alert('Producto rechazado y eliminado');
+      try {
+        const response = await fetch('/api/admin/products', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, action: 'reject' })
+        });
+
+        if (response.ok) {
+          setProducts(prevProducts =>
+            prevProducts.filter(product => product.id !== productId)
+          );
+          alert('Producto rechazado y eliminado');
+        }
+      } catch (error) {
+        console.error('Error rejecting product:', error);
+        alert('Error al rechazar el producto');
+      }
     }
   };
 
@@ -160,8 +229,54 @@ const AdminPanel = () => {
     alert('Configuraciones guardadas exitosamente');
   };
 
+  // Funciones para proveedores
+  const approveProvider = async (providerId: string) => {
+    try {
+      const response = await fetch('/api/admin/providers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ providerId, action: 'approve' })
+      });
+
+      if (response.ok) {
+        setProviders(prevProviders =>
+          prevProviders.map(provider =>
+            provider.id === providerId ? { ...provider, active: true } : provider
+          )
+        );
+        alert('Proveedor aprobado exitosamente');
+      }
+    } catch (error) {
+      console.error('Error approving provider:', error);
+      alert('Error al aprobar el proveedor');
+    }
+  };
+
+  const rejectProvider = async (providerId: string) => {
+    if (confirm('¿Estás seguro de rechazar este proveedor? Esta acción no se puede deshacer.')) {
+      try {
+        const response = await fetch('/api/admin/providers', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ providerId, action: 'reject' })
+        });
+
+        if (response.ok) {
+          setProviders(prevProviders =>
+            prevProviders.filter(provider => provider.id !== providerId)
+          );
+          alert('Proveedor rechazado');
+        }
+      } catch (error) {
+        console.error('Error rejecting provider:', error);
+        alert('Error al rechazar el proveedor');
+      }
+    }
+  };
+
   return (
-    <Layout header={1} footer={1}>
+    <ProtectedRoute requiredRole="ADMIN">
+      <Layout header={1} footer={1}>
       <Banner 
         title="Panel de Administración AMCI"
         subtitle="Gestión completa del marketplace"
@@ -171,49 +286,59 @@ const AdminPanel = () => {
       <section className="admin__panel pt-120 pb-80">
         <div className="container">
           {/* Estadísticas generales */}
-          <div className="row mb-5">
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4 border-start border-primary border-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-shopping-cart fa-2x text-primary"></i>
+          {loading ? (
+            <div className="row mb-5">
+              <div className="col-12 text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando estadísticas...</span>
                 </div>
-                <h3 className="stat-number text-primary">{orders.length}</h3>
-                <p className="stat-label text-muted">Órdenes totales</p>
               </div>
             </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4 border-start border-warning border-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-clock fa-2x text-warning"></i>
+          ) : (
+            <div className="row mb-5">
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4 border-start border-primary border-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-shopping-cart fa-2x text-primary"></i>
+                  </div>
+                  <h3 className="stat-number text-primary">{stats.totalOrders}</h3>
+                  <p className="stat-label text-muted">Órdenes totales</p>
                 </div>
-                <h3 className="stat-number text-warning">{products.filter(p => p.estado === 'pendiente').length}</h3>
-                <p className="stat-label text-muted">Productos pendientes</p>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4 border-start border-warning border-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-clock fa-2x text-warning"></i>
+                  </div>
+                  <h3 className="stat-number text-warning">{stats.pendingProducts}</h3>
+                  <p className="stat-label text-muted">Productos pendientes</p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4 border-start border-success border-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-check-circle fa-2x text-success"></i>
+                  </div>
+                  <h3 className="stat-number text-success">{stats.activeProducts}</h3>
+                  <p className="stat-label text-muted">Productos activos</p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4 border-start border-info border-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-dollar-sign fa-2x text-info"></i>
+                  </div>
+                  <h3 className="stat-number text-info">
+                    ${stats.totalSales.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </h3>
+                  <p className="stat-label text-muted">Ventas totales (MXN)</p>
+                </div>
               </div>
             </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4 border-start border-success border-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-check-circle fa-2x text-success"></i>
-                </div>
-                <h3 className="stat-number text-success">{products.filter(p => p.estado === 'aprobado').length}</h3>
-                <p className="stat-label text-muted">Productos activos</p>
-              </div>
-            </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4 border-start border-info border-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-dollar-sign fa-2x text-info"></i>
-                </div>
-                <h3 className="stat-number text-info">
-                  ${orders.reduce((sum, order) => sum + order.total, 0).toLocaleString('es-MX')}
-                </h3>
-                <p className="stat-label text-muted">Ventas totales (MXN)</p>
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Navegación por pestañas */}
           <div className="row">
@@ -229,7 +354,7 @@ const AdminPanel = () => {
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button 
+                  <button
                     className={`nav-link ${activeTab === 'orders' ? 'active' : ''}`}
                     onClick={() => setActiveTab('orders')}
                   >
@@ -238,7 +363,21 @@ const AdminPanel = () => {
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button 
+                  <button
+                    className={`nav-link ${activeTab === 'providers' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('providers')}
+                  >
+                    <i className="fal fa-users me-2"></i>
+                    Proveedores
+                    {providers.filter(p => !p.active).length > 0 && (
+                      <span className="badge bg-danger ms-2">
+                        {providers.filter(p => !p.active).length}
+                      </span>
+                    )}
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button
                     className={`nav-link ${activeTab === 'settings' ? 'active' : ''}`}
                     onClick={() => setActiveTab('settings')}
                   >
@@ -437,6 +576,111 @@ const AdminPanel = () => {
             </div>
           )}
 
+          {activeTab === 'providers' && (
+            <div className="providers-tab">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                      <h4 className="mb-0">
+                        Proveedores
+                        {providers.filter(p => !p.active).length > 0 && (
+                          <span className="badge bg-warning text-dark ms-2">
+                            {providers.filter(p => !p.active).length} pendientes
+                          </span>
+                        )}
+                      </h4>
+                    </div>
+
+                    <div className="card-body">
+                      {/* Tabla de proveedores */}
+                      <div className="table-responsive">
+                        <table className="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Razón Social</th>
+                              <th>RFC</th>
+                              <th>Contacto</th>
+                              <th>Email</th>
+                              <th>Teléfono</th>
+                              <th>Estado</th>
+                              <th>Fecha de registro</th>
+                              <th>Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {providers.length === 0 ? (
+                              <tr>
+                                <td colSpan={8} className="text-center py-5">
+                                  <i className="fal fa-users fa-3x text-muted mb-3"></i>
+                                  <p className="text-muted">No hay proveedores registrados</p>
+                                </td>
+                              </tr>
+                            ) : (
+                              providers.map((provider) => (
+                                <tr key={provider.id}>
+                                  <td>
+                                    <strong>{provider.razon_social}</strong>
+                                  </td>
+                                  <td>{provider.rfc}</td>
+                                  <td>{provider.name || 'N/A'}</td>
+                                  <td>
+                                    <small>{provider.email}</small>
+                                  </td>
+                                  <td>{provider.phone || 'N/A'}</td>
+                                  <td>
+                                    {provider.active ? (
+                                      <span className="badge bg-success">Activo</span>
+                                    ) : (
+                                      <span className="badge bg-warning text-dark">Pendiente</span>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <small>
+                                      {new Date(provider.created_at).toLocaleDateString('es-MX')}
+                                    </small>
+                                  </td>
+                                  <td>
+                                    {!provider.active ? (
+                                      <div className="btn-group" role="group">
+                                        <button
+                                          className="btn btn-success btn-sm"
+                                          onClick={() => approveProvider(provider.id)}
+                                          title="Aprobar proveedor"
+                                        >
+                                          <i className="fal fa-check"></i>
+                                        </button>
+                                        <button
+                                          className="btn btn-danger btn-sm"
+                                          onClick={() => rejectProvider(provider.id)}
+                                          title="Rechazar proveedor"
+                                        >
+                                          <i className="fal fa-times"></i>
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        className="btn btn-info btn-sm"
+                                        onClick={() => alert('Ver detalles del proveedor')}
+                                      >
+                                        <i className="fal fa-eye me-1"></i>
+                                        Ver
+                                      </button>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'settings' && (
             <div className="settings-tab">
               <div className="row">
@@ -589,7 +833,8 @@ const AdminPanel = () => {
           )}
         </div>
       </section>
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

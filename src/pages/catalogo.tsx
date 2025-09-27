@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
+import { useCart } from "@/contexts/CartContext";
+import { useRouter } from "next/router";
 
 interface Product {
   id: string;
@@ -41,6 +43,9 @@ const Catalogo = () => {
     busqueda: '',
     pricing_mode: ''
   });
+  const { addToCart } = useCart();
+  const router = useRouter();
+  const [addingToCart, setAddingToCart] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -82,6 +87,20 @@ const Catalogo = () => {
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleAddToCart = async (product: Product) => {
+    try {
+      setAddingToCart(product.id);
+      await addToCart(product.id, 1);
+      // Mostrar notificación de éxito (opcional)
+      alert('Producto agregado al carrito');
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+      alert('Error al agregar el producto al carrito');
+    } finally {
+      setAddingToCart(null);
+    }
   };
 
   return (
@@ -209,9 +228,22 @@ const Catalogo = () => {
 
                               <div className="product__btn">
                                 {product.pricing_mode === 'PRECIO' ? (
-                                  <button className="btn btn-primary w-100">
-                                    <i className="fal fa-shopping-cart me-2"></i>
-                                    Agregar al carrito
+                                  <button
+                                    className="btn btn-primary w-100"
+                                    onClick={() => handleAddToCart(product)}
+                                    disabled={addingToCart === product.id}
+                                  >
+                                    {addingToCart === product.id ? (
+                                      <>
+                                        <span className="spinner-border spinner-border-sm me-2" />
+                                        Agregando...
+                                      </>
+                                    ) : (
+                                      <>
+                                        <i className="fal fa-shopping-cart me-2"></i>
+                                        Agregar al carrito
+                                      </>
+                                    )}
                                   </button>
                                 ) : (
                                   <a

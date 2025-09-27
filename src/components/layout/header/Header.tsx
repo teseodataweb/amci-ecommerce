@@ -2,12 +2,16 @@ import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import AmciLogo from "@/components/layout/brand/AmciLogo";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/router";
 
 const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const { user, profile, signOut } = useAuth();
+  const { getCartCount } = useCart();
   const router = useRouter();
+  const cartCount = getCartCount();
+  const [adminNotifications, setAdminNotifications] = useState(0);
 
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
@@ -66,6 +70,30 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // Cargar notificaciones para admins
+  useEffect(() => {
+    const fetchAdminNotifications = async () => {
+      if (profile?.role === 'ADMIN') {
+        try {
+          const response = await fetch('/api/admin/notifications');
+          if (response.ok) {
+            const data = await response.json();
+            setAdminNotifications(data.total);
+          }
+        } catch (error) {
+          console.error('Error fetching admin notifications:', error);
+        }
+      }
+    };
+
+    fetchAdminNotifications();
+
+    // Actualizar notificaciones cada 30 segundos
+    const interval = setInterval(fetchAdminNotifications, 30000);
+
+    return () => clearInterval(interval);
+  }, [profile]);
 
   return (
     <Fragment>
@@ -138,7 +166,14 @@ const Header = () => {
                             <Link href="/panel/proveedor">Panel Proveedor</Link>
                           </li>
                           <li>
-                            <Link href="/panel/admin">Panel Admin</Link>
+                            <Link href="/panel/admin">
+                              Panel Admin
+                              {adminNotifications > 0 && (
+                                <span className="badge bg-danger ms-2">
+                                  {adminNotifications}
+                                </span>
+                              )}
+                            </Link>
                           </li>
                         </ul>
                       </li>
@@ -271,7 +306,14 @@ const Header = () => {
                               {profile?.role === 'ADMIN' && (
                                 <>
                                   <li>
-                                    <Link href="/panel/admin">Panel Admin</Link>
+                                    <Link href="/panel/admin">
+                                      Panel Admin
+                                      {adminNotifications > 0 && (
+                                        <span className="badge bg-danger ms-2">
+                                          {adminNotifications}
+                                        </span>
+                                      )}
+                                    </Link>
                                   </li>
                                   <li>
                                     <Link href="/reportes">Reportes</Link>
@@ -318,9 +360,11 @@ const Header = () => {
                   <div className="header__cart me-3">
                     <Link href="/carrito" className="cart-icon position-relative">
                       <i className="fal fa-shopping-cart fs-4"></i>
-                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        0
-                      </span>
+                      {cartCount > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {cartCount}
+                        </span>
+                      )}
                     </Link>
                   </div>
                   <div className="header__btn d-none d-xl-block">
@@ -331,9 +375,11 @@ const Header = () => {
                   <div className="header__cart d-xl-none me-2">
                     <Link href="/carrito" className="cart-icon position-relative">
                       <i className="fal fa-shopping-cart fs-5"></i>
-                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        0
-                      </span>
+                      {cartCount > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {cartCount}
+                        </span>
+                      )}
                     </Link>
                   </div>
                   <div className="header__toggle d-xl-none">

@@ -12,6 +12,7 @@ import "aos/dist/aos.css";
 
 import type { AppProps } from "next/app";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -21,7 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Suspense>
       <AuthProvider>
-        <Component {...pageProps} />
+        <CartProvider>
+          <Component {...pageProps} />
+        </CartProvider>
       </AuthProvider>
     </Suspense>
   );

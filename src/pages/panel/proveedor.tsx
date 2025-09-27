@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Order {
   id: number;
@@ -29,67 +31,16 @@ interface TrackingInfo {
 }
 
 const PanelProveedor = () => {
-  // Datos simulados - en producción vendrían de la API
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: 1001,
-      cliente_nombre: "Juan Pérez García",
-      cliente_email: "juan@empresa.com",
-      total: 900,
-      estado: 'RECIBIDO',
-      created_at: "2024-01-15T10:30:00Z",
-      productos: [
-        {
-          id: 1,
-          producto_nombre: "Kit EPP Básico - 1 Persona (Talla M)",
-          cantidad: 2,
-          precio_unitario: 450,
-          subtotal: 900
-        }
-      ],
-      direccion_envio: "Av. Insurgentes 123, Col. Roma Norte, CDMX, CP 06700",
-      telefono_cliente: "55 1234 5678"
-    },
-    {
-      id: 1002,
-      cliente_nombre: "María González",
-      cliente_email: "maria@construcciones.com",
-      total: 1350,
-      estado: 'CONFIRMADO',
-      created_at: "2024-01-14T14:20:00Z",
-      productos: [
-        {
-          id: 2,
-          producto_nombre: "Kit EPP Básico - 15 Personas",
-          cantidad: 1,
-          precio_unitario: 1350,
-          subtotal: 1350
-        }
-      ],
-      direccion_envio: "Calzada de Tlalpan 456, Col. Del Valle, CDMX, CP 03100",
-      telefono_cliente: "55 8765 4321"
-    },
-    {
-      id: 1003,
-      cliente_nombre: "Carlos Rodríguez",
-      cliente_email: "carlos@industrial.mx",
-      total: 675,
-      estado: 'ENVIADO',
-      created_at: "2024-01-13T09:15:00Z",
-      productos: [
-        {
-          id: 3,
-          producto_nombre: "Kit EPP Básico - 1 Persona (Talla L)",
-          cantidad: 1,
-          precio_unitario: 475,
-          subtotal: 475
-        }
-      ],
-      direccion_envio: "Blvd. Manuel Ávila Camacho 789, Naucalpan, Estado de México",
-      telefono_cliente: "55 9876 5432"
-    }
-  ]);
-
+  const { user } = useAuth();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    totalSales: 0,
+    totalProducts: 0,
+    activeProducts: 0,
+    pendingProducts: 0
+  });
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showTrackingModal, setShowTrackingModal] = useState(false);
   const [trackingInfo, setTrackingInfo] = useState<TrackingInfo>({
@@ -101,6 +52,49 @@ const PanelProveedor = () => {
   // Filtros
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/provider/dashboard?userId=${user.id}`);
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // Mapear órdenes
+          const mappedOrders = data.orders.map((order: any) => ({
+            id: order.id,
+            cliente_nombre: order.cliente_nombre,
+            cliente_email: order.cliente_email,
+            total: order.total,
+            estado: order.estado,
+            created_at: order.created_at,
+            productos: [],
+            direccion_envio: 'Ver detalles de la orden',
+            telefono_cliente: '-'
+          }));
+
+          setOrders(mappedOrders);
+          setStats({
+            totalOrders: data.stats.totalOrders,
+            totalSales: data.stats.totalSales,
+            totalProducts: data.stats.totalProducts,
+            activeProducts: data.stats.activeProducts,
+            pendingProducts: data.stats.pendingProducts
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching provider data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   const filteredOrders = orders.filter(order => {
     const matchesStatus = !statusFilter || order.estado === statusFilter;
@@ -171,58 +165,87 @@ const PanelProveedor = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <ProtectedRoute requiredRole="PROVEEDOR">
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Panel de Proveedor"
+            subtitle="Cargando..."
+            bg="bg-primary"
+          />
+          <section className="provider__panel pt-120 pb-120">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-xl-6 text-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                  <p className="mt-3">Cargando panel de proveedor...</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Layout>
+      </ProtectedRoute>
+    );
+  }
+
   return (
-    <Layout header={1} footer={1}>
-      <Banner 
-        title="Panel de Proveedor"
-        subtitle="Gestiona tus órdenes y envíos"
-        bg="bg-primary"
-      />
-      
-      <section className="provider__panel pt-120 pb-80">
-        <div className="container">
-          {/* Estadísticas */}
-          <div className="row mb-5">
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-clipboard-list fa-2x text-info"></i>
+    <ProtectedRoute requiredRole="PROVEEDOR">
+      <Layout header={1} footer={1}>
+        <Banner
+          title="Panel de Proveedor"
+          subtitle="Gestiona tus órdenes y envíos"
+          bg="bg-primary"
+        />
+
+        <section className="provider__panel pt-120 pb-80">
+          <div className="container">
+            {/* Estadísticas */}
+            <div className="row mb-5">
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-box fa-2x text-primary"></i>
+                  </div>
+                  <h3 className="stat-number text-primary">{stats.totalProducts}</h3>
+                  <p className="stat-label text-muted">Productos totales</p>
                 </div>
-                <h3 className="stat-number text-info">{orders.filter(o => o.estado === 'RECIBIDO').length}</h3>
-                <p className="stat-label text-muted">Órdenes pendientes</p>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-check-circle fa-2x text-success"></i>
+                  </div>
+                  <h3 className="stat-number text-success">{stats.activeProducts}</h3>
+                  <p className="stat-label text-muted">Productos activos</p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-shopping-cart fa-2x text-info"></i>
+                  </div>
+                  <h3 className="stat-number text-info">{stats.totalOrders}</h3>
+                  <p className="stat-label text-muted">Órdenes totales</p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 mb-4">
+                <div className="stat-card card text-center p-4">
+                  <div className="stat-icon mb-3">
+                    <i className="fal fa-dollar-sign fa-2x text-warning"></i>
+                  </div>
+                  <h3 className="stat-number text-warning">
+                    ${stats.totalSales.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </h3>
+                  <p className="stat-label text-muted">Ventas totales (MXN)</p>
+                </div>
               </div>
             </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-check-circle fa-2x text-warning"></i>
-                </div>
-                <h3 className="stat-number text-warning">{orders.filter(o => o.estado === 'CONFIRMADO').length}</h3>
-                <p className="stat-label text-muted">Confirmadas</p>
-              </div>
-            </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-truck fa-2x text-primary"></i>
-                </div>
-                <h3 className="stat-number text-primary">{orders.filter(o => o.estado === 'ENVIADO').length}</h3>
-                <p className="stat-label text-muted">En tránsito</p>
-              </div>
-            </div>
-            
-            <div className="col-xl-3 col-md-6 mb-4">
-              <div className="stat-card card text-center p-4">
-                <div className="stat-icon mb-3">
-                  <i className="fal fa-medal fa-2x text-success"></i>
-                </div>
-                <h3 className="stat-number text-success">{orders.filter(o => ['ENTREGADO', 'CERRADO'].includes(o.estado)).length}</h3>
-                <p className="stat-label text-muted">Completadas</p>
-              </div>
-            </div>
-          </div>
           
           {/* Filtros */}
           <div className="row mb-4">
@@ -514,7 +537,8 @@ const PanelProveedor = () => {
           </div>
         </div>
       )}
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

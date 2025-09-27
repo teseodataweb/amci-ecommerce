@@ -1,372 +1,255 @@
-# E-commerce AMCI - MVP
+# 🛒 AMCI E-Commerce Platform
 
-Plataforma e-commerce para AMCI basada en la plantilla Digitek, con funcionalidades completas de marketplace, gestión de proveedores y reportes de conciliación.
+Plataforma B2B de e-commerce que conecta clientes con múltiples proveedores. Sistema de marketplace con gestión de productos, órdenes, comisiones y pagos.
 
-## 🎯 Estado Actual del Proyecto (25 Enero 2025)
+## 📚 Documentación del Proyecto
 
-### ✅ Completado
-- **Autenticación con Supabase** - Login/registro funcional con roles (CLIENTE, PROVEEDOR, ADMIN)
-- **Base de datos PostgreSQL** - Esquema completo con todas las tablas necesarias
-- **Datos de prueba** - 6 categorías, 1 proveedor, 7 productos con imágenes
-- **Catálogo funcional** - Muestra productos reales desde Supabase con filtros
-- **APIs REST** - Endpoints para productos, categorías y autenticación
-- **Row Level Security** - Políticas de seguridad configuradas en Supabase
+| Documento | Descripción |
+|-----------|-------------|
+| **[PROYECTO-STATUS.md](./PROYECTO-STATUS.md)** | 📊 Estado completo del proyecto, funcionalidades implementadas, pendientes y guía para retomar |
+| **[DESARROLLO-SIGUIENTE.md](./DESARROLLO-SIGUIENTE.md)** | 🚀 Guía técnica detallada con código para implementar las siguientes tareas prioritarias |
+| **[DATABASE-SETUP-GUIDE.md](./DATABASE-SETUP-GUIDE.md)** | 🗄️ Configuración de la base de datos con Supabase |
+| **[PROVEEDORES-SETUP.md](./PROVEEDORES-SETUP.md)** | 👥 Guía paso a paso para dar de alta proveedores y productos |
 
-### 🔄 En Progreso
-- **Panel de administración** - Para gestión de productos y órdenes
-- **Carrito de compras** - Integración con base de datos
-- **Proceso de checkout** - Con integración de Mercado Pago
+## 🚀 Quick Start
 
-### 📝 Pendiente
-- **Panel de proveedores** - Para gestión de sus productos y órdenes
-- **Sistema de órdenes** - Estados y flujo completo
-- **Sistema de notificaciones** - Email con SendGrid
-- **Reportes y dispersión** - CSV con cálculos de comisiones
-- **Integración de pagos** - Mercado Pago en producción
+### 1. Instalación
 
-## 🚀 Características Principales
-
-### Para Clientes
-- **Catálogo completo** con filtros avanzados (categoría, proveedor, precio, cotización)
-- **Páginas de producto** con galería de imágenes, variantes y especificaciones técnicas
-- **Carrito funcional** con soporte para múltiples proveedores y emisores de factura
-- **Checkout seguro** con validaciones y advertencias de facturación múltiple
-- **Seguimiento de órdenes** por email
-
-### Para Proveedores
-- **Panel de gestión** de órdenes con estados en tiempo real
-- **Sistema de confirmación** y carga de información de envío
-- **Gestión de guías** de envío con múltiples paqueterías
-- **Notificaciones automáticas** a clientes
-
-### Para Administradores AMCI
-- **Aprobación de productos** antes de publicación
-- **Panel de control** con estadísticas en tiempo real
-- **Sistema de reportes** con exportación CSV
-- **Gestión de dispersión** con fechas editables
-- **Configuración de comisiones** y períodos de pago
-
-## 🎨 Branding y Limpieza Aplicada
-
-### ✅ Cambios Implementados en esta Versión
-
-**Limpieza de Template:**
-- ✅ Eliminadas páginas demo: `index-2.tsx`, `index-3.tsx`, `index-4.tsx`, `blog.tsx`, `service.tsx`, `team.tsx`, etc.
-- ✅ Homepage completamente reescrita con contenido AMCI específico
-- ✅ Removidos componentes demo sin uso de la plantilla Digitek
-
-**Branding AMCI:**
-- ✅ Logo AMCI implementado (componente `AmciLogo` con colores corporativos)
-- ✅ Paleta de colores AMCI aplicada (`amci-theme.scss`)
-- ✅ Header unificado con navegación e-commerce
-- ✅ Footer con links legales y contacto AMCI
-
-**Navegación Completa:**
-- ✅ Flujo end-to-end sin links rotos: `Home → Catálogo → Producto → Carrito → Checkout → Orden`
-- ✅ Páginas legales: `/terminos`, `/privacidad`, `/disclaimer`
-- ✅ Paneles funcionales: `/panel/proveedor`, `/panel/admin`, `/reportes`
-- ✅ Sistema de órdenes: `/ordenes`, `/orden/[id]`
-
-**Identidad Visual:**
-- ✅ Paleta AMCI: Azul primario (`#1e40af`), Verde secundario (`#059669`)
-- ✅ Tipografía consistente con pesos y jerarquías
-- ✅ Iconografía industrial (Font Awesome)
-- ✅ Componentes con hover states y transiciones
-
-## 🏗️ Arquitectura Técnica
-
-### Frontend
-- **Next.js 13.2.4** con TypeScript
-- **React 18.2.0** para componentes
-- **Bootstrap 5.2.3** para estilos responsive
-- **Sass 1.60.0** para preprocesamiento CSS
-- **Font Awesome** para iconografía
-
-### Proveedores Integrados
-- **AP Safety** - Equipos de protección personal (EPP)
-- **MTM** - Refacciones hidráulicas e industriales
-- **Pumping Team** - Bombas y sistemas de bombeo
-- **Plásticos Torres** - Iluminación LED y plafones
-
-## 📋 Requisitos del Sistema
-
-- Node.js 16.x o superior
-- npm 8.x o superior
-- Navegador moderno con soporte para ES6+
-
-## ⚡ Instalación y Configuración
-
-### 1. Clona el repositorio
 ```bash
-git clone [URL-del-repositorio]
-cd amci-ecommerce
-```
-
-### 2. Instala las dependencias
-```bash
+# Instalar dependencias
 npm install
+
+# Configurar variables de entorno
+# Copiar .env.example a .env y llenar las variables
+cp .env.example .env
 ```
 
-### 3. Configura Supabase
+### 2. Configurar Base de Datos
 
-#### Crear cuenta en Supabase
-1. Ve a [https://supabase.com](https://supabase.com) y crea una cuenta
-2. Crea un nuevo proyecto
-3. Guarda las credenciales que te proporciona
+1. Ve a [Supabase Dashboard](https://supabase.com/dashboard)
+2. Ejecuta los scripts SQL en orden:
+   - `supabase-init.sql` (crear tablas)
+   - `supabase-rls-policies.sql` (políticas de seguridad)
 
-#### Configurar base de datos
-1. Ve al SQL Editor en tu dashboard de Supabase
-2. Ejecuta los scripts SQL en este orden:
-   - `supabase-init.sql` - Crea todas las tablas
-   - `enable-rls.sql` - Configura políticas de seguridad
-   - `setup-data-simple.sql` - Crea datos de prueba (actualiza el email en línea 8)
+### 3. Ejecutar Servidor
 
-### 4. Configura las variables de entorno
-
-Crea un archivo `.env.local` con tus credenciales de Supabase:
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://TU_PROYECTO.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_aqui
-SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_aqui
-DATABASE_URL=postgresql://postgres:TU_PASSWORD@db.TU_PROYECTO.supabase.co:5432/postgres
-
-# App
-NEXT_PUBLIC_APP_NAME=AMCI E-commerce
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Mercado Pago (futuro)
-NEXT_PUBLIC_MP_PUBLIC_KEY=tu_public_key_de_sandbox
-MP_SECRET_KEY=tu_secret_key_de_sandbox
-
-# Email (futuro)
-SENDGRID_API_KEY=tu_sendgrid_api_key
-SENDGRID_FROM_EMAIL=noreply@amci.com
-
-# Configuración AMCI
-AMCI_COMMISSION_PERCENT=10
-AMCI_DISBURSEMENT_PERIOD=15
-```
-
-### 5. Ejecuta el servidor de desarrollo
 ```bash
 npm run dev
+# Abrir http://localhost:3000
 ```
 
-La aplicación estará disponible en [http://localhost:3000](http://localhost:3000)
+### 4. Crear Usuario Admin
 
-## 🌐 Rutas Principales
+```sql
+-- En Supabase SQL Editor:
+UPDATE users
+SET role = 'ADMIN'
+WHERE email = 'tu-email@ejemplo.com';
+```
 
-### Públicas (Funcionales)
-- ✅ `/` - Homepage con branding AMCI
-- ✅ `/catalogo` - Catálogo de productos con filtros (FUNCIONANDO CON DB)
-- ✅ `/login` - Inicio de sesión
-- ✅ `/registro` - Registro de clientes
-- ✅ `/registro-proveedor` - Registro de proveedores
-- 🔄 `/producto/[slug]` - Detalle de producto
-- 🔄 `/carrito` - Carrito de compras
-- 📝 `/checkout` - Proceso de pago
-- ✅ `/about` - Información sobre AMCI
-- ✅ `/contact` - Contacto
+## 🎯 Funcionalidades Principales
 
-### Privadas (En desarrollo)
-- 📝 `/panel/admin` - Panel de administración AMCI
-- 📝 `/panel/proveedor` - Panel de gestión para proveedores
-- 📝 `/reportes` - Reportes de ventas y dispersión
-- 📝 `/ordenes` - Historial de órdenes del cliente
+### ✅ Implementadas
 
-## 💳 Integración de Pagos
+- **Autenticación Multi-Rol**: Sistema con 3 roles (CLIENTE, PROVEEDOR, ADMIN)
+- **Catálogo de Productos**: Navegación y búsqueda de productos
+- **Carrito de Compras**: Gestión completa del carrito
+- **Checkout con Stripe**: Integración de pasarela de pago
+- **Panel de Admin**: Gestión de productos, órdenes, proveedores
+- **Panel de Proveedor**: Dashboard con productos y órdenes
+- **Sistema de Órdenes**: Tracking de órdenes por usuario
+- **Reportes**: Ventas, productos top, comisiones
+- **Notificaciones**: Badge de notificaciones para admin
 
-El sistema está configurado para usar **Mercado Pago** en modo sandbox. Los pagos se centralizan en AMCI y posteriormente se dispersan a los proveedores según la configuración establecida.
+### 🚧 En Desarrollo
 
-### Flujo de Pago
-1. Cliente realiza compra → Pago a AMCI
-2. Webhook confirma pago → Crea orden y notifica proveedor
-3. Proveedor confirma y envía → Cliente recibe tracking
-4. Sistema genera reportes → AMCI dispersa pagos
+- Confirmación de pago y creación de orden en BD
+- Sistema de tracking de envíos
+- Gestión automática de inventario
+- Notificaciones por email
+- Dispersión de pagos a proveedores
+- Facturación electrónica
 
-## 📊 Sistema de Reportes
+Ver detalles completos en: **[PROYECTO-STATUS.md](./PROYECTO-STATUS.md)**
 
-### Campos del Reporte CSV
-- Fecha de venta
-- ID de orden
-- Información del cliente
-- Proveedor
-- Detalle del producto
-- Cantidades y precios
-- Subtotal y envío
-- **Comisión AMCI**
-- **Neto a proveedor**
-- **Estado y fecha de dispersión** (editable)
+## 🏗️ Stack Tecnológico
 
-### Funcionalidades
-- Filtros por fecha, proveedor y estado
-- Exportación CSV con todos los campos
-- Edición en línea de fechas de dispersión
-- Cálculos automáticos de totales
+- **Frontend**: Next.js 13, React 18, TypeScript
+- **Styling**: Bootstrap 5, SCSS
+- **Backend**: Next.js API Routes
+- **Base de Datos**: Supabase (PostgreSQL)
+- **Autenticación**: Supabase Auth
+- **Pagos**: Stripe
+- **Hosting**: Vercel (recomendado)
 
-## 🔧 Scripts Disponibles
+## 📁 Estructura del Proyecto
+
+```
+amci-ecommerce/
+├── src/
+│   ├── components/       # Componentes reutilizables
+│   ├── contexts/         # Contextos de React (Auth, Cart)
+│   ├── pages/            # Páginas y API routes
+│   │   ├── api/         # Backend APIs
+│   │   ├── panel/       # Paneles de admin y proveedor
+│   │   └── ...
+│   └── styles/          # Estilos globales
+├── public/              # Assets estáticos
+├── .env                 # Variables de entorno (NO subir a Git)
+├── supabase-init.sql    # Script de creación de BD
+└── README.md            # Este archivo
+```
+
+## 🔒 Seguridad
+
+- ✅ Row Level Security (RLS) habilitado en todas las tablas
+- ✅ Validación de roles en cada ruta protegida
+- ✅ Service Role Key solo en servidor
+- ✅ Anon Key en cliente
+- ⚠️ NO exponer keys sensibles en frontend
+
+## 🧪 Testing
+
+### Datos de Prueba
+
+Para crear datos de prueba, sigue la guía completa:
+**[PROVEEDORES-SETUP.md](./PROVEEDORES-SETUP.md)**
+
+### Tarjeta de Prueba (Stripe)
+
+```
+Número: 4242 4242 4242 4242
+Fecha: Cualquier fecha futura
+CVC: Cualquier 3 dígitos
+```
+
+## 📦 Scripts Disponibles
 
 ```bash
 # Desarrollo
-npm run dev          # Servidor de desarrollo
-npm run build        # Build de producción
-npm run start        # Servidor de producción
-npm run lint         # Linting con ESLint
+npm run dev
 
-# Utilidades (futuras implementaciones)
-npm run db:migrate   # Migraciones de base de datos
-npm run db:seed      # Datos de prueba
-npm run test         # Suite de pruebas
+# Build para producción
+npm run build
+
+# Iniciar producción
+npm start
+
+# Linting
+npm run lint
 ```
 
-## 📱 Responsive Design
+## 🚀 Deployment
 
-La aplicación está completamente optimizada para:
-- 📱 **Móviles** (320px - 767px)
-- 📱 **Tablets** (768px - 1023px)
-- 💻 **Desktop** (1024px+)
+### Vercel (Recomendado)
 
-## 🚦 Estados de Orden
+1. Conectar repositorio a Vercel
+2. Configurar variables de entorno
+3. Deploy automático en cada push
 
-### Flujo Completo
-```
-RECIBIDO → CONFIRMADO → ENVIADO → ENTREGADO → CERRADO
-                ↓
-            CANCELADO / DEVUELTO
-```
+### Variables de Entorno Requeridas
 
-### Responsabilidades
-- **RECIBIDO**: Orden creada, esperando confirmación del proveedor
-- **CONFIRMADO**: Proveedor acepta la orden
-- **ENVIADO**: Proveedor registra envío con guía de rastreo
-- **ENTREGADO**: Producto entregado al cliente
-- **CERRADO**: Orden completada y lista para dispersión
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-## 🔐 Seguridad Implementada
-
-- Validación de formularios en frontend y backend
-- Sanitización de datos de entrada
-- Headers de seguridad configurados
-- Validación de roles y permisos
-- Logs de auditoría para cambios críticos
-
-## 📧 Sistema de Notificaciones
-
-### Plantillas de Email
-- **Cliente**: Confirmación de compra, actualizaciones de envío
-- **Proveedor**: Nueva orden asignada, recordatorios
-- **AMCI**: Reportes de dispersión, alertas administrativas
-
-## 🏭 Datos de Proveedores
-
-### AP Safety
-- **Especialidad**: Equipos de protección personal
-- **Productos**: Kits EPP, cascos, guantes, calzado de seguridad
-- **Modalidad**: Precios fijos y paquetes por cantidad de personas
-
-### MTM  
-- **Especialidad**: Refacciones industriales
-- **Productos**: Componentes hidráulicos, sellos, mangueras
-- **Modalidad**: Mayormente precios fijos, algunas cotizaciones
-
-### Pumping Team
-- **Especialidad**: Sistemas de bombeo
-- **Productos**: Bombas sumergibles, centrífugas, accesorios
-- **Modalidad**: Principalmente cotizaciones por proyecto
-
-### Plásticos Torres
-- **Especialidad**: Iluminación LED
-- **Productos**: Plafones, luminarias, packs por cantidad
-- **Modalidad**: Precios fijos con descuentos por volumen
-
-## 🚀 Deployment en Vercel
-
-### Pasos para Deploy
-1. Conecta tu repositorio a Vercel
-2. Configura las variables de entorno en el dashboard
-3. Vercel detectará automáticamente Next.js
-4. El build y deploy será automático
-
-### Variables de Entorno en Vercel
-```
-NEXT_PUBLIC_APP_NAME
-NEXT_PUBLIC_APP_URL
-NEXT_PUBLIC_MP_PUBLIC_KEY
-MP_SECRET_KEY
-DATABASE_URL
-SENDGRID_API_KEY
-SENDGRID_FROM_EMAIL
+# Stripe
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
 ```
 
-## 📹 Demo Video
+## 📖 Guías Detalladas
 
-El video de demostración debe mostrar:
-1. **Compra con precio visible** - Flujo completo del cliente
-2. **Proveedor confirma y sube guía** - Panel de proveedor
-3. **Admin filtra reportes y exporta CSV** - Panel administrativo
+### Para Empezar
 
-## 🛠️ Próximos Pasos de Desarrollo
+1. Lee **[PROYECTO-STATUS.md](./PROYECTO-STATUS.md)** para entender el estado actual
+2. Configura la base de datos con **[DATABASE-SETUP-GUIDE.md](./DATABASE-SETUP-GUIDE.md)**
+3. Crea datos de prueba con **[PROVEEDORES-SETUP.md](./PROVEEDORES-SETUP.md)**
 
-### Inmediato (Próxima sesión)
-1. **Panel de Administración** (`/panel/admin`)
-   - CRUD de productos con aprobación
-   - Gestión de categorías
-   - Gestión de proveedores
-   - Dashboard con métricas
+### Para Desarrollar
 
-2. **Carrito Funcional**
-   - Persistencia en base de datos
-   - Sincronización con usuario logueado
-   - Cálculo de totales y envío
-   - Validaciones de stock
+1. Lee **[DESARROLLO-SIGUIENTE.md](./DESARROLLO-SIGUIENTE.md)** para ver tareas prioritarias
+2. Elige una tarea de la lista
+3. Crea un branch: `git checkout -b feature/nombre`
+4. Desarrolla, prueba y haz commit
 
-3. **Proceso de Checkout**
-   - Formulario de dirección de envío
-   - Integración con Mercado Pago
-   - Creación de órdenes
-   - Confirmación por email
+## 🐛 Solución de Problemas
 
-### Corto Plazo (Semana 1-2)
-- **Panel de Proveedores** - Gestión de productos y órdenes
-- **Sistema de Órdenes** - Estados y tracking completo
-- **Sistema de Notificaciones** - Templates de email
-- **Reportes de Dispersión** - CSV con comisiones
+### El servidor no inicia
 
-### Mediano Plazo (Semana 3-4)
-- **Búsqueda avanzada** - Con filtros múltiples
-- **Sistema de reseñas** - Ratings y comentarios
-- **Wishlist** - Lista de deseos del usuario
-- **Cupones y descuentos** - Sistema promocional
+```bash
+# Eliminar node_modules y reinstalar
+rm -rf node_modules
+npm install
+```
 
-## 🔄 Próximas Fases
+### Error de conexión a Supabase
 
-### Fase 2 (Post-MVP)
-- Autenticación 2FA
-- Integración WhatsApp/SMS
-- API de facturación automática
-- Sistema de inventario en tiempo real
-- Métricas avanzadas de business intelligence
+- Verifica que `.env` tenga las variables correctas
+- Verifica que Supabase esté funcionando
 
-### Fase 3 (Escalamiento)
-- Multi-tenant para otras empresas
-- API pública para integraciones
-- Aplicación móvil nativa
-- Sistema de afiliados
+### Panel admin no carga
 
-## 🆘 Soporte y Contacto
+- Verifica que tu usuario tenga rol ADMIN:
+  ```sql
+  SELECT email, role FROM users WHERE email = 'tu-email';
+  ```
 
-Para soporte técnico y consultas:
-- **Email**: soporte@amci.com
-- **Documentación**: [URL de documentación]
-- **Issues**: [URL del repositorio]/issues
+### Más problemas
+
+Ver sección "Problemas Conocidos" en **[PROYECTO-STATUS.md](./PROYECTO-STATUS.md)**
+
+## 📞 Soporte
+
+1. Revisa **[PROYECTO-STATUS.md](./PROYECTO-STATUS.md)** primero
+2. Verifica logs del servidor (terminal)
+3. Verifica console del navegador (F12)
+4. Consulta documentación oficial:
+   - [Next.js](https://nextjs.org/docs)
+   - [Supabase](https://supabase.com/docs)
+   - [Stripe](https://stripe.com/docs)
+
+## 📊 Estado del Proyecto
+
+```
+Frontend:        ████████████████████░ 85%
+Backend APIs:    ███████████████████░░ 80%
+Base de Datos:   ████████████████████░ 95%
+Integración:     ████████████░░░░░░░░░ 60%
+Testing:         ░░░░░░░░░░░░░░░░░░░░░  0%
+Documentación:   █████████████████████ 100%
+```
+
+## 🎯 Próximos Pasos
+
+1. 🚨 **CRÍTICO**: Completar flujo de checkout (guardar orden en BD)
+2. ⚡ Implementar sistema de tracking de envíos
+3. ⚡ Gestión automática de inventario
+4. 📧 Sistema de notificaciones por email
+5. 💰 Dispersión de pagos a proveedores
+
+Ver detalles técnicos en: **[DESARROLLO-SIGUIENTE.md](./DESARROLLO-SIGUIENTE.md)**
+
+## 🤝 Contribución
+
+1. Fork del repositorio
+2. Crear branch: `git checkout -b feature/AmazingFeature`
+3. Commit: `git commit -m 'Add some AmazingFeature'`
+4. Push: `git push origin feature/AmazingFeature`
+5. Abrir Pull Request
 
 ## 📄 Licencia
 
-Copyright © 2024 AMCI. Todos los derechos reservados.
+Este proyecto es privado y confidencial.
+
+## ✨ Créditos
+
+Desarrollado con ❤️ usando Next.js, Supabase y Stripe
 
 ---
 
-**🤖 Generated with [Claude Code](https://claude.ai/code)**
+**📚 Para información detallada, consulta: [PROYECTO-STATUS.md](./PROYECTO-STATUS.md)**
 
-**Co-Authored-By: Claude <noreply@anthropic.com>**
+**🚀 Para empezar a desarrollar: [DESARROLLO-SIGUIENTE.md](./DESARROLLO-SIGUIENTE.md)**

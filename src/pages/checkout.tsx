@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
 import Link from "next/link";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/router";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import dynamic from 'next/dynamic';
+
+// Cargar el componente de Stripe de forma dinámica para evitar SSR
+const StripePayment = dynamic(
+  () => import('@/components/checkout/StripePayment'),
+  { ssr: false }
+);
 
 interface CheckoutFormData {
   // Información personal
@@ -24,38 +35,19 @@ interface CheckoutFormData {
   aceptaPrivacidad: boolean;
 }
 
-interface CartItem {
-  id: number;
-  nombre: string;
-  proveedor: string;
-  precio: number;
-  cantidad: number;
-  imagen: string;
-  emisor_factura: 'AMCI' | 'PROVEEDOR';
-}
-
 const Checkout = () => {
-  // Datos del carrito (normalmente vendrían del estado global)
-  const [cartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      nombre: "Kit EPP Básico - 1 Persona",
-      proveedor: "AP Safety",
-      precio: 450,
-      cantidad: 2,
-      imagen: "/img/products/epp-kit-1-main.jpg",
-      emisor_factura: 'AMCI'
-    },
-    {
-      id: 2,
-      nombre: "Refacciones Hidráulicas", 
-      proveedor: "MTM",
-      precio: 250,
-      cantidad: 1,
-      imagen: "/img/products/refacciones-hidraulicas.jpg",
-      emisor_factura: 'PROVEEDOR'
+  const { items: cartItems, getCartTotal, clearCart, loading: cartLoading } = useCart();
+  const { user, profile, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  // Debug info
+  useEffect(() => {
+    if (!authLoading) {
+      console.log('Checkout - User:', user?.email);
+      console.log('Checkout - Profile:', profile);
+      console.log('Checkout - Role:', profile?.role);
     }
-  ]);
+  }, [user, profile, authLoading]);
 
   const [formData, setFormData] = useState<CheckoutFormData>({
     nombre: '',
@@ -75,15 +67,47 @@ const Checkout = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [showPayment, setShowPayment] = useState(false);
+  const [orderData, setOrderData] = useState<any>(null);
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+  const subtotal = getCartTotal();
   const costoEnvio = 200;
   const iva = subtotal * 0.16;
   const total = subtotal + costoEnvio + iva;
 
   // Verificar múltiples emisores de factura
-  const emisoresDiferentes = new Set(cartItems.map(item => item.emisor_factura));
+  const emisoresDiferentes = new Set(cartItems.map(item => item.product?.emisor_factura).filter(Boolean));
   const multipleFacturas = emisoresDiferentes.size > 1;
+
+  useEffect(() => {
+    // Pre-llenar datos si el usuario está autenticado (solo al cargar)
+    if (user && profile && !formData.email && !formData.nombre) {
+      console.log('Pre-filling form with user data');
+      setFormData(prev => ({
+        ...prev,
+        nombre: profile.name || prev.nombre || '',
+        email: profile.email || user.email || prev.email || '',
+        telefono: profile.phone || prev.telefono || ''
+      }));
+    }
+  }, [user, profile]); // Solo cuando cambien user o profile
+
+  // Verificar carrito vacío de forma separada y solo cuando no estemos procesando pago
+  useEffect(() => {
+    // Solo redirigir si:
+    // 1. El carrito está vacío
+    // 2. Ya terminó de cargar tanto el carrito como la autenticación
+    // 3. NO estamos mostrando el formulario de pago
+    // 4. NO estamos procesando
+    if (cartItems.length === 0 &&
+        !cartLoading &&
+        !authLoading &&
+        !showPayment &&
+        !isProcessing) {
+      console.log('Cart is empty and not processing payment, redirecting to cart page');
+      router.push('/carrito');
+    }
+  }, [cartItems.length, cartLoading, authLoading, showPayment, isProcessing]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -128,32 +152,178 @@ const Checkout = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
+    e.stopPropagation();
+    console.log('Checkout form submitted');
+
+    // Evitar procesar si ya estamos procesando
+    if (isProcessing) {
+      console.log('Already processing, ignoring submit');
       return;
     }
-    
+
+    if (!validateForm()) {
+      console.log('Form validation failed, errors:', errors);
+      // Scroll al primer error
+      const firstErrorField = Object.keys(errors)[0];
+      if (firstErrorField) {
+        const element = document.getElementsByName(firstErrorField)[0];
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      return;
+    }
+
+    if (!user) {
+      console.log('No user found, redirecting to login');
+      alert('Debes iniciar sesión para completar la compra');
+      router.push('/login?redirect=/checkout');
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      console.log('Cart is empty, cannot proceed');
+      alert('Tu carrito está vacío');
+      router.push('/carrito');
+      return;
+    }
+
+    console.log('Form is valid, preparing payment...');
     setIsProcessing(true);
-    
+
     try {
-      // Aquí se integraría con Mercado Pago o Stripe
-      // Por ahora simulamos el proceso
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simular creación de orden y redirección a página de éxito
-      alert('¡Pedido creado exitosamente! Redirigiendo...');
-      // window.location.href = '/orden/123';
-      
+      // Guardar los datos de la orden para cuando el pago sea exitoso
+      const orderInfo = {
+        userId: user.id,
+        items: cartItems,
+        shippingAddress: {
+          nombre: formData.nombre,
+          calle: formData.calle,
+          numero: formData.numero,
+          colonia: formData.colonia,
+          ciudad: formData.ciudad,
+          estado: formData.estado,
+          codigoPostal: formData.codigoPostal
+        },
+        billingInfo: {
+          rfc: formData.rfc,
+          requiereFactura: formData.requiereFactura
+        },
+        subtotal,
+        shipping: costoEnvio,
+        tax: iva,
+        total
+      };
+
+      setOrderData(orderInfo);
+      setShowPayment(true);
+      console.log('Payment form displayed, showPayment set to true');
     } catch (error) {
-      console.error('Error al procesar el pago:', error);
-      alert('Error al procesar el pago. Inténtalo nuevamente.');
+      console.error('Error preparing payment:', error);
+      alert('Ocurrió un error al preparar el pago. Intenta nuevamente.');
     } finally {
       setIsProcessing(false);
     }
   };
 
+  const handlePaymentSuccess = async (paymentIntentId: string) => {
+    try {
+      setIsProcessing(true);
+
+      // Crear la orden con el ID del pago
+      const response = await fetch('/api/orders/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...orderData,
+          paymentIntentId
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Limpiar carrito
+        await clearCart();
+
+        // Redirigir a página de éxito
+        alert(`¡Pago exitoso! Número de orden: ${data.orderNumber}`);
+        router.push(`/orden/${data.orderId}`);
+      } else {
+        throw new Error(data.error || 'Error al crear la orden');
+      }
+    } catch (error) {
+      console.error('Error al procesar la orden:', error);
+      alert('El pago fue exitoso pero hubo un error al crear la orden. Contacta soporte.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    alert(`Error en el pago: ${error}`);
+    setShowPayment(false);
+  };
+
+  if (cartLoading || authLoading) {
+    return (
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Finalizar compra"
+            subtitle="Cargando..."
+            bg="bg-primary"
+          />
+          <section className="checkout__area pt-120 pb-120">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-xl-6 text-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                  <p className="mt-3">Preparando tu checkout...</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Layout>
+      </ProtectedRoute>
+    );
+  }
+
+  // Si el carrito está vacío y no estamos mostrando el pago, mostrar mensaje
+  if (cartItems.length === 0 && !showPayment) {
+    return (
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Finalizar compra"
+            subtitle="Tu carrito está vacío"
+            bg="bg-primary"
+          />
+          <section className="checkout__area pt-120 pb-120">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-xl-6 text-center">
+                  <h3>Tu carrito está vacío</h3>
+                  <p className="mt-3">Agrega algunos productos antes de continuar al checkout.</p>
+                  <Link href="/catalogo" className="btn btn-primary mt-3">
+                    Ir al catálogo
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Layout>
+      </ProtectedRoute>
+    );
+  }
+
   return (
-    <Layout header={1} footer={1}>
+    <ProtectedRoute requireAuth={true}>
+      <Layout header={1} footer={1}>
       <Banner 
         title="Finalizar compra"
         subtitle="Completa tu pedido de forma segura"
@@ -162,7 +332,7 @@ const Checkout = () => {
       
       <section className="checkout__area pt-120 pb-80">
         <div className="container">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="row">
               {/* Formulario de checkout */}
               <div className="col-xl-8 col-lg-8">
@@ -408,21 +578,21 @@ const Checkout = () => {
                       {cartItems.map(item => (
                         <div key={item.id} className="order-product d-flex justify-content-between align-items-center mb-3">
                           <div className="product-info d-flex align-items-center">
-                            <img 
-                              src={item.imagen}
-                              alt={item.nombre}
+                            <img
+                              src={item.product?.images?.[0]?.url || 'https://via.placeholder.com/50x50?text=Sin+Imagen'}
+                              alt={item.product?.nombre || 'Producto'}
                               className="me-3"
                               style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                             />
                             <div>
-                              <h6 className="mb-1">{item.nombre}</h6>
+                              <h6 className="mb-1">{item.product?.nombre || 'Producto sin nombre'}</h6>
                               <small className="text-muted">
-                                {item.proveedor} × {item.cantidad}
+                                {item.product?.provider?.razon_social || 'Sin proveedor'} × {item.quantity}
                               </small>
                             </div>
                           </div>
                           <span className="product-total">
-                            ${(item.precio * item.cantidad).toLocaleString('es-MX')}
+                            ${((item.product?.precio || 0) * item.quantity).toLocaleString('es-MX')}
                           </span>
                         </div>
                       ))}
@@ -457,24 +627,51 @@ const Checkout = () => {
                       </div>
                     </div>
                     
-                    {/* Botón de pago */}
-                    <button 
-                      type="submit"
-                      className="btn btn-primary btn-lg w-100"
-                      disabled={isProcessing}
-                    >
-                      {isProcessing ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                          Procesando...
-                        </>
-                      ) : (
-                        <>
-                          <i className="fal fa-credit-card me-2"></i>
-                          Pagar ahora
-                        </>
-                      )}
-                    </button>
+                    {/* Botón de pago o formulario de Stripe */}
+                    {!showPayment ? (
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-lg w-100"
+                        disabled={isProcessing}
+                        onClick={(e) => {
+                          console.log('Payment button clicked');
+                          console.log('showPayment:', showPayment);
+                          console.log('isProcessing:', isProcessing);
+                          console.log('cartItems.length:', cartItems.length);
+                        }}
+                      >
+                        {isProcessing ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Procesando...
+                          </>
+                        ) : (
+                          <>
+                            <i className="fal fa-credit-card me-2"></i>
+                            Continuar al pago
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <div className="stripe-payment-wrapper">
+                        <h5 className="mb-3">Completa tu pago</h5>
+                        <StripePayment
+                          amount={total}
+                          orderId={`ORDER-${Date.now()}`}
+                          customerEmail={formData.email}
+                          onSuccess={handlePaymentSuccess}
+                          onError={handlePaymentError}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-outline-secondary w-100 mt-2"
+                          onClick={() => setShowPayment(false)}
+                        >
+                          <i className="fas fa-arrow-left me-2"></i>
+                          Volver a los datos
+                        </button>
+                      </div>
+                    )}
                     
                     <div className="payment-methods text-center mt-3">
                       <small className="text-muted">Pago 100% seguro</small>
@@ -491,7 +688,8 @@ const Checkout = () => {
           </form>
         </div>
       </section>
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

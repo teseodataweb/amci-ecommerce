@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
 import Link from "next/link";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Order {
   id: number;
@@ -14,47 +16,41 @@ interface Order {
 }
 
 const MisOrdenes = () => {
-  // Datos simulados del cliente - en producción vendrían de la API/autenticación
-  const [orders] = useState<Order[]>([
-    {
-      id: 1001,
-      fecha: "2024-01-15T10:30:00Z",
-      total: 1050,
-      estado: 'ENVIADO',
-      items_count: 2,
-      primer_producto: "Kit EPP Básico - 1 Persona",
-      proveedor_principal: "AP Safety"
-    },
-    {
-      id: 1002,
-      fecha: "2024-01-14T14:20:00Z",
-      total: 1650,
-      estado: 'CONFIRMADO',
-      items_count: 1,
-      primer_producto: "Kit EPP Avanzado - 15 Personas",
-      proveedor_principal: "AP Safety"
-    },
-    {
-      id: 1003,
-      fecha: "2024-01-10T09:15:00Z",
-      total: 15500,
-      estado: 'ENTREGADO',
-      items_count: 1,
-      primer_producto: "Bomba Sumergible Industrial",
-      proveedor_principal: "Pumping Team"
-    },
-    {
-      id: 1004,
-      fecha: "2024-01-05T16:45:00Z",
-      total: 870,
-      estado: 'CERRADO',
-      items_count: 3,
-      primer_producto: "Refacciones Hidráulicas",
-      proveedor_principal: "MTM"
-    }
-  ]);
-
+  const { user } = useAuth();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('');
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/orders?userId=${user.id}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          const mappedOrders = data.orders.map((order: any) => ({
+            id: order.numero_orden,
+            fecha: order.fecha,
+            total: order.total,
+            estado: order.estado,
+            items_count: order.items_count,
+            primer_producto: order.items[0]?.product_name || 'Sin productos',
+            proveedor_principal: 'Proveedor'
+          }));
+          setOrders(mappedOrders);
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
 
   const filteredOrders = orders.filter(order => 
     !statusFilter || order.estado === statusFilter
@@ -84,40 +80,69 @@ const MisOrdenes = () => {
     return messages[status as keyof typeof messages] || 'Estado desconocido';
   };
 
-  if (orders.length === 0) {
+  if (loading) {
     return (
-      <Layout header={1} footer={1}>
-        <Banner 
-          title="Mis Órdenes"
-          subtitle="Historial de compras"
-          bg="bg-primary"
-        />
-        
-        <section className="orders__area pt-120 pb-120">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-xl-6 text-center">
-                <div className="empty-orders">
-                  <i className="fal fa-clipboard-list fa-5x text-muted mb-4"></i>
-                  <h3 className="mb-3">No tienes órdenes aún</h3>
-                  <p className="text-muted mb-4">
-                    ¡Explora nuestro catálogo y realiza tu primera compra!
-                  </p>
-                  <Link href="/catalogo" className="btn btn-primary btn-lg">
-                    <i className="fal fa-shopping-cart me-2"></i>
-                    Explorar Catálogo
-                  </Link>
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Mis Órdenes"
+            subtitle="Cargando..."
+            bg="bg-primary"
+          />
+          <section className="orders__area pt-120 pb-120">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-xl-6 text-center">
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                  </div>
+                  <p className="mt-3">Cargando tus órdenes...</p>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </Layout>
+          </section>
+        </Layout>
+      </ProtectedRoute>
+    );
+  }
+
+  if (orders.length === 0 && !loading) {
+    return (
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Mis Órdenes"
+            subtitle="Historial de compras"
+            bg="bg-primary"
+          />
+
+          <section className="orders__area pt-120 pb-120">
+            <div className="container">
+              <div className="row justify-content-center">
+                <div className="col-xl-6 text-center">
+                  <div className="empty-orders">
+                    <i className="fal fa-clipboard-list fa-5x text-muted mb-4"></i>
+                    <h3 className="mb-3">No tienes órdenes aún</h3>
+                    <p className="text-muted mb-4">
+                      ¡Explora nuestro catálogo y realiza tu primera compra!
+                    </p>
+                    <Link href="/catalogo" className="btn btn-primary btn-lg">
+                      <i className="fal fa-shopping-cart me-2"></i>
+                      Explorar Catálogo
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Layout>
+      </ProtectedRoute>
     );
   }
 
   return (
-    <Layout header={1} footer={1}>
+    <ProtectedRoute requireAuth={true}>
+      <Layout header={1} footer={1}>
       <Banner 
         title="Mis Órdenes"
         subtitle={`${orders.length} órdenes realizadas`}
@@ -306,7 +331,8 @@ const MisOrdenes = () => {
           </div>
         </div>
       </section>
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

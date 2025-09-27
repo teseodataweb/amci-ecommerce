@@ -1,68 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
 import Link from "next/link";
-
-interface CartItem {
-  id: number;
-  producto_id: number;
-  nombre: string;
-  proveedor: string;
-  precio: number;
-  cantidad: number;
-  imagen: string;
-  variant?: string;
-  emisor_factura: 'AMCI' | 'PROVEEDOR';
-}
+import { useCart } from "@/contexts/CartContext";
+import { useRouter } from "next/router";
 
 const Carrito = () => {
-  // Datos de muestra del carrito - en producción vendrían del estado global/localStorage
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      producto_id: 1,
-      nombre: "Kit EPP Básico - 1 Persona",
-      proveedor: "AP Safety",
-      precio: 450,
-      cantidad: 2,
-      imagen: "/img/products/epp-kit-1-main.jpg",
-      variant: "Talla M",
-      emisor_factura: 'AMCI'
-    },
-    {
-      id: 2,
-      producto_id: 3,
-      nombre: "Refacciones Hidráulicas",
-      proveedor: "MTM",
-      precio: 250,
-      cantidad: 1,
-      imagen: "/img/products/refacciones-hidraulicas.jpg",
-      emisor_factura: 'PROVEEDOR'
-    }
-  ]);
+  const { items: cartItems, removeFromCart, updateQuantity, getCartTotal, loading } = useCart();
+  const router = useRouter();
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, cantidad: newQuantity } : item
-      )
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+  const subtotal = getCartTotal();
   const costoEnvio = 200; // Costo fijo de envío para el ejemplo
   const iva = subtotal * 0.16; // 16% IVA
   const total = subtotal + costoEnvio + iva;
 
   // Verificar si hay productos de diferentes emisores de factura
-  const emisoresDiferentes = new Set(cartItems.map(item => item.emisor_factura));
+  const emisoresDiferentes = new Set(cartItems.map(item => item.product?.emisor_factura).filter(Boolean));
   const multipleFacturas = emisoresDiferentes.size > 1;
+
+  if (loading) {
+    return (
+      <Layout header={1} footer={1}>
+        <Banner
+          title="Carrito de compras"
+          subtitle="Cargando..."
+          bg="bg-primary"
+        />
+        <section className="cart__area pt-120 pb-120">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-xl-6 text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Layout>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -127,25 +104,25 @@ const Carrito = () => {
                           <td>
                             <div className="cart__product d-flex align-items-center">
                               <div className="cart__product-thumb me-3">
-                                <img 
-                                  src={item.imagen}
-                                  alt={item.nombre}
+                                <img
+                                  src={item.product?.images?.[0]?.url || 'https://via.placeholder.com/80x80?text=Sin+Imagen'}
+                                  alt={item.product?.nombre || 'Producto'}
                                   style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                                 />
                               </div>
                               <div className="cart__product-content">
                                 <h5 className="cart__product-title mb-1">
-                                  <Link href={`/producto/${item.producto_id}`}>
-                                    {item.nombre}
+                                  <Link href={`/producto/${item.product?.slug || item.product_id}`}>
+                                    {item.product?.nombre || 'Producto sin nombre'}
                                   </Link>
                                 </h5>
                                 <span className="text-muted small">
-                                  {item.proveedor}
-                                  {item.variant && ` • ${item.variant}`}
+                                  {item.product?.provider?.razon_social || 'Sin proveedor'}
+                                  {item.variant_data && ` • ${JSON.stringify(item.variant_data)}`}
                                 </span>
                                 <div className="mt-1">
-                                  <span className={`badge ${item.emisor_factura === 'AMCI' ? 'bg-primary' : 'bg-secondary'}`}>
-                                    Factura: {item.emisor_factura}
+                                  <span className={`badge ${item.product?.emisor_factura === 'AMCI' ? 'bg-primary' : 'bg-secondary'}`}>
+                                    Factura: {item.product?.emisor_factura || 'AMCI'}
                                   </span>
                                 </div>
                               </div>
@@ -153,23 +130,23 @@ const Carrito = () => {
                           </td>
                           <td>
                             <span className="cart__price">
-                              ${item.precio.toLocaleString('es-MX')} MXN
+                              ${(item.product?.precio || 0).toLocaleString('es-MX')} MXN
                             </span>
                           </td>
                           <td>
                             <div className="quantity-control d-flex align-items-center">
-                              <button 
+                              <button
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => updateQuantity(item.id, item.cantidad - 1)}
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               >
                                 -
                               </button>
                               <span className="quantity-display mx-3">
-                                {item.cantidad}
+                                {item.quantity}
                               </span>
-                              <button 
+                              <button
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => updateQuantity(item.id, item.cantidad + 1)}
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               >
                                 +
                               </button>
@@ -177,13 +154,13 @@ const Carrito = () => {
                           </td>
                           <td>
                             <span className="cart__total fw-bold">
-                              ${(item.precio * item.cantidad).toLocaleString('es-MX')} MXN
+                              ${((item.product?.precio || 0) * item.quantity).toLocaleString('es-MX')} MXN
                             </span>
                           </td>
                           <td>
-                            <button 
+                            <button
                               className="btn btn-outline-danger btn-sm"
-                              onClick={() => removeItem(item.id)}
+                              onClick={() => removeFromCart(item.id)}
                             >
                               <i className="fal fa-trash"></i>
                             </button>

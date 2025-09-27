@@ -66,7 +66,7 @@ export default function Registro() {
         <Head>
           <title>Registro Exitoso - AMCI E-commerce</title>
         </Head>
-        <Layout>
+        <Layout header={1} footer={1}>
           <section className="contact-area pt-100 pb-100">
             <div className="container">
               <div className="row justify-content-center">
@@ -99,7 +99,7 @@ export default function Registro() {
         <title>Registro de Cliente - AMCI E-commerce</title>
         <meta name="description" content="Crea tu cuenta en AMCI E-commerce" />
       </Head>
-      <Layout>
+      <Layout header={1} footer={1}>
         <section className="contact-area pt-100 pb-100">
           <div className="container">
             <div className="row justify-content-center">

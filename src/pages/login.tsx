@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +11,16 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, user, profile } = useAuth();
+  const { redirect } = router.query;
+
+  // Si ya está autenticado Y está en la página de login, redirigir
+  useEffect(() => {
+    if (user && profile && router.pathname === '/login') {
+      const redirectUrl = redirect ? decodeURIComponent(redirect as string) : '/';
+      router.push(redirectUrl);
+    }
+  }, [user, profile, redirect, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +33,11 @@ export default function Login() {
       setError(result.error);
       setLoading(false);
     } else {
-      // Redireccionar según el rol del usuario (se manejará después de obtener el perfil)
-      router.push('/');
+      // Esperar un momento para que se cargue el perfil
+      setTimeout(() => {
+        const redirectUrl = redirect ? decodeURIComponent(redirect as string) : '/';
+        router.push(redirectUrl);
+      }, 1000);
     }
   };
 
@@ -35,7 +47,7 @@ export default function Login() {
         <title>Iniciar Sesión - AMCI E-commerce</title>
         <meta name="description" content="Accede a tu cuenta AMCI" />
       </Head>
-      <Layout>
+      <Layout header={1} footer={1}>
         <section className="contact-area pt-100 pb-100">
           <div className="container">
             <div className="row justify-content-center">
