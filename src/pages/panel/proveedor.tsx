@@ -129,20 +129,49 @@ const PanelProveedor = () => {
     setTrackingInfo({ carrier: '', tracking: '', tracking_url: '' });
   };
 
-  const submitTracking = () => {
+  const submitTracking = async () => {
     if (!selectedOrder || !trackingInfo.carrier || !trackingInfo.tracking) {
       alert('Por favor completa todos los campos obligatorios');
       return;
     }
 
-    setOrders(prevOrders =>
-      prevOrders.map(order =>
-        order.id === selectedOrder.id ? { ...order, estado: 'ENVIADO' as const } : order
-      )
-    );
+    if (!user) {
+      alert('Error: No se encontró información del usuario');
+      return;
+    }
 
-    setShowTrackingModal(false);
-    alert('Información de envío registrada exitosamente. El cliente ha sido notificado.');
+    try {
+      const response = await fetch('/api/provider/shipping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: selectedOrder.id,
+          providerId: user.id,
+          carrier: trackingInfo.carrier,
+          tracking: trackingInfo.tracking,
+          tracking_url: trackingInfo.tracking_url || null
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Actualizar estado local
+        setOrders(prevOrders =>
+          prevOrders.map(order =>
+            order.id === selectedOrder.id ? { ...order, estado: 'ENVIADO' as const } : order
+          )
+        );
+
+        setShowTrackingModal(false);
+        alert(data.message || 'Información de envío registrada exitosamente');
+      } else {
+        alert(data.error || 'Error al registrar el envío');
+      }
+    } catch (error) {
+      console.error('Error submitting tracking:', error);
+      alert('Error al registrar el envío. Intenta nuevamente.');
+    }
   };
 
   const markAsDelivered = (orderId: number) => {

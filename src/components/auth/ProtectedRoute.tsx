@@ -27,7 +27,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       profileRole: profile?.role
     });
 
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout | undefined;
 
     // Solo verificar cuando la carga haya terminado
     if (!loading) {

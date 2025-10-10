@@ -1,130 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
+import { useAuth } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 interface OrderItem {
-  id: number;
+  id: string;
+  producto_id: string;
   producto_nombre: string;
   cantidad: number;
   precio_unitario: number;
   subtotal: number;
   proveedor: string;
+  imagen?: string;
 }
 
 interface Order {
-  id: number;
+  id: string;
+  numero_orden: string;
   fecha: string;
-  cliente_nombre: string;
-  cliente_email: string;
   total: number;
   subtotal: number;
   envio: number;
-  iva: number;
+  impuestos: number;
   estado: 'RECIBIDO' | 'CONFIRMADO' | 'ENVIADO' | 'ENTREGADO' | 'CERRADO' | 'CANCELADO';
-  direccion_envio: string;
-  telefono_cliente: string;
+  payment_status?: string;
   items: OrderItem[];
+  direccion?: {
+    nombre: string;
+    calle: string;
+    numero: string;
+    colonia: string;
+    ciudad: string;
+    estado: string;
+    codigo_postal: string;
+  };
   tracking?: {
     carrier: string;
     numero: string;
     url?: string;
-  };
+    fecha_envio?: string;
+  } | null;
 }
-
-// Datos simulados - en producción vendrían de la API
-const getOrderById = (id: string): Order | null => {
-  const orders: { [key: string]: Order } = {
-    "1001": {
-      id: 1001,
-      fecha: "2024-01-15T10:30:00Z",
-      cliente_nombre: "Juan Pérez García",
-      cliente_email: "juan@empresa.com",
-      total: 1050,
-      subtotal: 900,
-      envio: 150,
-      iva: 144,
-      estado: 'ENVIADO',
-      direccion_envio: "Av. Insurgentes 123, Col. Roma Norte, CDMX, CP 06700",
-      telefono_cliente: "55 1234 5678",
-      items: [
-        {
-          id: 1,
-          producto_nombre: "Kit EPP Básico - 1 Persona (Talla M)",
-          cantidad: 2,
-          precio_unitario: 450,
-          subtotal: 900,
-          proveedor: "AP Safety"
-        }
-      ],
-      tracking: {
-        carrier: "DHL",
-        numero: "1234567890",
-        url: "https://www.dhl.com.mx/ex/tracking.html?AWB=1234567890"
-      }
-    },
-    "1002": {
-      id: 1002,
-      fecha: "2024-01-14T14:20:00Z",
-      cliente_nombre: "María González",
-      cliente_email: "maria@construcciones.com",
-      total: 1650,
-      subtotal: 1350,
-      envio: 180,
-      iva: 216,
-      estado: 'CONFIRMADO',
-      direccion_envio: "Calzada de Tlalpan 456, Col. Del Valle, CDMX, CP 03100",
-      telefono_cliente: "55 8765 4321",
-      items: [
-        {
-          id: 1,
-          producto_nombre: "Kit EPP Avanzado - 15 Personas",
-          cantidad: 1,
-          precio_unitario: 1350,
-          subtotal: 1350,
-          proveedor: "AP Safety"
-        }
-      ]
-    }
-  };
-
-  return orders[id] || null;
-};
 
 const OrdenDetalle = () => {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAuth();
+  const [order, setOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const isSuccess = router.query.success === 'true';
 
-  if (!id || typeof id !== 'string') {
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!id || typeof id !== 'string') return;
+
+      try {
+        setLoading(true);
+        const url = user
+          ? `/api/orders/${id}?userId=${user.id}`
+          : `/api/orders/${id}`;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error('Orden no encontrada');
+        }
+
+        const data = await response.json();
+        setOrder(data);
+      } catch (err) {
+        console.error('Error fetching order:', err);
+        setError(err instanceof Error ? err.message : 'Error al cargar la orden');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [id, user]);
+
+  if (loading) {
     return (
-      <Layout header={1} footer={1}>
-        <div className="container py-5 text-center">
-          <h3>Cargando orden...</h3>
-        </div>
-      </Layout>
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <div className="container py-5 text-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+            <p className="mt-3">Cargando orden...</p>
+          </div>
+        </Layout>
+      </ProtectedRoute>
     );
   }
 
-  const order = getOrderById(id);
-
-  if (!order) {
+  if (!order || error) {
     return (
-      <Layout header={1} footer={1}>
-        <Banner 
-          title="Orden no encontrada"
-          subtitle="La orden que buscas no existe o ha sido eliminada"
-          bg="bg-danger"
-        />
-        <div className="container py-5 text-center">
-          <h3>Orden no encontrada</h3>
-          <p>Lo sentimos, no pudimos encontrar la orden #{id}.</p>
-          <Link href="/catalogo" className="btn btn-primary">
-            <i className="fal fa-arrow-left me-2"></i>
-            Volver al catálogo
-          </Link>
-        </div>
-      </Layout>
+      <ProtectedRoute requireAuth={true}>
+        <Layout header={1} footer={1}>
+          <Banner
+            title="Orden no encontrada"
+            subtitle={error || "La orden que buscas no existe o ha sido eliminada"}
+            bg="bg-danger"
+          />
+          <div className="container py-5 text-center">
+            <h3>Orden no encontrada</h3>
+            <p>Lo sentimos, no pudimos encontrar la orden #{id}.</p>
+            <Link href="/catalogo" className="btn btn-primary">
+              <i className="fal fa-arrow-left me-2"></i>
+              Volver al catálogo
+            </Link>
+          </div>
+        </Layout>
+      </ProtectedRoute>
     );
   }
 
@@ -153,12 +145,13 @@ const OrdenDetalle = () => {
   };
 
   return (
-    <Layout header={1} footer={1}>
-      <Banner 
-        title={`Orden #${order.id}`}
-        subtitle="Detalles y seguimiento de tu pedido"
-        bg="bg-success"
-      />
+    <ProtectedRoute requireAuth={true}>
+      <Layout header={1} footer={1}>
+        <Banner
+          title={`Orden #${order.numero_orden}`}
+          subtitle="Detalles y seguimiento de tu pedido"
+          bg="bg-success"
+        />
       
       <section className="order__details pt-120 pb-80">
         <div className="container">
@@ -169,7 +162,7 @@ const OrdenDetalle = () => {
                 <i className="fal fa-check-circle fa-4x text-success mb-4"></i>
                 <h2 className="mb-3">¡Gracias por tu compra!</h2>
                 <p className="lead mb-4">
-                  Tu orden #{order.id} ha sido procesada exitosamente. 
+                  Tu orden #{order.numero_orden} ha sido procesada exitosamente.
                   Recibirás actualizaciones por email en cada etapa del proceso.
                 </p>
                 
@@ -200,7 +193,7 @@ const OrdenDetalle = () => {
                     <div className="row">
                       <div className="col-md-6 mb-3">
                         <h6>Número de Orden</h6>
-                        <p className="mb-0">#{order.id}</p>
+                        <p className="mb-0">#{order.numero_orden}</p>
                       </div>
                       <div className="col-md-6 mb-3">
                         <h6>Fecha</h6>
@@ -214,23 +207,33 @@ const OrdenDetalle = () => {
                           })}
                         </p>
                       </div>
-                      <div className="col-md-6 mb-3">
-                        <h6>Cliente</h6>
-                        <p className="mb-0">{order.cliente_nombre}</p>
-                        <small className="text-muted">{order.cliente_email}</small>
-                      </div>
-                      <div className="col-md-6 mb-3">
-                        <h6>Teléfono</h6>
-                        <p className="mb-0">{order.telefono_cliente}</p>
-                      </div>
+                      {order.payment_status && (
+                        <div className="col-md-6 mb-3">
+                          <h6>Estado de Pago</h6>
+                          <span className={`badge ${order.payment_status === 'paid' ? 'bg-success' : 'bg-warning'}`}>
+                            {order.payment_status === 'paid' ? 'Pagado' : 'Pendiente'}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {/* Shipping Address */}
-                  <div className="shipping-info mb-4">
-                    <h6>Dirección de Envío</h6>
-                    <p className="mb-0">{order.direccion_envio}</p>
-                  </div>
+                  {order.direccion && (
+                    <div className="shipping-info mb-4">
+                      <h6>Dirección de Envío</h6>
+                      <p className="mb-1"><strong>{order.direccion.nombre}</strong></p>
+                      <p className="mb-1">
+                        {order.direccion.calle} {order.direccion.numero}
+                      </p>
+                      <p className="mb-1">
+                        {order.direccion.colonia}, {order.direccion.ciudad}
+                      </p>
+                      <p className="mb-0">
+                        {order.direccion.estado} - CP {order.direccion.codigo_postal}
+                      </p>
+                    </div>
+                  )}
 
                   {/* Tracking Information */}
                   {order.tracking && (
@@ -318,7 +321,7 @@ const OrdenDetalle = () => {
                   
                   <div className="summary-row d-flex justify-content-between mb-3">
                     <span>IVA (16%):</span>
-                    <span>${order.iva.toLocaleString('es-MX')} MXN</span>
+                    <span>${order.impuestos.toLocaleString('es-MX')} MXN</span>
                   </div>
                   
                   <hr />
@@ -336,7 +339,7 @@ const OrdenDetalle = () => {
                       Continuar Comprando
                     </Link>
                     
-                    <Link href="/panel/cliente" className="btn btn-outline-primary">
+                    <Link href="/ordenes" className="btn btn-outline-primary">
                       <i className="fal fa-list me-2"></i>
                       Ver Mis Órdenes
                     </Link>
@@ -371,7 +374,8 @@ const OrdenDetalle = () => {
           </div>
         </div>
       </section>
-    </Layout>
+      </Layout>
+    </ProtectedRoute>
   );
 };
 

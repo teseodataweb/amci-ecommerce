@@ -18,7 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       subtotal,
       shipping,
       tax,
-      total
+      total,
+      paymentIntentId
     } = req.body;
 
     // Verificar que el usuario existe
@@ -82,6 +83,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         envio: shipping,
         impuestos: tax,
         estado: 'RECIBIDO',
+        payment_id: paymentIntentId || null,
+        payment_status: paymentIntentId ? 'paid' : 'pending',
         emisor_factura_resumen: emisorFacturaResumen,
         notes: billingInfo?.notes || ''
       })
@@ -122,6 +125,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         reason: 'Orden creada',
         user_id: userId
       });
+
+    // Decrementar stock de productos
+    for (const item of items) {
+      // Primero obtener el stock actual
+      const { data: product } = await supabase
+        .from('products')
+        .select('stock')
+        .eq('id', item.product_id)
+        .single();
+
+      if (product && product.stock >= item.quantity) {
+        const newStock = product.stock - item.quantity;
+        const { error: stockError } = await supabase
+          .from('products')
+          .update({
+            stock: newStock
+          })
+          .eq('id', item.product_id);
+
+        if (stockError) {
+          console.error('Error updating stock:', stockError);
+        }
+      }
+    }
 
     // Limpiar el carrito del usuario
     await supabase
