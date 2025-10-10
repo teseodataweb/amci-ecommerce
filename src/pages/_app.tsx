@@ -3,7 +3,6 @@ import React, { Suspense, useEffect } from "react";
 // bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import "public/app/css/fontawesome-pro.css";
 import "@/styles/index-four.scss";
 import "@/styles/main.scss";
 
