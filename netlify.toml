@@ -1,17 +1,5 @@
 [build]
   command = "npm run build"
-  publish = ".next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "9"
-
-# Redireccionamientos y reglas de caché
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
