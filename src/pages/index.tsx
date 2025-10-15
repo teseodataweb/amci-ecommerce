@@ -40,6 +40,7 @@ const Home = () => {
                   width={500}
                   height={500}
                   priority
+                  unoptimized
                   style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.3))' }}
                 />
               </div>
@@ -70,6 +71,7 @@ const Home = () => {
                       alt="AP Safety"
                       width={250}
                       height={125}
+                      unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
@@ -97,6 +99,7 @@ const Home = () => {
                       alt="MTM"
                       width={250}
                       height={125}
+                      unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
@@ -124,6 +127,7 @@ const Home = () => {
                       alt="Pumping Team"
                       width={250}
                       height={125}
+                      unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
@@ -151,6 +155,7 @@ const Home = () => {
                       alt="Plásticos Torres"
                       width={250}
                       height={125}
+                      unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>

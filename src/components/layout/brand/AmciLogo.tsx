@@ -42,6 +42,7 @@ const AmciLogo: React.FC<AmciLogoProps> = ({
           width={imageSizes[size].width}
           height={imageSizes[size].height}
           priority
+          unoptimized
           style={{ objectFit: 'contain' }}
         />
       </Link>
