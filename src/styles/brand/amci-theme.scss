@@ -324,11 +324,11 @@ footer {
 .cart-icon {
   color: var(--amci-primary);
   text-decoration: none;
-  
+
   &:hover {
     color: var(--amci-primary-dark);
   }
-  
+
   .badge {
     font-size: 0.7rem;
     min-width: 1.2rem;
@@ -336,5 +336,443 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+// ============================================
+// HERO SECTION AMCI
+// ============================================
+
+.hero__area-amci {
+  position: relative;
+  background-image: url('/img/hero/hero-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  overflow: hidden;
+
+  // Overlay oscuro para contraste
+  .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+
+  .container {
+    z-index: 2;
+  }
+
+  .min-vh-50 {
+    min-height: 50vh;
+  }
+}
+
+.hero__title-amci {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.hero__description-amci {
+  font-size: 1.25rem;
+  color: #ffffff;
+  line-height: 1.6;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
+}
+
+// ============================================
+// PROVIDERS SECTION AMCI
+// ============================================
+
+.provider__card-amci {
+  border: 1px solid var(--amci-border-light);
+  border-radius: 12px;
+  background: white;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(30, 64, 175, 0.15);
+    border-color: var(--amci-primary);
+  }
+
+  .provider__logo-wrapper {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--amci-gray-50);
+    border-radius: 8px;
+  }
+
+  .provider__logo-placeholder {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid var(--amci-border-light);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: all 0.3s ease;
+    }
+
+    .provider__logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--amci-gray-400);
+      letter-spacing: 1px;
+    }
+  }
+
+  &:hover .provider__logo-placeholder {
+    border-color: var(--amci-primary);
+    background: var(--amci-gray-50);
+    transform: scale(1.05);
+
+    img {
+      transform: scale(1.05);
+    }
+
+    .provider__logo-text {
+      color: var(--amci-primary);
+    }
+  }
+
+  .provider__name {
+    color: var(--amci-primary);
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .provider__description {
+    color: var(--amci-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .provider__specialties {
+    .badge-amci {
+      background-color: var(--amci-gray-100);
+      color: var(--amci-text-primary);
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// ============================================
+// FEATURES SECTION AMCI
+// ============================================
+
+.features__area-amci {
+  background-color: var(--amci-bg-secondary);
+}
+
+.feature__card-amci {
+  border: none;
+  border-radius: 12px;
+  background: white;
+  padding: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(30, 64, 175, 0.2);
+  }
+
+  .feature__card-body {
+    padding: 2.5rem;
+    text-align: center;
+  }
+
+  .feature__icon-amci {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(30, 64, 175, 0.05) 100%);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+
+    i {
+      transition: all 0.3s ease;
+    }
+  }
+
+  &:hover .feature__icon-amci {
+    background: linear-gradient(135deg, var(--amci-primary) 0%, var(--amci-primary-dark) 100%);
+
+    i {
+      color: white !important;
+    }
+  }
+
+  .feature__title {
+    color: var(--amci-text-primary);
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature__description {
+    color: var(--amci-text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+}
+
+// ============================================
+// FOOTER AMCI
+// ============================================
+
+.footer__amci {
+  background: linear-gradient(135deg, var(--amci-gray-900) 0%, var(--amci-gray-800) 100%);
+  color: var(--amci-gray-200);
+
+  .footer__title h3 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer__contact-amci {
+    .footer__contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      color: var(--amci-gray-300);
+      font-size: 0.95rem;
+
+      i {
+        color: var(--amci-primary-light);
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .footer__link a {
+    color: var(--amci-gray-300);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+
+    &:hover {
+      color: var(--amci-primary-light);
+      padding-left: 5px;
+    }
+  }
+
+  .touch__social-amci {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--amci-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+      }
+    }
+  }
+
+  .footer__copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    margin-top: 2rem;
+
+    .copyright__text {
+      color: var(--amci-gray-400);
+      font-size: 0.9rem;
+
+      a {
+        color: var(--amci-gray-400);
+        text-decoration: none;
+
+        &:hover {
+          color: var(--amci-primary-light);
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// SECTION TITLES AMCI
+// ============================================
+
+.section__title-main {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--amci-text-primary);
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.section__subtitle {
+  font-size: 1.125rem;
+  color: var(--amci-text-secondary);
+  line-height: 1.6;
+}
+
+// ============================================
+// UTILITY CLASSES AMCI
+// ============================================
+
+.bg-amci-light {
+  background-color: var(--amci-bg-secondary) !important;
+}
+
+.py-100 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.mb-60 {
+  margin-bottom: 3.75rem;
+}
+
+// ============================================
+// FORMS AMCI
+// ============================================
+
+.contact-form-wrap {
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  .title {
+    color: var(--amci-text-primary);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-grp {
+    margin-bottom: 1.5rem;
+
+    label {
+      color: var(--amci-text-primary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid var(--amci-border-light);
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: var(--amci-primary);
+        box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.15);
+      }
+    }
+  }
+
+  .btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+}
+
+// ============================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================
+
+@media (max-width: 992px) {
+  .hero__area-amci {
+    min-height: 500px;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
+  }
+
+  .py-100 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .provider__card-amci {
+    padding: 1.5rem;
+  }
+
+  .feature__card-amci .feature__card-body {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero__title-amci {
+    font-size: 1.75rem;
+  }
+
+  .hero__description-amci {
+    font-size: 1rem;
+  }
+
+  .section__title-main {
+    font-size: 1.75rem;
+  }
+
+  .provider__card-amci,
+  .feature__card-amci .feature__card-body {
+    padding: 1.5rem;
+  }
+
+  .contact-form-wrap {
+    padding: 2rem;
   }
 }

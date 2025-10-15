@@ -5,7 +5,7 @@ import AmciLogo from "@/components/layout/brand/AmciLogo";
 const Footer = () => {
   return (
     <footer>
-      <section className="footer__border p-relative z-index-11 pt-120 pb-55 foot-one-bg">
+      <section className="footer__border footer__amci p-relative z-index-11 pt-120 pb-55">
         <div className="footer__style-3">
           <span className="footer__cercle"></span>
           <div className="container">
@@ -13,26 +13,37 @@ const Footer = () => {
               <div className="row">
                 <div className="col-xl-5 col-lg-4 col-md-5 col-sm-6">
                   <div className="footer__widget mb-55">
-                    <div className="footer__logo mb-20">
-                      <AmciLogo size="small" />
+                    <div className="footer__logo mb-30">
+                      <AmciLogo size="medium" variant="white" />
                     </div>
-                    <div className="footer__contact mb-30">
-                      <span>AMCI - Suministros Industriales</span>
-                      <span>Ciudad de México, México</span>
-                      <span>soporte@amci.com</span>
-                      <span>+52 55 1234 5678</span>
+                    <div className="footer__contact footer__contact-amci mb-30">
+                      <p className="mb-2 text-white-50">
+                        Tu socio confiable en suministros industriales
+                      </p>
+                      <div className="footer__contact-item">
+                        <i className="fal fa-map-marker-alt me-2"></i>
+                        <span>Ciudad de México, México</span>
+                      </div>
+                      <div className="footer__contact-item">
+                        <i className="fal fa-envelope me-2"></i>
+                        <span>soporte@amci.com</span>
+                      </div>
+                      <div className="footer__contact-item">
+                        <i className="fal fa-phone me-2"></i>
+                        <span>+52 55 1234 5678</span>
+                      </div>
                     </div>
-                    <div className="touch__social">
-                      <Link href="/">
+                    <div className="touch__social touch__social-amci">
+                      <Link href="/" className="social-icon">
                         <i className="fa-brands fa-facebook-f"></i>
                       </Link>
-                      <Link href="/">
+                      <Link href="/" className="social-icon">
                         <i className="fa-brands fa-twitter"></i>
                       </Link>
-                      <Link href="/">
+                      <Link href="/" className="social-icon">
                         <i className="fa-brands fa-youtube"></i>
                       </Link>
-                      <Link href="/">
+                      <Link href="/" className="social-icon">
                         <i className="fa-brands fa-linkedin"></i>
                       </Link>
                     </div>
