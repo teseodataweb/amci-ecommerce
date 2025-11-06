@@ -156,113 +156,607 @@ const Home = () => {
           </div>
 
           <div className="row justify-content-center g-4">
+            {/* AP Safety Card */}
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-              <div className="provider__card provider__card-amci card h-100 text-center">
-                <div className="provider__logo-wrapper">
-                  <div className="provider__logo-placeholder">
+              <div
+                className="card h-100 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: '1px solid #e8e8e8',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(4, 70, 240, 0.12)';
+                  e.currentTarget.style.borderColor = '#0446F0';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = '#e8e8e8';
+                }}
+              >
+                {/* Badge de Certificación */}
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  color: '#ffffff',
+                  padding: '4px 10px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)'
+                }}>
+                  <i className="fas fa-certificate" style={{ fontSize: '10px' }}></i>
+                  Certificado ISO
+                </div>
+
+                <div style={{ padding: '24px 20px 20px' }}>
+                  {/* Logo del Proveedor */}
+                  <div style={{
+                    background: '#f8f9fa',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    marginBottom: '20px',
+                    minHeight: '140px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
                     <Image
                       src="/img/providers/ap-safety.png"
                       alt="AP Safety"
-                      width={250}
-                      height={125}
+                      width={220}
+                      height={110}
                       unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
-                </div>
-                <div className="provider__info">
-                  <h5 className="provider__name">AP Safety</h5>
-                  <p className="provider__description">
+
+                  {/* Nombre y Rating */}
+                  <h5 style={{
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '8px'
+                  }}>
+                    AP Safety
+                  </h5>
+
+                  {/* Rating con estrellas */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginBottom: '12px'
+                  }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className="fas fa-star" style={{ color: '#FFC107', fontSize: '14px' }}></i>
+                    ))}
+                    <span style={{ fontSize: '13px', color: '#666', marginLeft: '6px' }}>(5.0)</span>
+                  </div>
+
+                  {/* Descripción */}
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#666',
+                    lineHeight: '1.6',
+                    marginBottom: '16px',
+                    minHeight: '60px'
+                  }}>
                     Equipos de protección personal y seguridad industrial
                   </p>
-                  <div className="provider__specialties">
-                    <span className="badge badge-amci me-1">EPP</span>
-                    <span className="badge badge-amci me-1">Cascos</span>
-                    <span className="badge badge-amci">Guantes</span>
+
+                  {/* Info adicional */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid #f0f0f0'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-box" style={{ color: '#0446F0', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>200+ productos</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-truck-fast" style={{ color: '#10B981', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>24-48h</span>
+                    </div>
+                  </div>
+
+                  {/* Especialidades */}
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>EPP</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Cascos</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Guantes</span>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* MTM Card */}
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-              <div className="provider__card provider__card-amci card h-100 text-center">
-                <div className="provider__logo-wrapper">
-                  <div className="provider__logo-placeholder">
+              <div
+                className="card h-100 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: '1px solid #e8e8e8',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(4, 70, 240, 0.12)';
+                  e.currentTarget.style.borderColor = '#0446F0';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = '#e8e8e8';
+                }}
+              >
+                {/* Badge de Años de Experiencia */}
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)',
+                  color: '#ffffff',
+                  padding: '4px 10px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 8px rgba(4, 70, 240, 0.3)'
+                }}>
+                  <i className="fas fa-award" style={{ fontSize: '10px' }}></i>
+                  15+ años
+                </div>
+
+                <div style={{ padding: '24px 20px 20px' }}>
+                  <div style={{
+                    background: '#f8f9fa',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    marginBottom: '20px',
+                    minHeight: '140px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
                     <Image
                       src="/img/providers/mtm.png"
                       alt="MTM"
-                      width={250}
-                      height={125}
+                      width={220}
+                      height={110}
                       unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
-                </div>
-                <div className="provider__info">
-                  <h5 className="provider__name">MTM</h5>
-                  <p className="provider__description">
+
+                  <h5 style={{
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '8px'
+                  }}>
+                    MTM
+                  </h5>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginBottom: '12px'
+                  }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className="fas fa-star" style={{ color: '#FFC107', fontSize: '14px' }}></i>
+                    ))}
+                    <span style={{ fontSize: '13px', color: '#666', marginLeft: '6px' }}>(4.9)</span>
+                  </div>
+
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#666',
+                    lineHeight: '1.6',
+                    marginBottom: '16px',
+                    minHeight: '60px'
+                  }}>
                     Refacciones hidráulicas e industriales especializadas
                   </p>
-                  <div className="provider__specialties">
-                    <span className="badge badge-amci me-1">Hidráulica</span>
-                    <span className="badge badge-amci me-1">Sellos</span>
-                    <span className="badge badge-amci">Mangueras</span>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid #f0f0f0'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-box" style={{ color: '#0446F0', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>350+ productos</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-truck-fast" style={{ color: '#10B981', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>48-72h</span>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Hidráulica</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Sellos</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Mangueras</span>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Pumping Team Card */}
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-              <div className="provider__card provider__card-amci card h-100 text-center">
-                <div className="provider__logo-wrapper">
-                  <div className="provider__logo-placeholder">
+              <div
+                className="card h-100 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: '1px solid #e8e8e8',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(4, 70, 240, 0.12)';
+                  e.currentTarget.style.borderColor = '#0446F0';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = '#e8e8e8';
+                }}
+              >
+                {/* Badge de Entregas Rápidas */}
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                  color: '#ffffff',
+                  padding: '4px 10px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)'
+                }}>
+                  <i className="fas fa-bolt" style={{ fontSize: '10px' }}></i>
+                  Envío Express
+                </div>
+
+                <div style={{ padding: '24px 20px 20px' }}>
+                  <div style={{
+                    background: '#f8f9fa',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    marginBottom: '20px',
+                    minHeight: '140px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
                     <Image
                       src="/img/providers/pumping-team.png"
                       alt="Pumping Team"
-                      width={250}
-                      height={125}
+                      width={220}
+                      height={110}
                       unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
-                </div>
-                <div className="provider__info">
-                  <h5 className="provider__name">Pumping Team</h5>
-                  <p className="provider__description">
+
+                  <h5 style={{
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '8px'
+                  }}>
+                    Pumping Team
+                  </h5>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginBottom: '12px'
+                  }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className="fas fa-star" style={{ color: '#FFC107', fontSize: '14px' }}></i>
+                    ))}
+                    <span style={{ fontSize: '13px', color: '#666', marginLeft: '6px' }}>(5.0)</span>
+                  </div>
+
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#666',
+                    lineHeight: '1.6',
+                    marginBottom: '16px',
+                    minHeight: '60px'
+                  }}>
                     Bombas y sistemas de bombeo para toda aplicación
                   </p>
-                  <div className="provider__specialties">
-                    <span className="badge badge-amci me-1">Bombas</span>
-                    <span className="badge badge-amci me-1">Sumergibles</span>
-                    <span className="badge badge-amci">Centrífugas</span>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid #f0f0f0'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-box" style={{ color: '#0446F0', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>180+ productos</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-truck-fast" style={{ color: '#10B981', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>12-24h</span>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Bombas</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Sumergibles</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Centrífugas</span>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Plásticos Torres Card */}
             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-              <div className="provider__card provider__card-amci card h-100 text-center">
-                <div className="provider__logo-wrapper">
-                  <div className="provider__logo-placeholder">
+              <div
+                className="card h-100 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: '1px solid #e8e8e8',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(4, 70, 240, 0.12)';
+                  e.currentTarget.style.borderColor = '#0446F0';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = '#e8e8e8';
+                }}
+              >
+                {/* Badge de Garantía */}
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
+                  color: '#ffffff',
+                  padding: '4px 10px',
+                  borderRadius: '20px',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 8px rgba(139, 92, 246, 0.3)'
+                }}>
+                  <i className="fas fa-shield-check" style={{ fontSize: '10px' }}></i>
+                  Garantía 2 años
+                </div>
+
+                <div style={{ padding: '24px 20px 20px' }}>
+                  <div style={{
+                    background: '#f8f9fa',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    marginBottom: '20px',
+                    minHeight: '140px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
                     <Image
                       src="/img/providers/plasticos-torres.png"
                       alt="Plásticos Torres"
-                      width={250}
-                      height={125}
+                      width={220}
+                      height={110}
                       unoptimized
                       style={{ objectFit: 'contain' }}
                     />
                   </div>
-                </div>
-                <div className="provider__info">
-                  <h5 className="provider__name">Plásticos Torres</h5>
-                  <p className="provider__description">
+
+                  <h5 style={{
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    color: '#1a1a1a',
+                    marginBottom: '8px'
+                  }}>
+                    Plásticos Torres
+                  </h5>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginBottom: '12px'
+                  }}>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i key={star} className="fas fa-star" style={{ color: '#FFC107', fontSize: '14px' }}></i>
+                    ))}
+                    <span style={{ fontSize: '13px', color: '#666', marginLeft: '6px' }}>(4.8)</span>
+                  </div>
+
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#666',
+                    lineHeight: '1.6',
+                    marginBottom: '16px',
+                    minHeight: '60px'
+                  }}>
                     Iluminación LED industrial y comercial
                   </p>
-                  <div className="provider__specialties">
-                    <span className="badge badge-amci me-1">LED</span>
-                    <span className="badge badge-amci me-1">Plafones</span>
-                    <span className="badge badge-amci">Luminarias</span>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid #f0f0f0'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-box" style={{ color: '#0446F0', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>150+ productos</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="fas fa-truck-fast" style={{ color: '#10B981', fontSize: '12px' }}></i>
+                      <span style={{ fontSize: '12px', color: '#666' }}>24-48h</span>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>LED</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Plafones</span>
+                    <span style={{
+                      background: 'rgba(4, 70, 240, 0.08)',
+                      color: '#0446F0',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      fontWeight: '500'
+                    }}>Luminarias</span>
                   </div>
                 </div>
               </div>
