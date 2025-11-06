@@ -7,9 +7,183 @@ const Home = () => {
   return (
     <Layout header={1} footer={1}>
       {/* Hero Section */}
+      <style jsx>{`
+        @keyframes lightSweep {
+          0% {
+            transform: translateX(-150%) translateY(-100%);
+          }
+          25% {
+            transform: translateX(-50%) translateY(0%);
+          }
+          50% {
+            transform: translateX(50%) translateY(-50%);
+          }
+          75% {
+            transform: translateX(150%) translateY(20%);
+          }
+          100% {
+            transform: translateX(250%) translateY(-80%);
+          }
+        }
+
+        @keyframes textSlideGlow {
+          0% {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 10px rgba(78, 158, 255, 0.3), 0 0 20px rgba(4, 70, 240, 0.2);
+          }
+          50% {
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 40px rgba(78, 158, 255, 1), 0 0 60px rgba(4, 70, 240, 0.6);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(78, 158, 255, 0.8), 0 0 50px rgba(4, 70, 240, 0.4);
+          }
+        }
+
+        @keyframes textGlowPulse {
+          0%, 100% {
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(78, 158, 255, 0.8), 0 0 50px rgba(4, 70, 240, 0.4);
+          }
+          50% {
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 45px rgba(78, 158, 255, 1), 0 0 80px rgba(4, 70, 240, 0.7);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+
+        @keyframes particleFloat1 {
+          0%, 100% {
+            transform: translate(0, 0);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translate(30px, -30px);
+            opacity: 0.6;
+          }
+        }
+
+        @keyframes particleFloat2 {
+          0%, 100% {
+            transform: translate(0, 0);
+            opacity: 0.4;
+          }
+          50% {
+            transform: translate(-40px, 40px);
+            opacity: 0.7;
+          }
+        }
+
+        @keyframes particleFloat3 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.2;
+          }
+          50% {
+            transform: translate(20px, -50px) scale(1.2);
+            opacity: 0.5;
+          }
+        }
+
+        @keyframes buttonPulseHero {
+          0%, 100% {
+            box-shadow: 0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+          }
+          50% {
+            box-shadow: 0 4px 14px rgba(4, 70, 240, 0.6), 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 20px rgba(4, 70, 240, 0.3);
+          }
+        }
+
+        @keyframes subtleBlink {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.85;
+          }
+        }
+
+        .hero-overlay-animated::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(ellipse 1000px 800px at center, rgba(78, 158, 255, 0.3) 0%, rgba(30, 64, 175, 0.18) 30%, transparent 65%);
+          animation: lightSweep 18s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        .hero-text-glow {
+          animation: textSlideGlow 1.5s ease-out forwards, textGlowPulse 4s ease-in-out 1.5s infinite;
+        }
+
+        .hero-image-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-button-pulse {
+          animation: buttonPulseHero 2s ease-in-out infinite, subtleBlink 3s ease-in-out infinite;
+        }
+
+        .hero-button-secondary {
+          animation: subtleBlink 3.5s ease-in-out infinite;
+        }
+
+        .particle {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+        }
+
+        .particle-1 {
+          width: 100px;
+          height: 100px;
+          background: radial-gradient(circle, rgba(78, 158, 255, 0.3) 0%, transparent 70%);
+          top: 20%;
+          left: 10%;
+          animation: particleFloat1 8s ease-in-out infinite;
+        }
+
+        .particle-2 {
+          width: 150px;
+          height: 150px;
+          background: radial-gradient(circle, rgba(4, 70, 240, 0.2) 0%, transparent 70%);
+          bottom: 30%;
+          right: 15%;
+          animation: particleFloat2 10s ease-in-out infinite;
+        }
+
+        .particle-3 {
+          width: 80px;
+          height: 80px;
+          background: radial-gradient(circle, rgba(78, 158, 255, 0.25) 0%, transparent 70%);
+          top: 60%;
+          left: 30%;
+          animation: particleFloat3 7s ease-in-out infinite;
+        }
+
+        .particle-4 {
+          width: 120px;
+          height: 120px;
+          background: radial-gradient(circle, rgba(4, 70, 240, 0.15) 0%, transparent 70%);
+          top: 40%;
+          right: 25%;
+          animation: particleFloat1 9s ease-in-out infinite reverse;
+        }
+      `}</style>
       <section className="hero__area hero__area-amci">
         <div
-          className="hero__overlay"
+          className="hero__overlay hero-overlay-animated"
           style={{
             position: 'absolute',
             top: 0,
@@ -17,9 +191,16 @@ const Home = () => {
             right: 0,
             bottom: 0,
             background: 'radial-gradient(ellipse at left center, rgba(30, 64, 175, 0.75) 0%, rgba(13, 27, 62, 0.88) 50%, rgba(0, 15, 40, 0.95) 100%)',
-            zIndex: 1
+            zIndex: 1,
+            overflow: 'hidden'
           }}
-        ></div>
+        >
+          {/* Animated particles */}
+          <div className="particle particle-1"></div>
+          <div className="particle particle-2"></div>
+          <div className="particle particle-3"></div>
+          <div className="particle particle-4"></div>
+        </div>
         <div className="container position-relative" style={{ zIndex: 2 }}>
           <div className="row align-items-center" style={{ minHeight: '100vh' }}>
             <div className="col-xl-7 col-lg-7">
@@ -27,6 +208,7 @@ const Home = () => {
                 <h1
                   className="hero__title display-3 fw-bold text-white mb-4"
                   data-aos="fade-up"
+                  data-aos-duration="1200"
                   style={{
                     textShadow: '2px 2px 8px rgba(0, 0, 0, 0.6)',
                     lineHeight: '1.2'
@@ -34,10 +216,9 @@ const Home = () => {
                 >
                   Equipos y suministros industriales
                   <span
-                    className="d-block mt-3"
+                    className="d-block mt-3 hero-text-glow"
                     style={{
                       color: '#4E9EFF',
-                      textShadow: '2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(78, 158, 255, 0.8), 0 0 50px rgba(4, 70, 240, 0.4)',
                       fontWeight: '700'
                     }}
                   >
@@ -45,23 +226,25 @@ const Home = () => {
                   </span>
                 </h1>
                 <p
-                  className="hero__description fs-5 mb-5 text-white"
+                  className="hero__description fs-5 text-white"
                   data-aos="fade-up"
-                  data-aos-delay="100"
+                  data-aos-delay="300"
+                  data-aos-duration="1200"
                   style={{
                     textShadow: '1px 1px 4px rgba(0, 0, 0, 0.6)',
                     lineHeight: '1.6',
                     maxWidth: '600px',
-                    fontWeight: '400'
+                    fontWeight: '400',
+                    marginBottom: '48px'
                   }}
                 >
                   Encuentra todo lo que necesitas para tu empresa con nuestros proveedores certificados.
                   Desde equipos de protección personal hasta maquinaria industrial especializada.
                 </p>
-                <div className="hero__buttons d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="200">
+                <div className="hero__buttons d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1200">
                   <Link
                     href="/catalogo"
-                    className="btn"
+                    className="btn hero-button-pulse"
                     style={{
                       background: '#0446F0',
                       color: '#ffffff',
@@ -70,7 +253,6 @@ const Home = () => {
                       fontWeight: '600',
                       borderRadius: '12px',
                       border: 'none',
-                      boxShadow: '0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2)',
                       transition: 'all 0.3s ease',
                       textDecoration: 'none',
                       display: 'inline-flex',
@@ -93,7 +275,7 @@ const Home = () => {
                   </Link>
                   <Link
                     href="/about"
-                    className="btn"
+                    className="btn hero-button-secondary"
                     style={{
                       background: 'rgba(255, 255, 255, 0.1)',
                       color: '#ffffff',
@@ -127,7 +309,7 @@ const Home = () => {
               </div>
             </div>
             <div className="col-xl-5 col-lg-5 d-none d-lg-block">
-              <div className="hero__image text-center" data-aos="fade-left" data-aos-delay="300">
+              <div className="hero__image text-center hero-image-float" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1400">
                 <Image
                   src="/img/hero/hero-image.png"
                   alt="AMCI Equipos Industriales"
