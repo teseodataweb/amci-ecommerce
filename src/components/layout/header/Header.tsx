@@ -103,7 +103,7 @@ const Header = () => {
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
-                  <AmciLogo size="medium" />
+                  <AmciLogo size="medium" variant="full" />
                 </div>
                 <div className="offcanvas__close">
                   <button
@@ -271,7 +271,7 @@ const Header = () => {
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-2 col-6">
                 <div className="header__logo">
-                  <AmciLogo size="medium" />
+                  <AmciLogo size="medium" variant={scrolled ? 'full' : 'white'} />
                 </div>
               </div>
               <div className="col-xl-8 col-lg-8 d-none d-lg-block">
@@ -368,7 +368,36 @@ const Header = () => {
                     </Link>
                   </div>
                   <div className="header__btn d-none d-xl-block">
-                    <Link className="border__btn s-3" href="/catalogo">
+                    <Link
+                      href="/catalogo"
+                      className="btn"
+                      style={{
+                        background: '#0446F0',
+                        color: '#ffffff',
+                        padding: '10px 24px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        borderRadius: '10px',
+                        border: 'none',
+                        boxShadow: '0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2)',
+                        transition: 'all 0.3s ease',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        whiteSpace: 'nowrap',
+                        letterSpacing: '-0.01em'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#0338C0';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(4, 70, 240, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = '#0446F0';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2)';
+                      }}
+                    >
                       VER CATÁLOGO
                     </Link>
                   </div>
@@ -413,10 +442,109 @@ const Header = () => {
           width: 100%;
         }
         .btn-logout:hover {
-          color: #1e40af;
+          color: #0446F0;
         }
         .cart-icon {
           color: inherit;
+        }
+
+        /* Header transparente sobre Hero - Links blancos */
+        .header__transparent:not(.sticky) :global(.main-menu ul li a),
+        .header__transparent:not(.sticky) :global(.main-menu ul li button) {
+          color: #ffffff !important;
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .header__transparent:not(.sticky) :global(.main-menu ul li a:hover),
+        .header__transparent:not(.sticky) :global(.main-menu ul li button:hover) {
+          color: #4E9EFF !important;
+        }
+
+        .header__transparent:not(.sticky) :global(.cart-icon) {
+          color: #ffffff !important;
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .header__transparent:not(.sticky) :global(.cart-icon i) {
+          color: #ffffff !important;
+        }
+
+        .header__transparent:not(.sticky) :global(.border__btn) {
+          color: #ffffff !important;
+          border-color: #ffffff !important;
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .header__transparent:not(.sticky) :global(.border__btn:hover) {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: #4E9EFF !important;
+          color: #4E9EFF !important;
+        }
+
+        /* Iconos del header transparente */
+        .header__transparent:not(.sticky) :global(.fas),
+        .header__transparent:not(.sticky) :global(.fal),
+        .header__transparent:not(.sticky) :global(.far) {
+          color: #ffffff;
+          filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        /* Header con scroll - Fondo sólido */
+        .header__transparent.sticky {
+          background: rgba(255, 255, 255, 0.98) !important;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Links del navbar con fondo sólido (sticky) */
+        .header__transparent.sticky :global(.main-menu ul li a),
+        .header__transparent.sticky :global(.main-menu ul li button) {
+          color: #333333 !important;
+        }
+
+        .header__transparent.sticky :global(.main-menu ul li a:hover),
+        .header__transparent.sticky :global(.main-menu ul li button:hover) {
+          color: #0446F0 !important;
+        }
+
+        /* Men\u00fa desplegable - Submenu */
+        :global(.main-menu ul li .submenu) {
+          background: #ffffff !important;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          padding: 8px 0;
+        }
+
+        :global(.main-menu ul li .submenu li a),
+        :global(.main-menu ul li .submenu li button) {
+          color: #333333 !important;
+          padding: 10px 20px;
+          transition: all 0.3s ease;
+          text-shadow: none !important;
+        }
+
+        :global(.main-menu ul li .submenu li a:hover),
+        :global(.main-menu ul li .submenu li button:hover) {
+          color: #0446F0 !important;
+          background: rgba(4, 70, 240, 0.05) !important;
+        }
+
+        /* Asegurar que el submenu siempre tenga texto oscuro incluso sobre Hero */
+        .header__transparent:not(.sticky) :global(.main-menu ul li .submenu li a),
+        .header__transparent:not(.sticky) :global(.main-menu ul li .submenu li button) {
+          color: #333333 !important;
+          text-shadow: none !important;
+        }
+
+        .header__transparent:not(.sticky) :global(.main-menu ul li .submenu li a:hover),
+        .header__transparent:not(.sticky) :global(.main-menu ul li .submenu li button:hover) {
+          color: #0446F0 !important;
+          background: rgba(4, 70, 240, 0.05) !important;
+        }
+
+        :global(.badge) {
+          font-size: 11px;
+          padding: 3px 6px;
         }
       `}</style>
     </Fragment>

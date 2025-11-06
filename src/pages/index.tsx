@@ -8,25 +8,119 @@ const Home = () => {
     <Layout header={1} footer={1}>
       {/* Hero Section */}
       <section className="hero__area hero__area-amci">
-        <div className="hero__overlay"></div>
-        <div className="container position-relative">
+        <div
+          className="hero__overlay"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(ellipse at left center, rgba(30, 64, 175, 0.75) 0%, rgba(13, 27, 62, 0.88) 50%, rgba(0, 15, 40, 0.95) 100%)',
+            zIndex: 1
+          }}
+        ></div>
+        <div className="container position-relative" style={{ zIndex: 2 }}>
           <div className="row align-items-center" style={{ minHeight: '100vh' }}>
             <div className="col-xl-7 col-lg-7">
               <div className="hero__content">
-                <h1 className="hero__title hero__title-amci mb-4" data-aos="fade-up">
+                <h1
+                  className="hero__title display-3 fw-bold text-white mb-4"
+                  data-aos="fade-up"
+                  style={{
+                    textShadow: '2px 2px 8px rgba(0, 0, 0, 0.6)',
+                    lineHeight: '1.2'
+                  }}
+                >
                   Equipos y suministros industriales
-                  <span className="text-amci-primary d-block mt-2">de calidad certificada</span>
+                  <span
+                    className="d-block mt-3"
+                    style={{
+                      color: '#4E9EFF',
+                      textShadow: '2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(78, 158, 255, 0.8), 0 0 50px rgba(4, 70, 240, 0.4)',
+                      fontWeight: '700'
+                    }}
+                  >
+                    de calidad certificada
+                  </span>
                 </h1>
-                <p className="hero__description hero__description-amci mb-5 text-white" data-aos="fade-up" data-aos-delay="100">
+                <p
+                  className="hero__description fs-5 mb-5 text-white"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                  style={{
+                    textShadow: '1px 1px 4px rgba(0, 0, 0, 0.6)',
+                    lineHeight: '1.6',
+                    maxWidth: '600px',
+                    fontWeight: '400'
+                  }}
+                >
                   Encuentra todo lo que necesitas para tu empresa con nuestros proveedores certificados.
                   Desde equipos de protección personal hasta maquinaria industrial especializada.
                 </p>
-                <div className="hero__buttons" data-aos="fade-up" data-aos-delay="200">
-                  <Link href="/catalogo" className="btn btn-amci-primary btn-lg me-3 shadow-sm">
+                <div className="hero__buttons d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="200">
+                  <Link
+                    href="/catalogo"
+                    className="btn"
+                    style={{
+                      background: '#0446F0',
+                      color: '#ffffff',
+                      padding: '14px 32px',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      borderRadius: '12px',
+                      border: 'none',
+                      boxShadow: '0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2)',
+                      transition: 'all 0.3s ease',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      letterSpacing: '-0.01em'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#0338C0';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(4, 70, 240, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#0446F0';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 14px rgba(4, 70, 240, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2)';
+                    }}
+                  >
                     <i className="fal fa-search me-2"></i>
                     Explorar Catálogo
                   </Link>
-                  <Link href="/about" className="btn btn-outline-light btn-lg shadow-sm">
+                  <Link
+                    href="/about"
+                    className="btn"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      color: '#ffffff',
+                      padding: '14px 32px',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      borderRadius: '12px',
+                      border: '2px solid rgba(255, 255, 255, 0.3)',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      letterSpacing: '-0.01em'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
                     Conoce más
                   </Link>
                 </div>

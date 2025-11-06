@@ -2,8 +2,8 @@
   /**
   @font family declaration
   */
-  --bd-ff-body: 'Poppins', sans-serif;;
-  --bd-ff-heading: 'Prompt', sans-serif;;
+  --bd-ff-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --bd-ff-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   --bd-ff-fontawesome: "Font Awesome 6 Pro";
   /**
   @color declaration
@@ -74,14 +74,17 @@
 }
 
 /*---------------------------------
-    Typography css start 
+    Typography css start
 ---------------------------------*/
 body {
   font-family: var(--bd-ff-body);
   font-size: var(--bd-fs-body);
-  font-weight: normal;
+  font-weight: 400;
   color: var(--clr-common-black);
-  line-height: 26px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
@@ -92,9 +95,10 @@ h5,
 h6 {
   font-family: var(--bd-ff-heading);
   color: var(--clr-common-heading);
-  font-weight: var(--bd-fw-sbold);
+  font-weight: 600;
   margin-top: 0px;
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   margin-bottom: 0;
 }
 
