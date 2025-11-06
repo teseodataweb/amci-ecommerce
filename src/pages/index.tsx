@@ -1154,24 +1154,202 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="cta__area py-80">
+      <style jsx>{`
+        @keyframes ctaPulse {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 12px 40px rgba(4, 70, 240, 0.25);
+          }
+          50% {
+            transform: scale(1.02);
+            box-shadow: 0 16px 50px rgba(4, 70, 240, 0.35);
+          }
+        }
+
+        @keyframes shimmer {
+          0% {
+            left: -100%;
+          }
+          100% {
+            left: 200%;
+          }
+        }
+
+        @keyframes buttonPulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+
+        .cta-animated {
+          animation: ctaPulse 3s ease-in-out infinite;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .cta-animated::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent
+          );
+          animation: shimmer 4s infinite;
+          animation-delay: 1s;
+        }
+
+        .cta-button-primary {
+          animation: buttonPulse 2s ease-in-out infinite;
+        }
+      `}</style>
+      <section
+        className="cta__area"
+        style={{
+          background: '#ffffff',
+          position: 'relative',
+          paddingTop: '60px',
+          paddingBottom: '60px'
+        }}
+      >
         <div className="container">
-          <div className="row">
+          <div className="row justify-content-center">
             <div className="col-12">
-              <div className="cta__content text-center">
-                <h2 className="cta__title mb-4">
-                  ¿Listo para comenzar?
-                </h2>
-                <p className="cta__description mb-4">
-                  Explora nuestro catálogo y encuentra exactamente lo que necesitas para tu empresa.
-                </p>
-                <div className="cta__buttons">
-                  <Link href="/catalogo" className="btn btn-primary btn-lg me-3">
-                    <i className="fal fa-shopping-cart me-2"></i>
+              <div
+                className="cta__content cta-animated"
+                style={{
+                  background: 'radial-gradient(ellipse at top, rgba(4, 70, 240, 0.95) 0%, rgba(3, 56, 192, 0.98) 25%, rgba(1, 31, 92, 1) 100%)',
+                  borderRadius: '24px',
+                  padding: '40px 60px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '40px',
+                  flexWrap: 'wrap'
+                }}
+                data-aos="fade-up"
+              >
+                {/* Left content */}
+                <div style={{ flex: '1 1 400px', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '16px' }}>
+                    <div style={{
+                      width: '60px',
+                      height: '60px',
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)'
+                    }}>
+                      <i className="fal fa-rocket" style={{ fontSize: '28px', color: '#ffffff' }}></i>
+                    </div>
+                    <h2
+                      className="cta__title"
+                      style={{
+                        fontSize: '32px',
+                        fontWeight: '800',
+                        color: '#ffffff',
+                        margin: 0,
+                        letterSpacing: '-0.5px',
+                        lineHeight: '1.2'
+                      }}
+                    >
+                      ¿Listo para comenzar?
+                    </h2>
+                  </div>
+                  <p
+                    className="cta__description"
+                    style={{
+                      fontSize: '16px',
+                      color: 'rgba(255, 255, 255, 0.9)',
+                      margin: 0,
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Explora nuestro catálogo y encuentra exactamente lo que necesitas para tu empresa.
+                  </p>
+                </div>
+
+                {/* Right buttons */}
+                <div
+                  className="cta__buttons"
+                  style={{
+                    display: 'flex',
+                    gap: '12px',
+                    flexWrap: 'wrap',
+                    justifyContent: 'flex-end'
+                  }}
+                >
+                  <Link
+                    href="/catalogo"
+                    className="cta-button-primary"
+                    style={{
+                      background: '#ffffff',
+                      color: '#0446F0',
+                      padding: '14px 28px',
+                      borderRadius: '12px',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      border: 'none'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+                    }}
+                  >
+                    <i className="fal fa-shopping-cart"></i>
                     Ver Catálogo Completo
                   </Link>
-                  <Link href="/contact" className="btn btn-outline-primary btn-lg">
-                    <i className="fal fa-envelope me-2"></i>
+                  <Link
+                    href="/contact"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      color: '#ffffff',
+                      padding: '14px 28px',
+                      borderRadius: '12px',
+                      fontSize: '15px',
+                      fontWeight: '600',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.3s ease',
+                      border: '2px solid rgba(255, 255, 255, 0.3)',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <i className="fal fa-envelope"></i>
                     Contactar Ventas
                   </Link>
                 </div>
