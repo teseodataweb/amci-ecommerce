@@ -148,8 +148,8 @@ const Home = () => {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="section__title text-center mb-60" data-aos="fade-up">
-                <h2 className="section__title-main">Nuestros Proveedores Certificados</h2>
+              <div className="section__title text-center mb-30" data-aos="fade-up">
+                <h2 className="section__title-main" style={{ marginBottom: '12px' }}>Nuestros Proveedores Certificados</h2>
                 <p className="section__subtitle">Trabajamos con los mejores proveedores para garantizar calidad y confiabilidad</p>
               </div>
             </div>
@@ -766,99 +766,387 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="features__area features__area-amci bg-amci-light py-100">
+      <section
+        className="features__area features__area-amci py-100"
+        style={{
+          background: 'linear-gradient(to right, rgba(120, 125, 130, 0.5) 0%, rgba(226, 228, 230, 0.3) 50%, rgba(120, 125, 130, 0.5) 100%)',
+          position: 'relative'
+        }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="section__title text-center mb-60" data-aos="fade-up">
-                <h2 className="section__title-main">¿Por qué elegir AMCI?</h2>
+              <div className="section__title text-center mb-30" data-aos="fade-up">
+                <h2 className="section__title-main" style={{ marginBottom: '12px' }}>¿Por qué elegir AMCI?</h2>
                 <p className="section__subtitle">Facilitamos tus compras industriales con un servicio integral y confiable</p>
               </div>
             </div>
           </div>
 
           <div className="row g-4">
+            {/* Proveedores Certificados */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-shield-check fa-3x text-amci-primary"></i>
-                  </div>
-                  <h4 className="feature__title">Proveedores Certificados</h4>
-                  <p className="feature__description">
-                    Todos nuestros proveedores están certificados y cumplen con los más altos estándares de calidad.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(16, 185, 129, 0.15)';
+                  e.currentTarget.style.borderColor = '#10B981';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(16, 185, 129, 0.25)'
+                }}>
+                  <i className="fal fa-shield-check" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Proveedores Certificados
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Todos nuestros proveedores están certificados y cumplen con los más altos estándares de calidad.
+                </p>
               </div>
             </div>
 
+            {/* Pagos Seguros */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="150">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-credit-card fa-3x text-amci-primary"></i>
-                  </div>
-                  <h4 className="feature__title">Pagos Seguros</h4>
-                  <p className="feature__description">
-                    Procesamos pagos de forma centralizada y segura, con dispersión programada a proveedores.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(4, 70, 240, 0.15)';
+                  e.currentTarget.style.borderColor = '#0446F0';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(4, 70, 240, 0.25)'
+                }}>
+                  <i className="fal fa-credit-card" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Pagos Seguros
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Procesamos pagos de forma centralizada y segura, con dispersión programada a proveedores.
+                </p>
               </div>
             </div>
 
+            {/* Envío y Seguimiento */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-truck fa-3x text-amci-primary"></i>
-                  </div>
-                  <h4 className="feature__title">Envío y Seguimiento</h4>
-                  <p className="feature__description">
-                    Recibe actualizaciones en tiempo real del estado de tu pedido desde la compra hasta la entrega.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(245, 158, 11, 0.15)';
+                  e.currentTarget.style.borderColor = '#F59E0B';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(245, 158, 11, 0.25)'
+                }}>
+                  <i className="fal fa-truck" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Envío y Seguimiento
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Recibe actualizaciones en tiempo real del estado de tu pedido desde la compra hasta la entrega.
+                </p>
               </div>
             </div>
 
+            {/* Facturación Flexible */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="250">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-file-invoice-dollar fa-3x text-amci-secondary"></i>
-                  </div>
-                  <h4 className="feature__title">Facturación Flexible</h4>
-                  <p className="feature__description">
-                    Recibe facturas de AMCI o directamente del proveedor según el producto seleccionado.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(139, 92, 246, 0.15)';
+                  e.currentTarget.style.borderColor = '#8B5CF6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(139, 92, 246, 0.25)'
+                }}>
+                  <i className="fal fa-file-invoice-dollar" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Facturación Flexible
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Recibe facturas de AMCI o directamente del proveedor según el producto seleccionado.
+                </p>
               </div>
             </div>
 
+            {/* Soporte Especializado */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-headset fa-3x text-amci-secondary"></i>
-                  </div>
-                  <h4 className="feature__title">Soporte Especializado</h4>
-                  <p className="feature__description">
-                    Nuestro equipo te acompaña en todo el proceso, desde la cotización hasta el postventa.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(236, 72, 153, 0.15)';
+                  e.currentTarget.style.borderColor = '#EC4899';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(236, 72, 153, 0.25)'
+                }}>
+                  <i className="fal fa-headset" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Soporte Especializado
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Nuestro equipo te acompaña en todo el proceso, desde la cotización hasta el postventa.
+                </p>
               </div>
             </div>
 
+            {/* Reportes Detallados */}
             <div className="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="350">
-              <div className="feature__card feature__card-amci card h-100">
-                <div className="feature__card-body">
-                  <div className="feature__icon feature__icon-amci mb-4">
-                    <i className="fal fa-chart-line fa-3x text-amci-primary"></i>
-                  </div>
-                  <h4 className="feature__title">Reportes Detallados</h4>
-                  <p className="feature__description">
-                    Accede a reportes completos de tus compras y gestiona fácilmente tu historial de pedidos.
-                  </p>
+              <div
+                className="card h-100"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.7) 100%)',
+                  border: '1px solid rgba(232, 232, 232, 0.5)',
+                  borderRadius: '24px',
+                  padding: '40px 24px',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px rgba(6, 182, 212, 0.15)';
+                  e.currentTarget.style.borderColor = '#06B6D4';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
+                  e.currentTarget.style.borderColor = 'rgba(232, 232, 232, 0.5)';
+                }}
+              >
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '24px',
+                  boxShadow: '0 8px 16px rgba(6, 182, 212, 0.25)'
+                }}>
+                  <i className="fal fa-chart-line" style={{ fontSize: '36px', color: '#ffffff' }}></i>
                 </div>
+                <h4 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1a1a1a',
+                  marginBottom: '12px'
+                }}>
+                  Reportes Detallados
+                </h4>
+                <p style={{
+                  fontSize: '15px',
+                  color: '#666',
+                  lineHeight: '1.7',
+                  margin: 0
+                }}>
+                  Accede a reportes completos de tus compras y gestiona fácilmente tu historial de pedidos.
+                </p>
               </div>
             </div>
           </div>
