@@ -3,7 +3,12 @@ import { supabaseAdmin } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('=== CREATE ORDER API CALLED ===');
+  console.log('Method:', req.method);
+  console.log('Body received:', JSON.stringify(req.body, null, 2));
+
   if (req.method !== 'POST') {
+    console.log('Method not allowed:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -21,6 +26,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       total,
       paymentIntentId
     } = req.body;
+
+    console.log('Parsed data:');
+    console.log('- userId:', userId);
+    console.log('- items count:', items?.length);
+    console.log('- total:', total);
+    console.log('- paymentIntentId:', paymentIntentId);
 
     // Verificar que el usuario existe
     const { data: user, error: userError } = await supabase
@@ -156,14 +167,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .delete()
       .eq('user_id', userId);
 
-    return res.status(200).json({
+    console.log('Order created successfully!');
+    console.log('Order ID:', order.id);
+    console.log('Order Number:', order.id.slice(0, 8).toUpperCase());
+
+    const response = {
       success: true,
       orderId: order.id,
       orderNumber: order.id.slice(0, 8).toUpperCase()
-    });
+    };
+
+    console.log('Sending response:', response);
+    console.log('=== CREATE ORDER API COMPLETED ===');
+
+    return res.status(200).json(response);
 
   } catch (error) {
-    console.error('Error in create order:', error);
+    console.error('=== ERROR IN CREATE ORDER API ===');
+    console.error('Error details:', error);
+    console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
     return res.status(500).json({ error: 'Error interno del servidor' });
   }
 }

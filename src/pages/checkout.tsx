@@ -69,6 +69,7 @@ const Checkout = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showPayment, setShowPayment] = useState(false);
   const [orderData, setOrderData] = useState<any>(null);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   const subtotal = getCartTotal();
   const costoEnvio = 200;
@@ -99,15 +100,17 @@ const Checkout = () => {
     // 2. Ya terminó de cargar tanto el carrito como la autenticación
     // 3. NO estamos mostrando el formulario de pago
     // 4. NO estamos procesando
+    // 5. NO acabamos de completar un pago exitoso
     if (cartItems.length === 0 &&
         !cartLoading &&
         !authLoading &&
         !showPayment &&
-        !isProcessing) {
-      console.log('Cart is empty and not processing payment, redirecting to cart page');
+        !isProcessing &&
+        !paymentSuccessful) {
+      console.log('🛒 NUEVO CÓDIGO: Cart is empty, payment not successful, redirecting to cart');
       router.push('/carrito');
     }
-  }, [cartItems.length, cartLoading, authLoading, showPayment, isProcessing]);
+  }, [cartItems.length, cartLoading, authLoading, showPayment, isProcessing, paymentSuccessful]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -227,8 +230,15 @@ const Checkout = () => {
   };
 
   const handlePaymentSuccess = async (paymentIntentId: string) => {
+    console.log('=== PAYMENT SUCCESS CALLBACK ===');
+    console.log('Payment Intent ID:', paymentIntentId);
+    console.log('Order Data:', orderData);
+
     try {
       setIsProcessing(true);
+      setPaymentSuccessful(true); // Marcar el pago como exitoso para prevenir redirección
+
+      console.log('Creating order with API call...');
 
       // Crear la orden con el ID del pago
       const response = await fetch('/api/orders/create', {
@@ -242,23 +252,35 @@ const Checkout = () => {
         })
       });
 
+      console.log('API Response status:', response.status);
       const data = await response.json();
+      console.log('API Response data:', data);
 
       if (data.success) {
-        // Limpiar carrito
-        await clearCart();
+        console.log('Order created successfully! Order ID:', data.orderId);
 
-        // Redirigir a página de éxito
-        alert(`¡Pago exitoso! Número de orden: ${data.orderNumber}`);
-        router.push(`/orden/${data.orderId}`);
+        // Limpiar carrito
+        console.log('Clearing cart...');
+        await clearCart();
+        console.log('Cart cleared');
+
+        // Redirigir a página de éxito con success flag
+        console.log('Redirecting to:', `/orden/${data.orderId}?success=true`);
+
+        // Usar replace en lugar de push para evitar que el usuario pueda volver
+        router.replace(`/orden/${data.orderId}?success=true`);
       } else {
+        console.error('Order creation failed:', data.error);
         throw new Error(data.error || 'Error al crear la orden');
       }
     } catch (error) {
-      console.error('Error al procesar la orden:', error);
+      console.error('=== ERROR IN PAYMENT SUCCESS HANDLER ===');
+      console.error('Error details:', error);
+      console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
       alert('El pago fue exitoso pero hubo un error al crear la orden. Contacta soporte.');
     } finally {
       setIsProcessing(false);
+      console.log('=== END PAYMENT SUCCESS CALLBACK ===');
     }
   };
 

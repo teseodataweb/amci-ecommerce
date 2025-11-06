@@ -18,9 +18,13 @@ export default function RegistroProveedor() {
     razonSocial: '',
     rfc: '',
     contactoOperativo: '',
+    contactoProgramacion: '',
     contactoFacturacion: '',
     clabe: '',
     emisorFacturaDefault: 'PROVEEDOR',
+    coberturaServicio: '',
+    correosNotificaciones: '',
+    observaciones: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -72,6 +76,12 @@ export default function RegistroProveedor() {
     return true;
   };
 
+  const validateStep3 = () => {
+    // Paso 3 es opcional, siempre válido
+    setError('');
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -79,9 +89,18 @@ export default function RegistroProveedor() {
       if (validateStep1()) {
         setStep(2);
       }
-    } else {
+    } else if (step === 2) {
       if (validateStep2()) {
+        setStep(3);
+      }
+    } else if (step === 3) {
+      if (validateStep3()) {
         setLoading(true);
+
+        // Procesar correos de notificaciones (convertir string a array)
+        const correosArray = formData.correosNotificaciones
+          ? formData.correosNotificaciones.split(',').map(email => email.trim()).filter(Boolean)
+          : [];
 
         const result = await signUp(formData.email, formData.password, {
           name: formData.name,
@@ -91,9 +110,13 @@ export default function RegistroProveedor() {
             razonSocial: formData.razonSocial,
             rfc: formData.rfc.toUpperCase(),
             contactoOperativo: formData.contactoOperativo,
+            contactoProgramacion: formData.contactoProgramacion,
             contactoFacturacion: formData.contactoFacturacion,
             clabe: formData.clabe,
             emisorFacturaDefault: formData.emisorFacturaDefault,
+            coberturaServicio: formData.coberturaServicio,
+            correosNotificaciones: correosArray.length > 0 ? JSON.stringify(correosArray) : null,
+            observaciones: formData.observaciones,
           },
         });
 
@@ -174,6 +197,11 @@ export default function RegistroProveedor() {
                         <div className={`step ${step >= 2 ? 'active' : ''}`}>
                           <span className="step-number">2</span>
                           <span className="step-label">Datos Fiscales</span>
+                        </div>
+                        <div className="step-line"></div>
+                        <div className={`step ${step >= 3 ? 'active' : ''}`}>
+                          <span className="step-number">3</span>
+                          <span className="step-label">Info. Adicional</span>
                         </div>
                       </div>
                     </div>
@@ -391,6 +419,105 @@ export default function RegistroProveedor() {
                           </select>
                         </div>
 
+                        <div className="d-flex gap-2">
+                          <button
+                            type="button"
+                            className="btn btn-secondary flex-fill"
+                            onClick={() => setStep(1)}
+                            disabled={loading}
+                          >
+                            <i className="fas fa-arrow-left me-2" /> Anterior
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-primary flex-fill"
+                          >
+                            Siguiente <i className="fas fa-arrow-right ms-2" />
+                          </button>
+                        </div>
+                      </>
+                    )}
+
+                    {step === 3 && (
+                      <>
+                        <h4 className="mb-3">Información Adicional</h4>
+                        <p className="text-muted mb-4">
+                          Campos opcionales para servicios especializados (ej: Pumping Team)
+                        </p>
+
+                        <div className="form-grp">
+                          <label htmlFor="contactoProgramacion">
+                            Contacto de Programación/Agenda
+                          </label>
+                          <input
+                            type="text"
+                            id="contactoProgramacion"
+                            name="contactoProgramacion"
+                            className="form-control"
+                            placeholder="Nombre / correo / teléfono"
+                            value={formData.contactoProgramacion}
+                            onChange={handleChange}
+                            disabled={loading}
+                          />
+                          <small className="text-muted">
+                            Para coordinar fechas y horarios de servicio
+                          </small>
+                        </div>
+
+                        <div className="form-grp">
+                          <label htmlFor="coberturaServicio">
+                            Cobertura de Servicio
+                          </label>
+                          <input
+                            type="text"
+                            id="coberturaServicio"
+                            name="coberturaServicio"
+                            className="form-control"
+                            placeholder="Ej: CDMX y Área Metropolitana, radio 50km"
+                            value={formData.coberturaServicio}
+                            onChange={handleChange}
+                            disabled={loading}
+                          />
+                          <small className="text-muted">
+                            Ciudades/estados cubiertos y radio en kilómetros
+                          </small>
+                        </div>
+
+                        <div className="form-grp">
+                          <label htmlFor="correosNotificaciones">
+                            Correos para Notificaciones
+                          </label>
+                          <input
+                            type="text"
+                            id="correosNotificaciones"
+                            name="correosNotificaciones"
+                            className="form-control"
+                            placeholder="correo1@ejemplo.com, correo2@ejemplo.com"
+                            value={formData.correosNotificaciones}
+                            onChange={handleChange}
+                            disabled={loading}
+                          />
+                          <small className="text-muted">
+                            Separados por comas. Recibirán notificaciones de órdenes/cotizaciones
+                          </small>
+                        </div>
+
+                        <div className="form-grp">
+                          <label htmlFor="observaciones">
+                            Observaciones
+                          </label>
+                          <textarea
+                            id="observaciones"
+                            name="observaciones"
+                            className="form-control"
+                            placeholder="Información adicional, restricciones, requisitos especiales..."
+                            value={formData.observaciones}
+                            onChange={handleChange}
+                            disabled={loading}
+                            rows={3}
+                          />
+                        </div>
+
                         <div className="form-check mb-3">
                           <input
                             type="checkbox"
@@ -415,7 +542,7 @@ export default function RegistroProveedor() {
                           <button
                             type="button"
                             className="btn btn-secondary flex-fill"
-                            onClick={() => setStep(1)}
+                            onClick={() => setStep(2)}
                             disabled={loading}
                           >
                             <i className="fas fa-arrow-left me-2" /> Anterior

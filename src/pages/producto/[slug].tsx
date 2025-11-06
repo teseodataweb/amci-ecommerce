@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import Banner from "@/components/layout/banner/Banner";
+import QuotationForm from "@/components/quotations/QuotationForm";
 
 interface ProductVariant {
   id: number;
@@ -103,10 +104,11 @@ const getProductBySlug = (slug: string): Product | null => {
 const ProductDetail = () => {
   const router = useRouter();
   const { slug } = router.query;
-  
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [showQuotationForm, setShowQuotationForm] = useState(false);
 
   if (!slug || typeof slug !== 'string') {
     return <div>Cargando...</div>;
@@ -280,12 +282,30 @@ const ProductDetail = () => {
                   </div>
                 )}
                 
-                {product.precio_modo === 'cotizar' && (
+                {product.precio_modo === 'cotizar' && !showQuotationForm && (
                   <div className="product__details-action mb-4">
-                    <button className="btn btn-warning btn-lg w-100 mb-3">
+                    <button
+                      className="btn btn-warning btn-lg w-100 mb-3"
+                      onClick={() => setShowQuotationForm(true)}
+                    >
                       <i className="fal fa-envelope me-2"></i>
                       Solicitar cotización
                     </button>
+                  </div>
+                )}
+
+                {product.precio_modo === 'cotizar' && showQuotationForm && (
+                  <div className="quotation-form-container mb-4">
+                    <QuotationForm
+                      productId={product.id.toString()}
+                      productName={product.nombre}
+                      providerName={product.proveedor}
+                      onSuccess={(quotationId) => {
+                        console.log('Cotización creada:', quotationId);
+                        // Mantener el formulario visible para mostrar el mensaje de éxito
+                      }}
+                      onCancel={() => setShowQuotationForm(false)}
+                    />
                   </div>
                 )}
                 
