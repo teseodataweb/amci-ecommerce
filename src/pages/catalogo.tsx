@@ -211,58 +211,110 @@ const Catalogo = () => {
                   <div className="row">
                     {products.map(product => (
                       <div key={product.id} className="col-xl-4 col-md-6 mb-40">
-                        <div className="product__item card h-100">
-                          <div className="product__thumb">
-                            <img
-                              src={product.images?.[0]?.url || 'https://via.placeholder.com/300x200?text=Sin+Imagen'}
-                              alt={product.images?.[0]?.alt || product.nombre}
-                              className="card-img-top"
-                              style={{ height: '200px', objectFit: 'cover' }}
-                            />
-                            <div className="product__badges">
-                              {product.pricing_mode === 'COTIZAR' && (
-                                <span className="badge bg-warning">Cotizar</span>
+                        <div className="product-card-b2b">
+                          {/* Image Section with Overlay Info */}
+                          <div className="product-card-b2b__image-wrapper">
+                            <Link href={`/producto/${product.slug}`}>
+                              <img
+                                src={product.images?.[0]?.url || 'https://via.placeholder.com/400x280?text=Sin+Imagen'}
+                                alt={product.images?.[0]?.alt || product.nombre}
+                                className="product-card-b2b__image"
+                              />
+                            </Link>
+
+                            {/* Badges Overlay */}
+                            <div className="product-card-b2b__badges">
+                              {product.pricing_mode === 'COTIZAR' ? (
+                                <span className="badge-b2b badge-b2b--quote">
+                                  <i className="fas fa-file-invoice-dollar"></i>
+                                  Por cotización
+                                </span>
+                              ) : (
+                                <>
+                                  {product.stock > 0 ? (
+                                    <span className="badge-b2b badge-b2b--stock">
+                                      <i className="fas fa-check-circle"></i>
+                                      En Stock
+                                    </span>
+                                  ) : (
+                                    <span className="badge-b2b badge-b2b--out">
+                                      <i className="fas fa-exclamation-circle"></i>
+                                      Agotado
+                                    </span>
+                                  )}
+                                </>
                               )}
-                              {product.stock > 0 && product.pricing_mode === 'PRECIO' && (
-                                <span className="badge bg-success">En stock</span>
-                              )}
+                            </div>
+
+                            {/* Quick Actions Overlay */}
+                            <div className="product-card-b2b__quick-actions">
+                              <button className="quick-action-btn" title="Vista rápida">
+                                <i className="far fa-eye"></i>
+                              </button>
+                              <button className="quick-action-btn" title="Comparar">
+                                <i className="far fa-balance-scale"></i>
+                              </button>
                             </div>
                           </div>
 
-                          <div className="card-body d-flex flex-column">
-                            <div className="product__content flex-grow-1">
-                              <span className="product__category text-muted small">
-                                {product.category?.name} • {product.provider?.razon_social}
-                              </span>
-                              <h5 className="product__title mt-2">
-                                <a href={`/producto/${product.slug}`}>
-                                  {product.nombre}
-                                </a>
-                              </h5>
-                              <p className="product__desc text-muted">
-                                {product.descripcion}
-                              </p>
+                          {/* Content Section */}
+                          <div className="product-card-b2b__content">
+                            {/* Provider Badge */}
+                            <div className="product-card-b2b__provider">
+                              <i className="fas fa-industry"></i>
+                              <span>{product.provider?.razon_social}</span>
                             </div>
 
-                            <div className="product__meta mt-auto">
-                              <div className="product__price mb-3">
-                                {product.pricing_mode === 'PRECIO' ? (
-                                  <span className="current-price h5 text-primary">
-                                    ${product.precio?.toLocaleString('es-MX')} MXN
+                            {/* Category */}
+                            <div className="product-card-b2b__category">
+                              {product.category?.name}
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="product-card-b2b__title">
+                              <Link href={`/producto/${product.slug}`}>
+                                {product.nombre}
+                              </Link>
+                            </h3>
+
+                            {/* Description */}
+                            <p className="product-card-b2b__description">
+                              {product.descripcion}
+                            </p>
+
+                            {/* Divider */}
+                            <div className="product-card-b2b__divider"></div>
+
+                            {/* Footer with Price and Action */}
+                            <div className="product-card-b2b__footer">
+                              <div className="product-card-b2b__price-section">
+                                <span className="price-label">Precio</span>
+                                <div className="price-info-row">
+                                  <span className={`price-value ${product.pricing_mode === 'COTIZAR' ? 'price-value--quote' : ''}`}>
+                                    {product.pricing_mode === 'PRECIO' ? (
+                                      <>
+                                        ${product.precio?.toLocaleString('es-MX')}
+                                        <span className="price-currency">MXN</span>
+                                      </>
+                                    ) : (
+                                      'Bajo cotización'
+                                    )}
                                   </span>
-                                ) : (
-                                  <span className="quote-price h5 text-warning">
-                                    Solicitar cotización
-                                  </span>
-                                )}
+                                  {product.stock > 0 && (
+                                    <span className="stock-info">
+                                      <i className="fas fa-box"></i>
+                                      {product.stock} unidades
+                                    </span>
+                                  )}
+                                </div>
                               </div>
 
-                              <div className="product__btn">
+                              <div className="product-card-b2b__action">
                                 {product.pricing_mode === 'PRECIO' ? (
                                   <button
-                                    className="btn btn-primary w-100"
+                                    className="btn-b2b btn-b2b--primary"
                                     onClick={() => handleAddToCart(product)}
-                                    disabled={addingToCart === product.id}
+                                    disabled={addingToCart === product.id || product.stock === 0}
                                   >
                                     {addingToCart === product.id ? (
                                       <>
@@ -271,19 +323,19 @@ const Catalogo = () => {
                                       </>
                                     ) : (
                                       <>
-                                        <i className="fal fa-shopping-cart me-2"></i>
-                                        Agregar al carrito
+                                        <i className="fas fa-shopping-cart"></i>
+                                        <span>Agregar</span>
                                       </>
                                     )}
                                   </button>
                                 ) : (
-                                  <a
+                                  <Link
                                     href={`/producto/${product.slug}`}
-                                    className="btn btn-outline-warning w-100"
+                                    className="btn-b2b btn-b2b--quote"
                                   >
-                                    <i className="fal fa-envelope me-2"></i>
-                                    Solicitar cotización
-                                  </a>
+                                    <i className="fas fa-file-invoice"></i>
+                                    <span>Cotizar</span>
+                                  </Link>
                                 )}
                               </div>
                             </div>

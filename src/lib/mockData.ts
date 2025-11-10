@@ -112,7 +112,7 @@ export const mockProducts = [
     descripcion: 'Cable de cobre electrolítico suave, calibre 12 AWG, 600V. Rollo de 100 metros',
     precio: null,
     pricing_mode: 'COTIZAR' as const,
-    stock: 0,
+    stock: 250,
     slug: 'cable-thw-calibre-12',
     visible: true,
     approved: true,
