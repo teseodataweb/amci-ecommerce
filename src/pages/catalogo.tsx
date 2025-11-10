@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import Layout from "@/components/layout/Layout";
-import Banner from "@/components/layout/banner/Banner";
+import CatalogHero from "@/components/layout/banner/CatalogHero";
 import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/router";
 
@@ -34,9 +35,20 @@ interface Category {
   slug: string;
 }
 
+interface CatalogStats {
+  totalProducts: number;
+  totalProviders: number;
+  totalCategories: number;
+}
+
 const Catalogo = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [stats, setStats] = useState<CatalogStats>({
+    totalProducts: 0,
+    totalProviders: 0,
+    totalCategories: 0
+  });
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     categoria: '',
@@ -50,6 +62,7 @@ const Catalogo = () => {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
+    fetchStats();
   }, [filters]);
 
   const fetchCategories = async () => {
@@ -61,6 +74,24 @@ const Catalogo = () => {
       }
     } catch (error) {
       console.error('Error al cargar categorías:', error);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/catalog/stats');
+      const data = await response.json();
+      if (data.stats) {
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+      // Set default values if API fails
+      setStats({
+        totalProducts: products.length,
+        totalProviders: new Set(products.map(p => p.provider.id)).size,
+        totalCategories: categories.length
+      });
     }
   };
 
@@ -105,12 +136,12 @@ const Catalogo = () => {
 
   return (
     <Layout header={1} footer={1}>
-      <Banner 
-        title="Catálogo AMCI"
-        subtitle="Encuentra los mejores productos de nuestros proveedores certificados"
-        bg="bg-primary"
+      <CatalogHero
+        totalProducts={stats.totalProducts}
+        totalProviders={stats.totalProviders}
+        totalCategories={stats.totalCategories}
       />
-      
+
       <section className="catalog__area pt-120 pb-80">
         <div className="container">
           <div className="row">
@@ -270,6 +301,39 @@ const Catalogo = () => {
                   )}
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section - Ayuda y Asesoría */}
+      <section className="catalog-cta__section py-5">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-10">
+              <div
+                className="catalog-cta__card"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+              >
+                <div className="catalog-cta__content">
+                  <div className="catalog-cta__icon">
+                    <i className="fas fa-headset"></i>
+                  </div>
+                  <div className="catalog-cta__text">
+                    <h3 className="catalog-cta__title">¿Necesitas ayuda para encontrar el producto ideal?</h3>
+                    <p className="catalog-cta__description">
+                      Nuestros asesores especializados están listos para ayudarte con cotizaciones personalizadas y recomendaciones técnicas
+                    </p>
+                  </div>
+                  <div className="catalog-cta__action">
+                    <Link href="/contact" className="btn-cta-catalog">
+                      <i className="fas fa-comments me-2"></i>
+                      Hablar con un asesor
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

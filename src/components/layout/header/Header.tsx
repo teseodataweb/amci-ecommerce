@@ -115,11 +115,11 @@ const Header = () => {
                 </div>
               </div>
               <div className="offcanvas__search mb-25">
-                <form action="/">
+                <form action="/catalogo">
                   <input
                     type="text"
-                    placeholder="What are you searching for?"
-                    required
+                    placeholder="Buscar productos o materiales..."
+                    name="search"
                   />
                   <button type="submit">
                     <i className="far fa-search"></i>
@@ -188,7 +188,7 @@ const Header = () => {
                 </div>
               </div>
               <div className="offcanvas__contact mt-30 mb-20">
-                <h4>Contact Info</h4>
+                <h4>Información de Contacto</h4>
                 <ul>
                   <li className="d-flex align-items-center">
                     <div className="offcanvas__contact-icon mr-15">
@@ -197,9 +197,9 @@ const Header = () => {
                     <div className="offcanvas__contact-text">
                       <Link
                         target="_blank"
-                        href="https://www.google.com/maps/place/Dhaka/@23.7806207,90.3492859,12z/data=!3m1!4b1!4m5!3m4!1s0x3755b8b087026b81:0x8fa563bbdd5904c2!8m2!3d23.8104753!4d90.4119873"
+                        href="https://www.google.com/maps"
                       >
-                        12/A, Mirnada City Tower, NYC
+                        Querétaro, Querétaro, México
                       </Link>
                     </div>
                   </li>
@@ -208,8 +208,8 @@ const Header = () => {
                       <i className="far fa-phone"></i>
                     </div>
                     <div className="offcanvas__contact-text">
-                      <Link href="tel:+088889797697" aria-label="Contact Us">
-                        +088889797697
+                      <Link href="tel:+525512345678" aria-label="Llamar a AMCI">
+                        +52 55 1234 5678
                       </Link>
                     </div>
                   </li>
@@ -218,35 +218,42 @@ const Header = () => {
                       <i className="fal fa-envelope"></i>
                     </div>
                     <div className="offcanvas__contact-text">
-                      <Link href="tel:+012-345-6789" aria-label="Contact Us">
-                        <span className="mailto:support@mail.com">
-                          support@mail.com
-                        </span>
+                      <Link href="mailto:contacto@amci.com" aria-label="Enviar correo a AMCI">
+                        contacto@amci.com
                       </Link>
+                    </div>
+                  </li>
+                  <li className="d-flex align-items-center">
+                    <div className="offcanvas__contact-icon mr-15">
+                      <i className="far fa-clock"></i>
+                    </div>
+                    <div className="offcanvas__contact-text">
+                      <span>Lun - Vie: 9:00 AM - 6:00 PM</span>
                     </div>
                   </li>
                 </ul>
               </div>
               <div className="offcanvas__social">
+                <h5>Encuentranos en nuestras redes sociales</h5>
                 <ul>
                   <li>
-                    <Link href="/">
+                    <Link href="https://www.facebook.com/amci" target="_blank" rel="noopener noreferrer" aria-label="Facebook de AMCI">
                       <i className="fab fa-facebook-f"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/">
-                      <i className="fab fa-twitter"></i>
+                    <Link href="https://www.instagram.com/amci" target="_blank" rel="noopener noreferrer" aria-label="Instagram de AMCI">
+                      <i className="fab fa-instagram"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link href="/">
-                      <i className="fab fa-youtube"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/">
+                    <Link href="https://www.linkedin.com/company/amci" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de AMCI">
                       <i className="fab fa-linkedin"></i>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="https://wa.me/525512345678" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de AMCI">
+                      <i className="fab fa-whatsapp"></i>
                     </Link>
                   </li>
                 </ul>
@@ -401,35 +408,25 @@ const Header = () => {
                       VER CATÁLOGO
                     </Link>
                   </div>
-                  <div className="header__cart d-xl-none me-2">
-                    <Link href="/carrito" className="cart-icon position-relative">
-                      <i className="fal fa-shopping-cart fs-5"></i>
-                      {cartCount > 0 && (
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                          {cartCount}
-                        </span>
-                      )}
-                    </Link>
-                  </div>
-                  <div className="header__toggle d-xl-none">
-                    <button
-                      className="sidebar__active"
-                      aria-label="Toggle Sidebar"
-                      onClick={handleToggleMenu}
-                    >
-                      <div className="bar-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </div>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </header>
+
+      {/* Botón flotante de información - Diseño innovador */}
+      <div className="floating-info-btn">
+        <button
+          className="fab-button"
+          aria-label="Información de contacto"
+          onClick={handleToggleMenu}
+        >
+          <i className="fas fa-address-card"></i>
+          <span className="fab-tooltip">Ver información</span>
+        </button>
+        <div className="fab-pulse"></div>
+      </div>
       <style jsx>{`
         .btn-logout {
           background: none;
@@ -489,22 +486,38 @@ const Header = () => {
           filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
         }
 
-        /* Header con scroll - Fondo sólido */
+        /* Header con scroll - Fondo sólido con mejor contraste */
         .header__transparent.sticky {
-          background: rgba(255, 255, 255, 0.98) !important;
-          backdrop-filter: blur(10px);
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          background: linear-gradient(to bottom, rgba(13, 27, 62, 0.97), rgba(13, 27, 62, 0.95)) !important;
+          backdrop-filter: blur(12px);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          border-bottom: 1px solid rgba(78, 158, 255, 0.2);
         }
 
-        /* Links del navbar con fondo sólido (sticky) */
+        /* Links del navbar con fondo sólido (sticky) - Ahora blancos con buen contraste */
         .header__transparent.sticky :global(.main-menu ul li a),
         .header__transparent.sticky :global(.main-menu ul li button) {
-          color: #333333 !important;
+          color: #ffffff !important;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .header__transparent.sticky :global(.main-menu ul li a:hover),
         .header__transparent.sticky :global(.main-menu ul li button:hover) {
-          color: #0446F0 !important;
+          color: #4E9EFF !important;
+        }
+
+        /* Iconos del carrito cuando hay scroll */
+        .header__transparent.sticky :global(.cart-icon) {
+          color: #ffffff !important;
+        }
+
+        .header__transparent.sticky :global(.cart-icon i) {
+          color: #ffffff !important;
+        }
+
+        /* Botón hamburguesa cuando hay scroll */
+        .header__transparent.sticky :global(.bar-icon span) {
+          background: #ffffff !important;
         }
 
         /* Men\u00fa desplegable - Submenu */
@@ -545,6 +558,136 @@ const Header = () => {
         :global(.badge) {
           font-size: 11px;
           padding: 3px 6px;
+        }
+
+        /* Botón flotante de información - Diseño innovador */
+        :global(.floating-info-btn) {
+          position: fixed;
+          bottom: 120px;
+          right: 30px;
+          z-index: 9999;
+        }
+
+        :global(.fab-button) {
+          position: relative;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #0446F0 0%, #0338C0 100%);
+          border: none;
+          color: #ffffff;
+          font-size: 26px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 8px 24px rgba(4, 70, 240, 0.4),
+                      0 4px 12px rgba(0, 0, 0, 0.2);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 2;
+        }
+
+        :global(.fab-button:hover) {
+          transform: translateY(-4px) scale(1.05);
+          box-shadow: 0 12px 32px rgba(4, 70, 240, 0.5),
+                      0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        :global(.fab-button:active) {
+          transform: translateY(-2px) scale(1.02);
+        }
+
+        :global(.fab-button i) {
+          color: #ffffff;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        /* Tooltip del botón */
+        :global(.fab-tooltip) {
+          position: absolute;
+          right: 74px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(13, 27, 62, 0.95);
+          color: #ffffff;
+          padding: 10px 16px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          white-space: nowrap;
+          opacity: 0;
+          pointer-events: none;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        :global(.fab-tooltip::after) {
+          content: '';
+          position: absolute;
+          right: -6px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 6px 0 6px 6px;
+          border-color: transparent transparent transparent rgba(13, 27, 62, 0.95);
+        }
+
+        :global(.fab-button:hover .fab-tooltip) {
+          opacity: 1;
+          right: 78px;
+        }
+
+        /* Efecto de pulso animado */
+        :global(.fab-pulse) {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: rgba(4, 70, 240, 0.4);
+          animation: pulse-animation 2s infinite;
+          z-index: 1;
+        }
+
+        @keyframes pulse-animation {
+          0% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(1.3);
+            opacity: 0.3;
+          }
+          100% {
+            transform: scale(1.6);
+            opacity: 0;
+          }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          :global(.floating-info-btn) {
+            bottom: 110px;
+            right: 20px;
+          }
+
+          :global(.fab-button) {
+            width: 56px;
+            height: 56px;
+            font-size: 22px;
+          }
+
+          :global(.fab-pulse) {
+            width: 56px;
+            height: 56px;
+          }
+
+          :global(.fab-tooltip) {
+            display: none;
+          }
         }
       `}</style>
     </Fragment>

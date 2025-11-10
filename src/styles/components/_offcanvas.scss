@@ -14,19 +14,25 @@
             align-items: center;
             justify-content: center;
             color: var(--clr-common-heading);
-            font-size: 18px;
-            background-color: var(--clr-theme-1);
+            font-size: 20px;
+            background-color: #0343E7;
             @include border-radius(50%);
             overflow: hidden;
             position: relative;
+            @include transition(.3s);
+            &:hover {
+                background-color: #0338C0;
+                transform: rotate(90deg) scale(1.1);
+            }
             i {
                 color: var(--clr-common-white);
+                @include transition(.3s);
             }
         }
     }
     &__info {
-        background: var(--clr-common-white)none repeat scroll 0 0;
-        border-left: 3px solid var(--clr-theme-1);
+        background: linear-gradient(to right, rgba(200, 205, 210, 0.85) 0%, rgba(240, 242, 244, 0.85) 33%, rgba(240, 242, 244, 0.85) 67%, rgba(200, 205, 210, 0.85) 100%);
+        border-left: 4px solid #0343E7;
         position: fixed;
         right: 0;
         top: 0;
@@ -44,7 +50,8 @@
         overflow-y: scroll;
         overscroll-behavior-y: contain;
         scrollbar-width: none;
-        background-color: var(--clr-common-white);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
         @media #{$xs}{
             width: 300px;
         }
@@ -70,7 +77,7 @@
     }
     &__top{
         padding-bottom: 20px;
-        border-bottom: 1px solid var(--clr-border-3);
+        border-bottom: 2px solid rgba(3, 67, 231, 0.4);
     }
     &__color{
         margin-bottom: 40px;
@@ -102,29 +109,33 @@
             width: 100%;
             height: 40px;
             line-height: 40px;
-            padding-right: 20px;
-            background: transparent;
+            padding-right: 40px;
+            background: rgba(255, 255, 255, 0.5);
             border: none;
             outline: none;
-            border-bottom: 1px solid var(--clr-border-1);
-            font-size: 16px; 
-            color: var(--clr-common-heading);
+            border-bottom: 2px solid #0343E7;
+            font-size: 16px;
+            color: #1a1a1a;
+            padding-left: 10px;
+            @include border-radius(4px 4px 0 0);
+            font-weight: normal;
             &::placeholder{
-                color: var(--clr-common-heading);
+                color: rgba(0, 0, 0, 0.6);
             }
             &:focus{
-                border-color: var(--clr-common-heading);
+                border-color: #0343E7;
+                background: rgba(255, 255, 255, 0.7);
             }
         }
         & button{
             position: absolute;
             top: 50%;
-            right: 0;
+            right: 10px;
             @include transform(translateY(-50%));
             font-size: 16px;
-            color: var(--clr-common-heading);
+            color: #1a1a1a;
             &:hover {
-                color: var(--clr-theme-1);
+                color: #0343E7;
             }
         }
     }
@@ -139,77 +150,87 @@
             margin-bottom: 20px;
             text-transform: uppercase;
             font-weight: var(--bd-fw-bold);
-            color: var(--clr-common-heading);
+            color: #1a1a1a;
+            letter-spacing: 0.5px;
         }
         & ul{
             & li{
                 &:not(:last-child){
                     margin-bottom: 20px;
                 }
-                &:hover{
-                    & i{
-                        color: var(--clr-common-white);
-                        border-color: var(--clr-theme-1);
-                        background-color: var(--clr-theme-1);
-                    }
-                }
             }
         }
         &-icon{
             & i{
-                width: 40px;
-                height: 40px;
+                width: 42px;
+                height: 42px;
                 display: flex;
                 align-items: center;
-                justify-content: space-evenly;
+                justify-content: center;
                 text-align: center;
-                border: 1px solid var(--clr-border-1);
-                @include border-radius(50%);
+                border: none;
                 @include border-radius(50%);
                 @include transition(.3s);
                 overflow: hidden;
-                color: var(--clr-common-heading);
+                color: var(--clr-common-white);
                 position: relative;
                 z-index: 5;
+                background-color: #0343E7;
             }
         }
         &-text{
             & a{
                 font-size: 16px;
-                font-weight: 500;
-                color: var(--clr-common-heading);
+                font-weight: normal;
+                color: #1a1a1a;
+                @include transition(.3s);
                 &:hover {
-                    color: var(--clr-theme-1);
+                    color: #0343E7;
                 }
+            }
+            & span{
+                font-size: 16px;
+                font-weight: normal;
+                color: #1a1a1a;
             }
         }
     }
     &__social{
         margin-bottom: 30px;
+        margin-top: 40px;
+        & h5{
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: var(--bd-fw-bold);
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         & ul{
             & li{
                 display: inline-block;
                 &:not(:last-child){
-                    margin-right: 5px;
+                    margin-right: 8px;
                 }
                 & a{
                     display: inline-block;
-                    width: 40px;
-                    height: 40px;
+                    width: 42px;
+                    height: 42px;
                     @include flexbox();
                     align-items: center;
                     justify-content: center;
-                    border: 1px solid var(--clr-border-1);
-                    color: var(--clr-theme-1);
+                    border: none;
+                    color: var(--clr-common-white);
+                    font-size: 17px;
                     @include border-radius(50%);
                     overflow: hidden;
                     position: relative;
                     z-index: 5;
-                    background-color: transparent;
+                    background-color: #0343E7;
+                    @include transition(.3s);
                     &:hover{
-                        color: var(--clr-common-white);
-                        border: 1px solid var(--clr-theme-1);
-                        background-color: var(--clr-theme-1);
+                        background-color: #0338C0;
+                        transform: translateY(-3px) scale(1.08);
                     }
                 }
             }
@@ -275,6 +296,24 @@
         opacity: 0.6;
         visibility: visible;
         @include transition(.3s);
+    }
+}
+
+// Estilos adicionales para menú móvil en offcanvas
+.mobile-menu {
+    .mean-nav {
+        ul {
+            li {
+                a, button {
+                    color: #1a1a1a !important;
+                    font-weight: 500;
+                    @include transition(.3s);
+                    &:hover {
+                        color: #0343E7 !important;
+                    }
+                }
+            }
+        }
     }
 }
 
