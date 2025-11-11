@@ -68,6 +68,16 @@ const About = () => {
     <Layout header={1} footer={1}>
       {/* Global styles */}
       <style dangerouslySetInnerHTML={{__html: `
+        /* Fix AOS animations - ensure elements stay visible */
+        [data-aos] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+
+        [data-aos].aos-animate {
+          opacity: 1 !important;
+        }
+
         @keyframes missionPulse {
           0%, 100% {
             transform: scale(1);
@@ -1882,6 +1892,245 @@ const About = () => {
                 >
                   Utilizamos tecnología para mejorar continuamente la experiencia de compra y gestión de pedidos.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Visit Current Site Section */}
+          <div className="row" style={{ marginTop: '80px' }}>
+            <div className="col-12">
+              <div
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.9) 100%)',
+                  backdropFilter: 'blur(20px)',
+                  border: '2px solid rgba(4, 70, 240, 0.15)',
+                  borderRadius: '24px',
+                  padding: 'clamp(40px, 6vw, 60px) clamp(30px, 5vw, 50px)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: '0 20px 60px rgba(4, 70, 240, 0.1)',
+                  transition: 'all 0.4s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 25px 70px rgba(4, 70, 240, 0.15)';
+                  e.currentTarget.style.borderColor = 'rgba(4, 70, 240, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(4, 70, 240, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(4, 70, 240, 0.15)';
+                }}
+              >
+                {/* Decorative corner elements */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '150px',
+                    height: '150px',
+                    background: 'radial-gradient(circle at top left, rgba(4, 70, 240, 0.08) 0%, transparent 70%)',
+                    borderRadius: '24px 0 100% 0',
+                    pointerEvents: 'none'
+                  }}
+                ></div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: '150px',
+                    height: '150px',
+                    background: 'radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08) 0%, transparent 70%)',
+                    borderRadius: '0 0 24px 100%',
+                    pointerEvents: 'none'
+                  }}
+                ></div>
+
+                {/* Animated badge */}
+                <div
+                  data-aos="zoom-in"
+                  data-aos-duration="800"
+                  data-aos-delay="200"
+                  style={{
+                    position: 'absolute',
+                    top: '-15px',
+                    right: 'clamp(20px, 5vw, 50px)',
+                    background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+                    color: '#ffffff',
+                    padding: '8px 20px',
+                    borderRadius: '30px',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 8px 20px rgba(245, 158, 11, 0.3)',
+                    animation: 'badgePulse 3s ease-in-out infinite',
+                    zIndex: 2
+                  }}
+                >
+                  <i className="fas fa-star" style={{ fontSize: '12px' }}></i>
+                  <span>Sitio Actual</span>
+                </div>
+
+                <div className="position-relative" style={{ zIndex: 1 }}>
+                  <div className="row align-items-center">
+                    {/* Left content */}
+                    <div className="col-lg-7 mb-4 mb-lg-0">
+                      <div
+                        data-aos="fade-right"
+                        data-aos-duration="1000"
+                        data-aos-delay="300"
+                      >
+                        <div
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            marginBottom: '20px'
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '50px',
+                              height: '50px',
+                              background: 'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)',
+                              borderRadius: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              boxShadow: '0 8px 20px rgba(4, 70, 240, 0.25)'
+                            }}
+                          >
+                            <i className="fal fa-globe" style={{ fontSize: '24px', color: '#ffffff' }}></i>
+                          </div>
+                          <h3
+                            style={{
+                              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                              fontWeight: '700',
+                              color: '#1a1a1a',
+                              margin: 0,
+                              lineHeight: '1.2'
+                            }}
+                          >
+                            Visita Nuestro Sitio Web Actual
+                          </h3>
+                        </div>
+                        <p
+                          data-aos="fade-right"
+                          data-aos-duration="1000"
+                          data-aos-delay="400"
+                          style={{
+                            fontSize: 'clamp(15px, 2vw, 17px)',
+                            color: '#666',
+                            lineHeight: '1.7',
+                            marginBottom: '24px',
+                            maxWidth: '600px'
+                          }}
+                        >
+                          Conoce nuestra trayectoria, misión y valores institucionales. Descubre cómo AMCI
+                          ha evolucionado como líder en la conexión entre empresas y proveedores industriales certificados.
+                        </p>
+                        <div
+                          data-aos="fade-up"
+                          data-aos-duration="800"
+                          data-aos-delay="500"
+                          style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '20px',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#10B981', fontSize: '18px' }}></i>
+                            <span style={{ fontSize: '14px', color: '#4a5568', fontWeight: '500' }}>100+ Productos</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#10B981', fontSize: '18px' }}></i>
+                            <span style={{ fontSize: '14px', color: '#4a5568', fontWeight: '500' }}>4+ Proveedores</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#10B981', fontSize: '18px' }}></i>
+                            <span style={{ fontSize: '14px', color: '#4a5568', fontWeight: '500' }}>Cotización Rápida</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right button */}
+                    <div className="col-lg-5">
+                      <div
+                        data-aos="fade-left"
+                        data-aos-duration="1000"
+                        data-aos-delay="400"
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '16px',
+                          alignItems: 'flex-start'
+                        }}
+                      >
+                        <Link
+                          href="https://amciac.org/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            background: 'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)',
+                            color: '#ffffff',
+                            padding: '16px 32px',
+                            borderRadius: '14px',
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            transition: 'all 0.3s ease',
+                            boxShadow: '0 8px 20px rgba(4, 70, 240, 0.3)',
+                            border: 'none',
+                            width: '100%',
+                            justifyContent: 'center'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
+                            e.currentTarget.style.boxShadow = '0 12px 30px rgba(4, 70, 240, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(4, 70, 240, 0.3)';
+                          }}
+                        >
+                          <i className="fal fa-external-link" style={{ fontSize: '18px' }}></i>
+                          <span>Ir al Sitio Institucional</span>
+                        </Link>
+
+                        <div
+                          style={{
+                            width: '100%',
+                            padding: '16px',
+                            background: 'rgba(4, 70, 240, 0.05)',
+                            borderRadius: '12px',
+                            border: '1px solid rgba(4, 70, 240, 0.1)'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                            <i className="fal fa-info-circle" style={{ color: '#0446F0', fontSize: '18px', marginTop: '2px' }}></i>
+                            <p style={{ fontSize: '13px', color: '#4a5568', margin: 0, lineHeight: '1.6' }}>
+                              <strong style={{ color: '#1a1a1a' }}>Nota:</strong> Serás redirigido a nuestro sitio web institucional
+                              donde podrás conocer más sobre nuestra historia, trayectoria y compromiso empresarial.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

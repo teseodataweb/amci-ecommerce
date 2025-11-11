@@ -13,19 +13,20 @@ const HomeThreeTouch = () => {
             <div className="touch__left mb-60">
               <div className="section__title-wrapper">
                 <span className="section__subtitle s-2">
-                  <span>Get </span>in touch
+                  <span>Ponte </span>en contacto
                 </span>
                 <h2 className="section__title s-2 mb-30">
-                  <span className="down__mark-line">Let&apos;s</span> Talk
+                  <span className="down__mark-line">Hablemos</span> hoy
                 </h2>
               </div>
               <p>
-                We&apos;ve been growing businesses since 2009, let us do it for
-                you!
+                Conectamos empresas con proveedores certificados desde 2010.
+                Déjanos ayudarte a encontrar los equipos y suministros industriales
+                que necesitas.
               </p>
               <div className="touch__search">
                 <form action="#">
-                  <input type="text" placeholder="Enter Mail" />
+                  <input type="text" placeholder="Ingresa tu correo" />
                   <button type="submit">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -48,16 +49,16 @@ const HomeThreeTouch = () => {
                 </form>
               </div>
               <div className="touch__social">
-                <Link href="/">
+                <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                   <i className="fa-brands fa-facebook-f"></i>
                 </Link>
-                <Link href="/">
+                <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer">
                   <i className="fa-brands fa-twitter"></i>
                 </Link>
-                <Link href="/">
+                <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer">
                   <i className="fa-brands fa-youtube"></i>
                 </Link>
-                <Link href="/">
+                <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                   <i className="fa-brands fa-linkedin"></i>
                 </Link>
               </div>
@@ -67,52 +68,54 @@ const HomeThreeTouch = () => {
             <div className="touch__contact p-relative">
               <div className="touch__carcle"></div>
               <div className="touch__content-title">
-                <h3>Schedule a Consultation</h3>
+                <h3>Solicita una Cotización</h3>
               </div>
               <form action="#">
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="First Name" />
+                      <input type="text" placeholder="Nombre" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Last Name" />
+                      <input type="text" placeholder="Apellido" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Company Name" />
+                      <input type="text" placeholder="Nombre de la Empresa" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Website" />
+                      <input type="text" placeholder="Sitio Web (Opcional)" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Monthly Budget" />
+                      <input type="text" placeholder="Presupuesto Estimado" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Phone Number" />
+                      <input type="text" placeholder="Teléfono" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="touch__input">
-                      <input type="text" placeholder="Email" />
+                      <input type="email" placeholder="Correo Electrónico" />
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="contact__select mb-20">
                       <select>
-                        <option value="0">Select the services</option>
-                        <option value="1">Payment</option>
-                        <option value="2">Information</option>
-                        <option value="3">Option</option>
+                        <option value="0">Tipo de Consulta</option>
+                        <option value="1">Cotización de Productos</option>
+                        <option value="2">Información General</option>
+                        <option value="3">Convertirse en Proveedor</option>
+                        <option value="4">Soporte Técnico</option>
+                        <option value="5">Facturación</option>
                       </select>
                     </div>
                   </div>
@@ -125,17 +128,17 @@ const HomeThreeTouch = () => {
                           id="sing-up"
                         />
                         <label className="sign__check" htmlFor="sing-up">
-                          Accept Our{" "}
+                          Acepto los{" "}
                           <span>
-                            <Link href="/">Terms</Link> &{" "}
-                            <Link href="/">Conditions</Link>
+                            <Link href="/terminos">Términos</Link> y{" "}
+                            <Link href="/privacidad">Condiciones</Link>
                           </span>
                         </label>
                       </div>
                       <div className="touch__btn">
                         <button type="button"></button>
                         <button className="border__btn" type="submit">
-                          Submit Query
+                          Enviar Solicitud
                         </button>
                       </div>
                     </div>

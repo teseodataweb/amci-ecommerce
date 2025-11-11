@@ -134,32 +134,95 @@ export default function RegistroProveedor() {
     return (
       <>
         <Head>
-          <title>Registro de Proveedor Exitoso - AMCI E-commerce</title>
+          <title>Solicitud Enviada - AMCI</title>
         </Head>
         <Layout header={1} footer={1}>
-          <section className="contact-area pt-100 pb-100">
+          <section className="pt-100 pb-100" style={{ background: '#f8f9fa', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-lg-8 col-md-10">
-                  <div className="text-center">
-                    <div className="mb-4">
-                      <i className="fas fa-check-circle text-success" style={{ fontSize: '4rem' }} />
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      borderRadius: '24px',
+                      padding: '60px 40px',
+                      boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)'
+                    }}
+                    data-aos="fade-up"
+                  >
+                    <div className="text-center">
+                      <div
+                        style={{
+                          width: '90px',
+                          height: '90px',
+                          background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0 auto 30px',
+                          boxShadow: '0 10px 30px rgba(16, 185, 129, 0.3)'
+                        }}
+                      >
+                        <i className="fas fa-check" style={{ fontSize: '48px', color: '#ffffff' }} />
+                      </div>
+                      <h2 style={{ fontSize: '28px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px' }}>
+                        ¡Solicitud Enviada Exitosamente!
+                      </h2>
+                      <p style={{ fontSize: '16px', color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>
+                        Tu solicitud de registro como proveedor ha sido recibida. Nuestro equipo la revisará pronto.
+                      </p>
                     </div>
-                    <h2 className="title mb-3">¡Solicitud Enviada!</h2>
-                    <p className="mb-4">
-                      Tu solicitud de registro como proveedor ha sido recibida exitosamente.
-                    </p>
-                    <div className="alert alert-info">
-                      <h5 className="alert-heading">Próximos pasos:</h5>
-                      <ol className="text-start mb-0">
-                        <li>Nuestro equipo revisará tu información en las próximas 24-48 horas</li>
+
+                    <div
+                      style={{
+                        background: 'rgba(4, 70, 240, 0.05)',
+                        borderRadius: '16px',
+                        padding: '24px',
+                        marginBottom: '30px'
+                      }}
+                    >
+                      <h5 style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <i className="fas fa-list-check" style={{ color: '#0446F0' }}></i>
+                        Próximos pasos:
+                      </h5>
+                      <ol style={{ marginBottom: 0, paddingLeft: '20px', lineHeight: '1.8', color: '#4a5568' }}>
+                        <li>Nuestro equipo revisará tu información en las próximas <strong>24-48 horas</strong></li>
                         <li>Recibirás un correo electrónico con el estado de tu solicitud</li>
-                        <li>Una vez aprobado, podrás acceder al panel de proveedores</li>
+                        <li>Una vez aprobado, podrás acceder al panel de proveedores y comenzar a publicar productos</li>
                       </ol>
                     </div>
-                    <Link href="/" className="btn btn-primary mt-4">
-                      Volver al Inicio
-                    </Link>
+
+                    <div className="text-center">
+                      <Link
+                        href="/"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          background: 'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)',
+                          color: '#ffffff',
+                          padding: '14px 32px',
+                          borderRadius: '12px',
+                          fontSize: '16px',
+                          fontWeight: '600',
+                          textDecoration: 'none',
+                          boxShadow: '0 4px 12px rgba(4, 70, 240, 0.3)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 6px 16px rgba(4, 70, 240, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(4, 70, 240, 0.3)';
+                        }}
+                      >
+                        <i className="fal fa-home"></i>
+                        Volver al Inicio
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -173,42 +236,141 @@ export default function RegistroProveedor() {
   return (
     <>
       <Head>
-        <title>Registro de Proveedor - AMCI E-commerce</title>
-        <meta name="description" content="Únete como proveedor en AMCI E-commerce" />
+        <title>Registro de Proveedor - AMCI</title>
+        <meta name="description" content="Únete a la red de proveedores certificados de AMCI y expande tu negocio" />
       </Head>
       <Layout header={1} footer={1}>
-        <section className="contact-area pt-100 pb-100">
+        {/* Hero Section */}
+        <section
+          className="hero__area hero__area-proveedor"
+          style={{
+            position: 'relative',
+            minHeight: '45vh',
+            display: 'flex',
+            alignItems: 'center',
+            overflow: 'hidden',
+            background: 'radial-gradient(ellipse at center, rgb(30, 64, 175) 0%, rgb(13, 27, 62) 50%, rgb(0, 15, 40) 100%)'
+          }}
+        >
+          <div className="container position-relative" style={{ zIndex: 2, paddingTop: '80px', paddingBottom: '80px' }}>
+            <div className="row">
+              <div className="col-12">
+                <div className="hero__content-proveedor text-center">
+                  <div
+                    data-aos="zoom-in"
+                    data-aos-duration="800"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: 'rgba(16, 185, 129, 0.2)',
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      borderRadius: '30px',
+                      padding: '8px 20px',
+                      marginBottom: '20px',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                  >
+                    <i className="fas fa-handshake" style={{ color: '#10B981', fontSize: '16px' }}></i>
+                    <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: '600' }}>
+                      Únete a nuestra red de proveedores
+                    </span>
+                  </div>
+                  <h1
+                    className="display-4 fw-bold text-white mb-3"
+                    data-aos="fade-up"
+                    data-aos-duration="1000"
+                    style={{
+                      textShadow: '2px 2px 8px rgba(0, 0, 0, 0.6)',
+                      lineHeight: '1.2',
+                      fontSize: 'clamp(2rem, 5vw, 3.2rem)'
+                    }}
+                  >
+                    Registro de Proveedor
+                  </h1>
+                  <p
+                    className="text-white mx-auto"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+                    data-aos-duration="1000"
+                    style={{
+                      textShadow: '1px 1px 6px rgba(0, 0, 0, 0.5)',
+                      maxWidth: '700px',
+                      fontSize: 'clamp(1rem, 2vw, 1.2rem)'
+                    }}
+                  >
+                    Forma parte de AMCI y conecta con empresas que necesitan tus productos y servicios industriales
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Form Section */}
+        <section className="pt-80 pb-100" style={{ background: '#f8f9fa' }}>
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-8 col-md-10">
-                <div className="contact-form-wrap">
+                <div
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: '24px',
+                    padding: 'clamp(30px, 5vw, 50px)',
+                    boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)',
+                    border: '1px solid rgba(0, 0, 0, 0.05)'
+                  }}
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                >
+                  {/* Header with icon */}
                   <div className="text-center mb-4">
-                    <h2 className="title">Registro de Proveedor</h2>
-                    <p>Únete a nuestra red de proveedores</p>
+                    <div
+                      style={{
+                        width: '70px',
+                        height: '70px',
+                        background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                        borderRadius: '18px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 20px',
+                        boxShadow: '0 8px 20px rgba(16, 185, 129, 0.25)'
+                      }}
+                    >
+                      <i className="fal fa-store" style={{ fontSize: '36px', color: '#ffffff' }}></i>
+                    </div>
+                    <h3 style={{ fontSize: '24px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px' }}>
+                      Solicitud de Registro
+                    </h3>
+                    <p style={{ fontSize: '15px', color: '#666', margin: 0 }}>
+                      Completa los siguientes pasos para unirte
+                    </p>
+                  </div>
 
-                    {/* Progress Steps */}
-                    <div className="progress-steps mt-4 mb-4">
-                      <div className="d-flex justify-content-center">
-                        <div className={`step ${step >= 1 ? 'active' : ''}`}>
-                          <span className="step-number">1</span>
-                          <span className="step-label">Datos de Usuario</span>
-                        </div>
-                        <div className="step-line"></div>
-                        <div className={`step ${step >= 2 ? 'active' : ''}`}>
-                          <span className="step-number">2</span>
-                          <span className="step-label">Datos Fiscales</span>
-                        </div>
-                        <div className="step-line"></div>
-                        <div className={`step ${step >= 3 ? 'active' : ''}`}>
-                          <span className="step-number">3</span>
-                          <span className="step-label">Info. Adicional</span>
-                        </div>
+                  {/* Progress Steps */}
+                  <div className="progress-steps mb-5">
+                    <div className="d-flex justify-content-center align-items-start flex-wrap" style={{ gap: '0' }}>
+                      <div className={`step ${step >= 1 ? 'active' : ''}`} style={{ flex: '0 0 auto' }}>
+                        <span className="step-number">{step > 1 ? <i className="fas fa-check"></i> : '1'}</span>
+                        <span className="step-label">Datos de Usuario</span>
+                      </div>
+                      <div className="step-line"></div>
+                      <div className={`step ${step >= 2 ? 'active' : ''}`} style={{ flex: '0 0 auto' }}>
+                        <span className="step-number">{step > 2 ? <i className="fas fa-check"></i> : '2'}</span>
+                        <span className="step-label">Datos Fiscales</span>
+                      </div>
+                      <div className="step-line"></div>
+                      <div className={`step ${step >= 3 ? 'active' : ''}`} style={{ flex: '0 0 auto' }}>
+                        <span className="step-number">3</span>
+                        <span className="step-label">Info. Adicional</span>
                       </div>
                     </div>
                   </div>
 
                   {error && (
-                    <div className="alert alert-danger" role="alert">
+                    <div className="alert alert-danger" role="alert" style={{ borderRadius: '12px', marginBottom: '24px' }}>
+                      <i className="fas fa-exclamation-circle me-2"></i>
                       {error}
                     </div>
                   )}
@@ -592,36 +754,60 @@ export default function RegistroProveedor() {
             z-index: 1;
           }
           .step-number {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: #e9ecef;
             color: #6c757d;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 12px;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
           }
           .step.active .step-number {
-            background: #1e40af;
+            background: linear-gradient(135deg, #0446F0 0%, #0338C0 100%);
             color: white;
+            border-color: #0446F0;
+            box-shadow: 0 4px 12px rgba(4, 70, 240, 0.3);
           }
           .step-label {
-            font-size: 14px;
+            font-size: 13px;
             color: #6c757d;
+            font-weight: 500;
+            text-align: center;
+            max-width: 100px;
           }
           .step.active .step-label {
-            color: #1e40af;
-            font-weight: 500;
+            color: #0446F0;
+            font-weight: 600;
           }
           .step-line {
-            width: 100px;
-            height: 2px;
+            width: 80px;
+            height: 3px;
             background: #e9ecef;
-            margin-top: 20px;
-            margin-left: 10px;
-            margin-right: 10px;
+            margin-top: 25px;
+            margin-left: 8px;
+            margin-right: 8px;
+            border-radius: 2px;
+          }
+          @media (max-width: 768px) {
+            .step-line {
+              width: 50px;
+            }
+            .step-label {
+              font-size: 11px;
+              max-width: 80px;
+            }
+            .step-number {
+              width: 40px;
+              height: 40px;
+              font-size: 16px;
+            }
           }
         `}</style>
       </Layout>

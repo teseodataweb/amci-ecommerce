@@ -41,6 +41,75 @@ interface CatalogStats {
   totalCategories: number;
 }
 
+// Helper functions para generar placeholders de texto
+const getProductInitials = (productName: string): string => {
+  const words = productName.trim().split(' ').filter(word => word.length > 0);
+
+  if (words.length === 1) {
+    // Si es una sola palabra, tomar las primeras 2 letras
+    return words[0].substring(0, 2).toUpperCase();
+  } else {
+    // Si son múltiples palabras, tomar la primera letra de las primeras 3 palabras
+    return words
+      .slice(0, 3)
+      .map(word => word[0])
+      .join('')
+      .toUpperCase();
+  }
+};
+
+const getColorFromString = (str: string): string => {
+  // Generar un color consistente basado en el hash del string
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Definir una paleta de colores profesionales para productos industriales
+  const colors = [
+    'linear-gradient(135deg, #0446F0 0%, #0338C0 100%)', // Azul
+    'linear-gradient(135deg, #10B981 0%, #059669 100%)', // Verde
+    'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', // Naranja
+    'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)', // Púrpura
+    'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', // Rojo
+    'linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)', // Cyan
+    'linear-gradient(135deg, #6366F1 0%, #4F46E5 100%)', // Índigo
+    'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)', // Rosa
+    'linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)', // Teal
+    'linear-gradient(135deg, #F97316 0%, #EA580C 100%)', // Naranja oscuro
+  ];
+
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};
+
+const ProductPlaceholder = ({ productName, className }: { productName: string; className?: string }) => {
+  const initials = getProductInitials(productName);
+  const backgroundColor = getColorFromString(productName);
+
+  return (
+    <div
+      className={className}
+      style={{
+        background: backgroundColor,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+        color: '#ffffff',
+        fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+        fontWeight: '700',
+        letterSpacing: '0.05em',
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+        userSelect: 'none'
+      }}
+    >
+      {initials}
+    </div>
+  );
+};
+
 const Catalogo = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -861,9 +930,8 @@ const Catalogo = () => {
                         >
                           {/* Image Section with Overlay Info */}
                           <div className="product-card-b2b__image-wrapper">
-                            <img
-                              src={product.images?.[0]?.url || 'https://via.placeholder.com/400x280?text=Sin+Imagen'}
-                              alt={product.images?.[0]?.alt || product.nombre}
+                            <ProductPlaceholder
+                              productName={product.nombre}
                               className="product-card-b2b__image"
                             />
 
@@ -1193,10 +1261,7 @@ const Catalogo = () => {
             <div className="row g-4">
               <div className="col-lg-6">
                 <div className="quick-view-modal__image">
-                  <img
-                    src={quickViewProduct.images?.[0]?.url || 'https://via.placeholder.com/500?text=Sin+Imagen'}
-                    alt={quickViewProduct.images?.[0]?.alt || quickViewProduct.nombre}
-                  />
+                  <ProductPlaceholder productName={quickViewProduct.nombre} />
                 </div>
 
                 {/* Información adicional del producto */}
@@ -1384,14 +1449,9 @@ const Catalogo = () => {
                     {getCompareProductsData().map(product => (
                       <th key={product.id} className="compare-table__product">
                         <div className="compare-product-header">
-                          <img
-                            src={product.images && product.images.length > 0 ? product.images[0].url : 'https://via.placeholder.com/150?text=Sin+Imagen'}
-                            alt={product.images && product.images.length > 0 ? product.images[0].alt : product.nombre}
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = 'https://via.placeholder.com/150?text=Sin+Imagen';
-                            }}
-                          />
+                          <div style={{ width: '150px', height: '150px' }}>
+                            <ProductPlaceholder productName={product.nombre} />
+                          </div>
                           <h4>{product.nombre}</h4>
                           <button
                             className="remove-from-compare"
