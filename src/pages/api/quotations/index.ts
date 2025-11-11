@@ -141,50 +141,58 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Formatear las cotizaciones para la respuesta
-    const formattedQuotations = quotations?.map(q => ({
-      id: q.id,
-      status: q.status,
-      presupuesto: q.presupuesto,
-      validoHasta: q.valido_hasta,
-      createdAt: q.created_at,
-      respondidaAt: q.respondida_at,
-      aceptadaAt: q.aceptada_at,
+    const formattedQuotations = quotations?.map(q => {
+      // Extraer relaciones (Supabase retorna arrays para relaciones)
+      const product = Array.isArray(q.product) ? q.product[0] : q.product;
+      const provider = Array.isArray(product?.provider) ? product.provider[0] : product?.provider;
+      const images = Array.isArray(product?.images) ? product.images : [];
+      const cliente = Array.isArray(q.cliente) ? q.cliente[0] : q.cliente;
 
-      // Datos del producto/servicio
-      producto: {
-        id: q.product.id,
-        nombre: q.product.nombre,
-        slug: q.product.slug,
-        imagen: q.product.images?.[0]?.url || null,
-        proveedor: q.product.provider.razon_social,
-        emisorFactura: q.product.emisor_factura
-      },
+      return {
+        id: q.id,
+        status: q.status,
+        presupuesto: q.presupuesto,
+        validoHasta: q.valido_hasta,
+        createdAt: q.created_at,
+        respondidaAt: q.respondida_at,
+        aceptadaAt: q.aceptada_at,
 
-      // Datos del servicio solicitado
-      servicio: q.datos_servicio,
+        // Datos del producto/servicio
+        producto: {
+          id: product?.id,
+          nombre: product?.nombre,
+          slug: product?.slug,
+          imagen: images?.[0]?.url || null,
+          proveedor: provider?.razon_social,
+          emisorFactura: product?.emisor_factura
+        },
 
-      // Datos del cliente (solo visible para proveedor/admin)
-      cliente: role !== 'CLIENTE' ? {
-        id: q.cliente.id,
-        nombre: q.cliente.name,
-        email: q.cliente.email,
-        telefono: q.cliente.phone
-      } : undefined,
+        // Datos del servicio solicitado
+        servicio: q.datos_servicio,
 
-      // Notas
-      notasCliente: q.notas_cliente,
-      notasProveedor: role !== 'CLIENTE' || q.status !== 'SOLICITADA'
-        ? q.notas_proveedor
-        : undefined,
+        // Datos del cliente (solo visible para proveedor/admin)
+        cliente: role !== 'CLIENTE' ? {
+          id: cliente?.id,
+          nombre: cliente?.name,
+          email: cliente?.email,
+          telefono: cliente?.phone
+        } : undefined,
 
-      // Indicadores de estado
-      estaVencida: q.valido_hasta
-        ? new Date(q.valido_hasta) < new Date()
-        : false,
-      puedeAceptar: q.status === 'PRESUPUESTADA'
-        && (!q.valido_hasta || new Date(q.valido_hasta) >= new Date()),
-      puedeResponder: q.status === 'SOLICITADA' && role === 'PROVEEDOR'
-    })) || [];
+        // Notas
+        notasCliente: q.notas_cliente,
+        notasProveedor: role !== 'CLIENTE' || q.status !== 'SOLICITADA'
+          ? q.notas_proveedor
+          : undefined,
+
+        // Indicadores de estado
+        estaVencida: q.valido_hasta
+          ? new Date(q.valido_hasta) < new Date()
+          : false,
+        puedeAceptar: q.status === 'PRESUPUESTADA'
+          && (!q.valido_hasta || new Date(q.valido_hasta) >= new Date()),
+        puedeResponder: q.status === 'SOLICITADA' && role === 'PROVEEDOR'
+      };
+    }) || [];
 
     // Estadísticas
     const stats = {

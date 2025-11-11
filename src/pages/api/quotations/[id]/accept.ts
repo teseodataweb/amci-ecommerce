@@ -104,6 +104,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const envio = 0; // Para servicios in-situ, el envío es 0
     const total = subtotal + impuestos;
 
+    // Extraer el producto (Supabase retorna un array para relaciones)
+    const product = Array.isArray(quotation.product) ? quotation.product[0] : quotation.product;
+
     // Crear la orden
     const { data: order, error: orderError } = await supabase
       .from('orders')
@@ -116,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         total: total,
         estado: 'RECIBIDO',
         emisor_factura_resumen: {
-          [quotation.product.emisor_factura]: total
+          [product.emisor_factura]: total
         },
         notes: `Orden generada desde cotización #${quotationId}`
       })
@@ -136,7 +139,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .from('order_items')
       .insert({
         order_id: order.id,
-        product_id: quotation.product.id,
+        product_id: product.id,
         qty: 1,
         precio_unit: subtotal,
         subtotal: subtotal,

@@ -76,8 +76,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'Cotización no encontrada' });
     }
 
+    // Extraer el producto (Supabase retorna un array para relaciones)
+    const product = Array.isArray(quotation.product) ? quotation.product[0] : quotation.product;
+    const provider = Array.isArray(product.provider) ? product.provider[0] : product.provider;
+
     // Verificar que el proveedor es dueño del producto
-    if (quotation.product.provider.id !== providerId) {
+    if (provider.id !== providerId) {
       return res.status(403).json({
         error: 'No tienes permiso para responder esta cotización'
       });

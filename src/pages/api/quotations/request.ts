@@ -140,8 +140,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
+    // Extraer el producto del quotation (Supabase retorna un array para relaciones)
+    const quotationProduct = Array.isArray(quotation.product) ? quotation.product[0] : quotation.product;
+    const quotationProvider = Array.isArray(quotationProduct?.provider) ? quotationProduct.provider[0] : quotationProduct?.provider;
+
     // TODO: Enviar notificación por correo al proveedor
-    // const correosProveedor = product.provider.correos_notificaciones || [];
+    // const correosProveedor = quotationProvider.correos_notificaciones || [];
     // await sendQuotationNotification(quotation, correosProveedor);
 
     return res.status(201).json({
@@ -149,8 +153,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       quotation: {
         id: quotation.id,
         status: quotation.status,
-        producto: quotation.product.nombre,
-        proveedor: quotation.product.provider.razon_social,
+        producto: quotationProduct?.nombre,
+        proveedor: quotationProvider?.razon_social,
         datosServicio: quotation.datos_servicio,
         createdAt: quotation.created_at
       },
