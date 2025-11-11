@@ -8,21 +8,66 @@ const Home = () => {
     <Layout header={1} footer={1}>
       {/* Hero Section */}
       <style jsx>{`
-        @keyframes lightSweep {
-          0% {
-            transform: translateX(-150%) translateY(-100%);
-          }
-          25% {
-            transform: translateX(-50%) translateY(0%);
+        @keyframes catalogShapeFloat1 {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
           }
           50% {
-            transform: translateX(50%) translateY(-50%);
+            transform: translateY(-20px) rotate(5deg);
+          }
+        }
+
+        @keyframes catalogShapeFloat2 {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          50% {
+            transform: translateY(20px) rotate(-5deg);
+          }
+        }
+
+        @keyframes heroImageVertical1 {
+          0%, 100% {
+            transform: translateY(0) scale(1.05);
+            filter: drop-shadow(0 35px 90px rgba(3, 56, 192, 0.75)) brightness(1.12) saturate(1.3);
+          }
+          50% {
+            transform: translateY(-60px) scale(0.92);
+            filter: drop-shadow(0 25px 70px rgba(3, 56, 192, 0.65)) brightness(1.05) saturate(1.2);
+          }
+        }
+
+        @keyframes heroImageVertical2 {
+          0%, 100% {
+            transform: translateY(-70px) scale(0.9);
+            filter: drop-shadow(0 28px 75px rgba(147, 197, 253, 0.7)) brightness(1.08) saturate(1.25);
+          }
+          50% {
+            transform: translateY(0) scale(1.08);
+            filter: drop-shadow(0 40px 100px rgba(59, 130, 246, 0.8)) brightness(1.15) saturate(1.35);
+          }
+        }
+
+        @keyframes lightSweep {
+          0% {
+            transform: translate(-150%, -150%) scale(1);
+            opacity: 0.3;
+          }
+          25% {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translate(50%, 50%) scale(1.5);
+            opacity: 0.4;
           }
           75% {
-            transform: translateX(150%) translateY(20%);
+            transform: translate(150%, -50%) scale(1.3);
+            opacity: 0.3;
           }
           100% {
-            transform: translateX(250%) translateY(-80%);
+            transform: translate(250%, -150%) scale(1);
+            opacity: 0.2;
           }
         }
 
@@ -111,16 +156,18 @@ const Home = () => {
           }
         }
 
-        .hero-overlay-animated::after {
+        .hero-overlay::after {
           content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: radial-gradient(ellipse 1000px 800px at center, rgba(78, 158, 255, 0.3) 0%, rgba(30, 64, 175, 0.18) 30%, transparent 65%);
-          animation: lightSweep 18s ease-in-out infinite;
+          top: 50%;
+          left: 50%;
+          width: 1200px;
+          height: 1200px;
+          transform: translate(-50%, -50%);
+          background: radial-gradient(circle, rgba(78, 158, 255, 0.4) 0%, rgba(30, 64, 175, 0.25) 25%, rgba(30, 64, 175, 0.1) 50%, transparent 70%);
+          animation: lightSweep 20s ease-in-out infinite;
           pointer-events: none;
+          border-radius: 50%;
         }
 
         .hero-text-glow {
@@ -180,68 +227,131 @@ const Home = () => {
           right: 25%;
           animation: particleFloat1 9s ease-in-out infinite reverse;
         }
+
+        :global(.catalog-shape-1) {
+          width: 320px;
+          height: 320px;
+          position: absolute;
+          border-radius: 50%;
+          bottom: 15%;
+          right: -100px;
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(78, 158, 255, 0.1) 100%);
+          animation: catalogShapeFloat1 6s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        :global(.catalog-shape-2) {
+          width: 280px;
+          height: 280px;
+          position: absolute;
+          border-radius: 50%;
+          top: 55%;
+          left: -110px;
+          background: linear-gradient(135deg, rgba(30, 64, 175, 0.12) 0%, rgba(13, 27, 62, 0.1) 100%);
+          animation: catalogShapeFloat2 8s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+          :global(.catalog-shape-1) {
+            width: 160px;
+            height: 160px;
+            bottom: 15%;
+            right: -50px;
+          }
+
+          :global(.catalog-shape-2) {
+            width: 140px;
+            height: 140px;
+            top: 55%;
+            left: -55px;
+          }
+        }
       `}</style>
-      <section className="hero__area hero__area-amci">
+      <section
+        className="hero__area hero__area-amci"
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden'
+        }}
+      >
         <div
-          className="hero__overlay hero-overlay-animated"
+          className="hero__overlay"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'radial-gradient(ellipse at left center, rgba(30, 64, 175, 0.75) 0%, rgba(13, 27, 62, 0.88) 50%, rgba(0, 15, 40, 0.95) 100%)',
+            background: 'radial-gradient(ellipse at center, rgb(30, 64, 175) 0%, rgb(13, 27, 62) 50%, rgb(0, 15, 40) 100%)',
             zIndex: 1,
             overflow: 'hidden'
           }}
         >
-          {/* Animated particles */}
+          {/* Partículas pequeñas animadas */}
           <div className="particle particle-1"></div>
           <div className="particle particle-2"></div>
           <div className="particle particle-3"></div>
           <div className="particle particle-4"></div>
+
+          {/* Círculos decorativos grandes - estilo Catálogo */}
+          <div className="catalog-shape catalog-shape-1"></div>
+          <div className="catalog-shape catalog-shape-2"></div>
+
         </div>
-        <div className="container position-relative" style={{ zIndex: 2 }}>
-          <div className="row align-items-center" style={{ minHeight: '100vh' }}>
-            <div className="col-xl-7 col-lg-7">
-              <div className="hero__content">
+
+        <div className="container position-relative" style={{ zIndex: 4, paddingTop: '100px', paddingBottom: '100px' }}>
+          <div className="row">
+            <div className="col-12">
+              <div className="hero__content" style={{ textAlign: 'center' }}>
                 <h1
-                  className="hero__title display-3 fw-bold text-white mb-4"
+                  className="fw-bold text-white mb-3"
                   data-aos="fade-up"
                   data-aos-duration="1200"
                   style={{
-                    textShadow: '2px 2px 8px rgba(0, 0, 0, 0.6)',
-                    lineHeight: '1.2'
+                    textShadow: '2px 2px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(78, 158, 255, 0.8), 0 0 50px rgba(4, 70, 240, 0.4)',
+                    lineHeight: '1.2',
+                    fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                    margin: 0,
+                    fontStyle: 'normal !important',
+                    fontFamily: 'inherit'
                   }}
                 >
-                  Equipos y suministros industriales
                   <span
-                    className="d-block mt-3 hero-text-glow"
+                    className="hero-text-glow-catalog"
                     style={{
-                      color: '#4E9EFF',
-                      fontWeight: '700'
+                      color: '#ffffff',
+                      fontWeight: '700',
+                      fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                      fontStyle: 'normal !important',
+                      fontFamily: 'inherit'
                     }}
                   >
-                    de calidad certificada
+                    Equipos y suministros industriales<br />de calidad certificada
                   </span>
                 </h1>
                 <p
-                  className="hero__description fs-5 text-white"
+                  className="text-white mx-auto"
                   data-aos="fade-up"
                   data-aos-delay="300"
                   data-aos-duration="1200"
                   style={{
-                    textShadow: '1px 1px 4px rgba(0, 0, 0, 0.6)',
+                    textShadow: '2px 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3)',
                     lineHeight: '1.6',
-                    maxWidth: '600px',
-                    fontWeight: '400',
-                    marginBottom: '48px'
+                    maxWidth: '700px',
+                    fontWeight: '500',
+                    fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+                    letterSpacing: '0.5px',
+                    marginBottom: '2.5rem'
                   }}
                 >
                   Encuentra todo lo que necesitas para tu empresa con nuestros proveedores certificados.
                   Desde equipos de protección personal hasta maquinaria industrial especializada.
                 </p>
-                <div className="hero__buttons d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1200">
+                <div className="hero__buttons d-flex flex-wrap gap-3 justify-content-center" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1200">
                   <Link
                     href="/catalogo"
                     className="btn hero-button-pulse"
@@ -308,20 +418,70 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-5 col-lg-5 d-none d-lg-block">
-              <div className="hero__image text-center hero-image-float" data-aos="fade-left" data-aos-delay="400" data-aos-duration="1400">
-                <Image
-                  src="/img/hero/hero-image.png"
-                  alt="AMCI Equipos Industriales"
-                  width={500}
-                  height={500}
-                  priority
-                  unoptimized
-                  style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.3))' }}
-                />
-              </div>
-            </div>
           </div>
+        </div>
+
+        {/* Imágenes decorativas - Movimiento vertical con cambio de escala */}
+        {/* Imagen grande inferior izquierda - Sube y baja reduciendo tamaño al subir */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-5%',
+            left: '2%',
+            width: '42%',
+            maxWidth: '520px',
+            zIndex: 3,
+            pointerEvents: 'none'
+          }}
+          data-aos="zoom-in"
+          data-aos-delay="500"
+          data-aos-duration="1500"
+        >
+          <Image
+            src="/img/hero/hero-image.png"
+            alt="AMCI Equipos Industriales"
+            width={520}
+            height={520}
+            priority
+            unoptimized
+            style={{
+              objectFit: 'contain',
+              width: '100%',
+              height: 'auto',
+              animation: 'heroImageVertical1 8s ease-in-out infinite'
+            }}
+          />
+        </div>
+
+        {/* Imagen pequeña superior derecha - Sube y baja reduciendo tamaño al subir */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '8%',
+            right: '4%',
+            width: '28%',
+            maxWidth: '340px',
+            zIndex: 3,
+            pointerEvents: 'none'
+          }}
+          data-aos="fade-down-left"
+          data-aos-delay="700"
+          data-aos-duration="1300"
+        >
+          <Image
+            src="/img/hero/hero-image.png"
+            alt="AMCI Equipos Industriales"
+            width={340}
+            height={340}
+            priority
+            unoptimized
+            style={{
+              objectFit: 'contain',
+              width: '100%',
+              height: 'auto',
+              animation: 'heroImageVertical2 10s ease-in-out infinite'
+            }}
+          />
         </div>
       </section>
 
@@ -1421,58 +1581,22 @@ const Home = () => {
                 data-aos="fade-up"
               >
                 {/* Left content */}
-                <div style={{ flex: '1 1 400px', textAlign: 'left' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '16px' }}>
-                    <div style={{
-                      width: '60px',
-                      height: '60px',
-                      background: 'rgba(255, 255, 255, 0.15)',
-                      borderRadius: '16px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.2)'
-                    }}>
-                      <i className="fal fa-rocket" style={{ fontSize: '28px', color: '#ffffff' }}></i>
-                    </div>
-                    <h2
-                      className="cta__title"
-                      style={{
-                        fontSize: '32px',
-                        fontWeight: '800',
-                        color: '#ffffff',
-                        margin: 0,
-                        letterSpacing: '-0.5px',
-                        lineHeight: '1.2'
-                      }}
-                    >
+                <div className="cta-content-wrapper">
+                  <div className="cta-icon-box">
+                    <i className="fal fa-rocket"></i>
+                  </div>
+                  <div className="cta-text-box">
+                    <h2 className="cta__title">
                       ¿Listo para comenzar?
                     </h2>
+                    <p className="cta__description">
+                      Explora nuestro catálogo y encuentra exactamente lo que necesitas para tu empresa.
+                    </p>
                   </div>
-                  <p
-                    className="cta__description"
-                    style={{
-                      fontSize: '16px',
-                      color: 'rgba(255, 255, 255, 0.9)',
-                      margin: 0,
-                      lineHeight: '1.6'
-                    }}
-                  >
-                    Explora nuestro catálogo y encuentra exactamente lo que necesitas para tu empresa.
-                  </p>
                 </div>
 
                 {/* Right buttons */}
-                <div
-                  className="cta__buttons"
-                  style={{
-                    display: 'flex',
-                    gap: '12px',
-                    flexWrap: 'wrap',
-                    justifyContent: 'flex-end'
-                  }}
-                >
+                <div className="cta__buttons">
                   <Link
                     href="/catalogo"
                     className="cta-button-primary"
@@ -1505,6 +1629,7 @@ const Home = () => {
                   </Link>
                   <Link
                     href="/contact"
+                    className="cta-button-secondary"
                     style={{
                       background: 'rgba(255, 255, 255, 0.15)',
                       color: '#ffffff',

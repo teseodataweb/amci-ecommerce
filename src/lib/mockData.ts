@@ -37,27 +37,62 @@ export const mockProviders = [
   {
     id: '1',
     razon_social: 'Cementos Mexicanos S.A. de C.V.',
-    nombre_comercial: 'CEMEX'
+    nombre_comercial: 'CEMEX',
+    descripcion: 'Líder global en la industria de materiales para construcción. Con más de 100 años de experiencia, ofrecemos productos de la más alta calidad.',
+    años_experiencia: 115,
+    rating: 4.8,
+    total_ventas: 12543,
+    tiempo_respuesta: '2-4 horas',
+    ubicacion: 'Monterrey, Nuevo León',
+    certificaciones: ['ISO 9001', 'ISO 14001', 'NOM-127']
   },
   {
     id: '2',
     razon_social: 'Aceros del Norte S.A. de C.V.',
-    nombre_comercial: 'AceroNorte'
+    nombre_comercial: 'AceroNorte',
+    descripcion: 'Especialistas en acero estructural y productos derivados. Más de 30 años sirviendo a la industria de la construcción.',
+    años_experiencia: 32,
+    rating: 4.6,
+    total_ventas: 8934,
+    tiempo_respuesta: '3-6 horas',
+    ubicacion: 'Guadalajara, Jalisco',
+    certificaciones: ['ISO 9001', 'NOM-026']
   },
   {
     id: '3',
     razon_social: 'Electro Materiales de Querétaro',
-    nombre_comercial: 'ElectroQRO'
+    nombre_comercial: 'ElectroQRO',
+    descripcion: 'Distribuidores certificados de material eléctrico de alta calidad. Expertos en soluciones eléctricas integrales.',
+    años_experiencia: 18,
+    rating: 4.7,
+    total_ventas: 6721,
+    tiempo_respuesta: '1-3 horas',
+    ubicacion: 'Querétaro, Querétaro',
+    certificaciones: ['ISO 9001', 'NOM-001']
   },
   {
     id: '4',
     razon_social: 'Plomería Industrial del Bajío',
-    nombre_comercial: 'PlomBajío'
+    nombre_comercial: 'PlomBajío',
+    descripcion: 'Soluciones completas en sistemas de plomería para proyectos residenciales, comerciales e industriales.',
+    años_experiencia: 25,
+    rating: 4.5,
+    total_ventas: 5432,
+    tiempo_respuesta: '4-8 horas',
+    ubicacion: 'León, Guanajuato',
+    certificaciones: ['ISO 9001', 'NOM-002']
   },
   {
     id: '5',
     razon_social: 'Herramientas Profesionales México',
-    nombre_comercial: 'HerramientasPro'
+    nombre_comercial: 'HerramientasPro',
+    descripcion: 'Importadores y distribuidores de herramientas profesionales de las mejores marcas internacionales.',
+    años_experiencia: 22,
+    rating: 4.9,
+    total_ventas: 9856,
+    tiempo_respuesta: '2-5 horas',
+    ubicacion: 'Ciudad de México',
+    certificaciones: ['ISO 9001', 'Distribuidor Autorizado']
   }
 ];
 
@@ -81,6 +116,67 @@ export const mockProducts = [
         id: '1',
         url: 'https://images.unsplash.com/photo-1597476689533-be5e5f2ed544?w=400',
         alt: 'Saco de cemento Portland'
+      }
+    ],
+    reviews: [
+      {
+        id: '1',
+        user_name: 'Carlos Mendoza',
+        rating: 5,
+        comment: 'Excelente calidad del cemento, lo he usado en múltiples proyectos y siempre da buenos resultados. La resistencia es muy buena.',
+        date: '2024-10-15',
+        verified_purchase: true
+      },
+      {
+        id: '2',
+        user_name: 'Ana García',
+        rating: 5,
+        comment: 'Muy buen producto, llegó en perfecto estado y el tiempo de entrega fue el prometido. Lo recomiendo ampliamente.',
+        date: '2024-10-08',
+        verified_purchase: true
+      },
+      {
+        id: '3',
+        user_name: 'Roberto Sánchez',
+        rating: 4,
+        comment: 'Buen cemento, cumple con las especificaciones. El precio es competitivo comparado con otros proveedores.',
+        date: '2024-09-28',
+        verified_purchase: true
+      },
+      {
+        id: '4',
+        user_name: 'María López',
+        rating: 5,
+        comment: 'Perfecto para mi proyecto de ampliación. La calidad es excelente y el servicio de CEMEX siempre es confiable.',
+        date: '2024-09-15',
+        verified_purchase: true
+      }
+    ],
+    faqs: [
+      {
+        id: '1',
+        question: '¿Cuál es el tiempo de fraguado de este cemento?',
+        answer: 'El tiempo de fraguado inicial es de aproximadamente 45 minutos y el fraguado final se alcanza en 10 horas bajo condiciones normales de temperatura (20°C).'
+      },
+      {
+        id: '2',
+        question: '¿Qué resistencia alcanza este cemento?',
+        answer: 'Este cemento CPC 30R alcanza una resistencia mínima de 30 MPa (300 kg/cm²) a los 28 días de curado, cumpliendo con la norma NOM-127-SCFI.'
+      },
+      {
+        id: '3',
+        question: '¿Cuánto rinde un saco de cemento?',
+        answer: 'Un saco de 50 kg rinde aproximadamente 33 litros de concreto. Para una mezcla estándar 1:2:3 (cemento:arena:grava), un saco alcanza para hacer aproximadamente 0.15 m³ de concreto.'
+      },
+      {
+        id: '4',
+        question: '¿Cómo debo almacenar el cemento?',
+        answer: 'Debe almacenarse en un lugar seco, protegido de la humedad y sobre tarimas de madera. No debe estar en contacto directo con el suelo. El cemento bien almacenado mantiene sus propiedades por hasta 3 meses.'
+      },
+      {
+        id: '5',
+        question: '¿Es apto para uso en clima frío?',
+        answer: 'Sí, este cemento puede usarse en clima frío, pero se recomienda proteger el concreto de las heladas durante las primeras 48 horas y mantener la temperatura de curado por encima de 5°C.'
       }
     ]
   },

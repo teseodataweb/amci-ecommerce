@@ -48,7 +48,7 @@ const CatalogHero: React.FC<CatalogHeroProps> = ({
       </div>
 
       {/* Contenido */}
-      <div className="container position-relative" style={{ zIndex: 2, paddingTop: '80px', paddingBottom: '100px' }}>
+      <div className="container position-relative" style={{ zIndex: 2, paddingTop: '100px', paddingBottom: '100px' }}>
         <div className="row">
           <div className="col-12">
             <div className="catalog-hero__content" style={{ textAlign: 'center' }}>

@@ -495,7 +495,7 @@ const About = () => {
         </div>
 
         {/* Contenido */}
-        <div className="container position-relative" style={{ zIndex: 2, paddingTop: '80px', paddingBottom: '100px' }}>
+        <div className="container position-relative" style={{ zIndex: 2, paddingTop: '100px', paddingBottom: '100px' }}>
           <div className="row">
             <div className="col-12">
               {/* Breadcrumb mejorado */}
@@ -1958,102 +1958,73 @@ const About = () => {
                   }}
                 ></div>
 
-                <div className="row align-items-center position-relative" style={{ zIndex: 2 }}>
-                  {/* Columna izquierda - Icono decorativo */}
-                  <div className="col-lg-3 mb-4 mb-lg-0 text-center text-lg-start">
+                <div className="position-relative" style={{ zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap', padding: '0 20px' }}>
+                  {/* Left content */}
+                  <div className="cta-content-wrapper">
                     <div
+                      className="cta-icon-box"
                       data-aos="zoom-in"
                       data-aos-duration="1000"
                       data-aos-delay="300"
+                    >
+                      <i className="fal fa-envelope-open-text"></i>
+                    </div>
+                    <div className="cta-text-box">
+                      <h3
+                        className="cta__title"
+                        data-aos="fade-right"
+                        data-aos-duration="1000"
+                        data-aos-delay="400"
+                      >
+                        ¿Tienes alguna pregunta?
+                      </h3>
+                      <p
+                        className="cta__description"
+                        data-aos="fade-right"
+                        data-aos-duration="1000"
+                        data-aos-delay="500"
+                      >
+                        Nuestro equipo está disponible para ayudarte con cualquier consulta sobre productos, proveedores o el proceso de compra.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right buttons */}
+                  <div
+                    className="cta__buttons"
+                    data-aos="fade-left"
+                    data-aos-duration="1000"
+                    data-aos-delay="600"
+                  >
+                    <Link
+                      href="/contact"
                       style={{
+                        background: '#ffffff',
+                        color: '#0446F0',
+                        padding: '14px 28px',
+                        borderRadius: '12px',
+                        fontSize: '15px',
+                        fontWeight: '600',
+                        textDecoration: 'none',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '120px',
-                        height: '120px',
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%)',
-                        backdropFilter: 'blur(20px)',
-                        borderRadius: '30px',
-                        border: '2px solid rgba(255, 255, 255, 0.3)',
-                        boxShadow: '0 15px 40px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.1)'
+                        gap: '8px',
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        border: 'none'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
                       }}
                     >
-                      <i className="fal fa-envelope-open-text" style={{ fontSize: '50px', color: '#ffffff' }}></i>
-                    </div>
-                  </div>
-
-                  {/* Columna central - Contenido */}
-                  <div className="col-lg-6 mb-4 mb-lg-0 text-center text-lg-start">
-                    <h3
-                      data-aos="fade-right"
-                      data-aos-duration="1000"
-                      data-aos-delay="400"
-                      style={{
-                        fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-                        fontWeight: '800',
-                        color: '#ffffff',
-                        marginBottom: '16px',
-                        lineHeight: '1.3',
-                        textShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
-                      }}
-                    >
-                      ¿Tienes alguna pregunta?
-                    </h3>
-                    <p
-                      data-aos="fade-right"
-                      data-aos-duration="1000"
-                      data-aos-delay="500"
-                      style={{
-                        fontSize: '16px',
-                        color: 'rgba(255, 255, 255, 0.95)',
-                        marginBottom: 0,
-                        lineHeight: '1.7',
-                        textShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
-                      }}
-                    >
-                      Nuestro equipo está disponible para ayudarte con cualquier consulta sobre productos, proveedores o el proceso de compra.
-                    </p>
-                  </div>
-
-                  {/* Columna derecha - Botón */}
-                  <div className="col-lg-3 text-center text-lg-end">
-                    <div
-                      data-aos="fade-left"
-                      data-aos-duration="1000"
-                      data-aos-delay="600"
-                    >
-                      <Link
-                        href="/contact"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '10px',
-                          background: '#ffffff',
-                          color: '#0446F0',
-                          padding: '16px 32px',
-                          borderRadius: '50px',
-                          fontSize: '16px',
-                          fontWeight: '700',
-                          textDecoration: 'none',
-                          boxShadow: '0 8px 30px rgba(255, 255, 255, 0.3)',
-                          transition: 'all 0.3s ease',
-                          border: '2px solid transparent'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)';
-                          e.currentTarget.style.boxShadow = '0 12px 40px rgba(255, 255, 255, 0.4)';
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                          e.currentTarget.style.boxShadow = '0 8px 30px rgba(255, 255, 255, 0.3)';
-                          e.currentTarget.style.background = '#ffffff';
-                        }}
-                      >
-                        <i className="fal fa-paper-plane" style={{ fontSize: '18px' }}></i>
-                        <span>Contáctanos</span>
-                      </Link>
-                    </div>
+                      <i className="fal fa-paper-plane"></i>
+                      Contáctanos
+                    </Link>
                   </div>
                 </div>
               </div>

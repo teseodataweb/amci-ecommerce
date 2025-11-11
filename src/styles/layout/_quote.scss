@@ -1,0 +1,677 @@
+// ============================================
+// QUOTE PAGE STYLES
+// ============================================
+
+@use '../utils' as *;
+
+// ============================================
+// QUOTE HERO ANIMATIONS
+// ============================================
+
+@keyframes particleFloatQuote1 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(30px, -30px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes particleFloatQuote2 {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-40px, 40px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes particleFloatQuote3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(20px, -50px) scale(1.2);
+    opacity: 0.5;
+  }
+}
+
+@keyframes quoteShapeFloat1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -30px) scale(1.05);
+  }
+}
+
+@keyframes quoteShapeFloat2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-25px, 25px) scale(1.08);
+  }
+}
+
+// ============================================
+// QUOTE HERO SECTION
+// ============================================
+
+.quote-hero {
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 100px;
+  padding-bottom: 60px;
+
+  @media #{$xs} {
+    min-height: 280px;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgb(30, 64, 175) 0%, rgb(13, 27, 62) 40%, rgb(0, 15, 40) 100%);
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  // Partículas pequeñas animadas
+  .quote-particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &-1 {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(78, 158, 255, 0.3) 0%, transparent 70%);
+      top: 20%;
+      left: 10%;
+      animation: particleFloatQuote1 8s ease-in-out infinite;
+    }
+
+    &-2 {
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(4, 70, 240, 0.2) 0%, transparent 70%);
+      bottom: 20%;
+      right: 15%;
+      animation: particleFloatQuote2 10s ease-in-out infinite;
+    }
+
+    &-3 {
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(78, 158, 255, 0.25) 0%, transparent 70%);
+      top: 50%;
+      left: 25%;
+      animation: particleFloatQuote3 7s ease-in-out infinite;
+    }
+  }
+
+  // Círculos decorativos grandes
+  .quote-shape {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &-1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      right: -80px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(78, 158, 255, 0.1) 100%);
+      animation: quoteShapeFloat1 6s ease-in-out infinite;
+
+      @media #{$xs} {
+        width: 150px;
+        height: 150px;
+        top: -50px;
+        right: -40px;
+      }
+    }
+
+    &-2 {
+      width: 250px;
+      height: 250px;
+      bottom: -70px;
+      left: -70px;
+      background: linear-gradient(135deg, rgba(30, 64, 175, 0.12) 0%, rgba(13, 27, 62, 0.1) 100%);
+      animation: quoteShapeFloat2 8s ease-in-out infinite;
+
+      @media #{$xs} {
+        width: 120px;
+        height: 120px;
+        bottom: -40px;
+        left: -40px;
+      }
+    }
+  }
+
+  &__content {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &__icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+
+    i {
+      font-size: 1.75rem;
+      color: white;
+    }
+
+    @media #{$xs} {
+      width: 50px;
+      height: 50px;
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  &__subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    max-width: 700px;
+    margin: 0 auto;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  // Breadcrumb moderno (matching product detail page)
+  .breadcrumb-modern {
+    animation: breadcrumbSlideIn 0.8s ease-out forwards;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    @media #{$xs} {
+      padding: 0 15px;
+    }
+  }
+
+  .breadcrumb-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .breadcrumb-item-link {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+    transition: all 0.3s ease;
+    position: relative;
+
+    i {
+      font-size: 15px;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.3s ease;
+    }
+
+    &:hover {
+      color: #ffffff;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  .breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 10px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .breadcrumb-current {
+    color: #ffffff;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    i {
+      font-size: 15px;
+    }
+  }
+
+  .breadcrumb-modern:hover .breadcrumb-separator {
+    opacity: 1;
+  }
+}
+
+@keyframes breadcrumbSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// QUOTE FORM SECTION
+// ============================================
+
+.quote-form-section {
+  padding: 80px 0;
+  background: #F8FAFC;
+
+  @media #{$xs} {
+    padding: 60px 0;
+  }
+}
+
+// Product Info Box
+.quote-product-info {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  border: 2px solid #93C5FD;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+
+  @media #{$xs} {
+    padding: 20px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #93C5FD;
+
+    i {
+      font-size: 1.75rem;
+      color: #0343E7;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1E293B;
+      margin: 0;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #64748B;
+      letter-spacing: 0.5px;
+    }
+
+    .value {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: #0F172A;
+    }
+  }
+}
+
+// Form Card
+.quote-form-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  @media #{$xs} {
+    padding: 24px;
+  }
+}
+
+.quote-form-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #E2E8F0;
+
+  i {
+    font-size: 1.5rem;
+    color: #0343E7;
+  }
+
+  h3 {
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+  }
+
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
+}
+
+.quote-form-group {
+  margin-bottom: 24px;
+
+  label {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 8px;
+
+    .required {
+      color: #EF4444;
+      margin-left: 4px;
+    }
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #1E293B;
+    background: white;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: #94A3B8;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #0343E7;
+      box-shadow: 0 0 0 4px rgba(3, 67, 231, 0.1);
+    }
+
+    &:disabled {
+      background: #F1F5F9;
+      cursor: not-allowed;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+}
+
+// Form Footer
+.quote-form-footer {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 2px solid #E2E8F0;
+}
+
+.quote-form-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    border: 2px solid #CBD5E1;
+    border-radius: 6px;
+    background: white;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #0343E7;
+      background: #EFF6FF;
+    }
+
+    &:checked {
+      background: linear-gradient(135deg, #0343E7 0%, #0338C0 100%);
+      border-color: #0343E7;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2.5px 2.5px 0;
+      }
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(3, 67, 231, 0.1);
+    }
+  }
+
+  label {
+    font-size: 0.9375rem;
+    color: #475569;
+    line-height: 1.6;
+    cursor: pointer;
+
+    a {
+      color: #0343E7;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #0338C0;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.quote-form-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  @media #{$xs} {
+    flex-direction: column;
+  }
+
+  button {
+    flex: 1;
+    min-width: 180px;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    i {
+      font-size: 1.125rem;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    @media #{$xs} {
+      min-width: 100%;
+    }
+  }
+
+  .btn-quote-primary {
+    background: linear-gradient(135deg, #0343E7 0%, #0338C0 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(3, 67, 231, 0.3);
+
+    &:hover:not(:disabled) {
+      box-shadow: 0 6px 24px rgba(3, 67, 231, 0.4);
+      transform: translateY(-2px);
+    }
+  }
+
+  .btn-quote-secondary {
+    background: linear-gradient(135deg, #64748B 0%, #475569 100%);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 16px rgba(100, 116, 139, 0.3);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+      box-shadow: 0 6px 24px rgba(100, 116, 139, 0.4);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// ============================================
+// INFO CARDS
+// ============================================
+
+.quote-info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+
+  @media #{$md} {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quote-info-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #0343E7;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(3, 67, 231, 0.15);
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+
+    i {
+      font-size: 1.75rem;
+      color: #0343E7;
+    }
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.6;
+  }
+}

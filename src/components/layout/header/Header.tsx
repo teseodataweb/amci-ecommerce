@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 const Header = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [showContactInfo, setShowContactInfo] = useState(false);
   const { user, profile, signOut } = useAuth();
   const { getCartCount } = useCart();
   const router = useRouter();
@@ -15,6 +16,10 @@ const Header = () => {
 
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
+  };
+
+  const handleToggleContactInfo = () => {
+    setShowContactInfo(!showContactInfo);
   };
 
   const handleLogout = async () => {
@@ -43,6 +48,7 @@ const Header = () => {
   useEffect(() => {
     const handleResizeHeader = (): void => {
       setToggleMenu(false);
+      setShowContactInfo(false);
       setOpenSubMenu(null);
     };
 
@@ -97,8 +103,9 @@ const Header = () => {
 
   return (
     <Fragment>
+      {/* Offcanvas para el Menú de Navegación (Hamburguesa) */}
       <div className="fix">
-        <div className={(toggleMenu ? " info-open" : " ") + " offcanvas__info"}>
+        <div className={(toggleMenu ? " info-open" : " ") + " offcanvas__menu"}>
           <div className="offcanvas__wrapper">
             <div className="offcanvas__content">
               <div className="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
@@ -187,6 +194,33 @@ const Header = () => {
                   </nav>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className={(toggleMenu ? " overlay-open" : " ") + " offcanvas__overlay"}
+        onClick={() => setToggleMenu(false)}
+      ></div>
+
+      {/* Offcanvas para Información de Contacto (Botón Flotante) */}
+      <div className="fix">
+        <div className={(showContactInfo ? " info-open" : " ") + " offcanvas__info"}>
+          <div className="offcanvas__wrapper">
+            <div className="offcanvas__content">
+              <div className="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
+                <div className="offcanvas__logo">
+                  <AmciLogo size="medium" variant="full" />
+                </div>
+                <div className="offcanvas__close">
+                  <button
+                    aria-label="Close"
+                    onClick={() => setShowContactInfo(false)}
+                  >
+                    <i className="fal fa-times"></i>
+                  </button>
+                </div>
+              </div>
               <div className="offcanvas__contact mt-30 mb-20">
                 <h4>Información de Contacto</h4>
                 <ul>
@@ -263,8 +297,8 @@ const Header = () => {
         </div>
       </div>
       <div
-        className={(toggleMenu ? " overlay-open" : " ") + " offcanvas__overlay"}
-        onClick={() => setToggleMenu(false)}
+        className={(showContactInfo ? " overlay-open" : " ") + " offcanvas__overlay offcanvas__overlay-contact"}
+        onClick={() => setShowContactInfo(false)}
       ></div>
       <div className="offcanvas__overlay-white"></div>
       <header>
@@ -278,7 +312,7 @@ const Header = () => {
             <div className="row align-items-center">
               <div className="col-xl-2 col-lg-2 col-6">
                 <div className="header__logo">
-                  <AmciLogo size="medium" variant={scrolled ? 'full' : 'white'} />
+                  <AmciLogo size="medium" variant="white" />
                 </div>
               </div>
               <div className="col-xl-8 col-lg-8 d-none d-lg-block">
@@ -364,17 +398,7 @@ const Header = () => {
               </div>
               <div className="col-xl-2 col-lg-2 col-6">
                 <div className="header__right d-flex align-items-center justify-content-end">
-                  <div className="header__cart me-3">
-                    <Link href="/carrito" className="cart-icon position-relative">
-                      <i className="fal fa-shopping-cart fs-4"></i>
-                      {cartCount > 0 && (
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                          {cartCount}
-                        </span>
-                      )}
-                    </Link>
-                  </div>
-                  <div className="header__btn d-none d-xl-block">
+                  <div className="header__btn d-none d-lg-block me-3">
                     <Link
                       href="/catalogo"
                       className="btn"
@@ -408,6 +432,25 @@ const Header = () => {
                       VER CATÁLOGO
                     </Link>
                   </div>
+                  <div className="header__cart me-3">
+                    <Link href="/carrito" className="cart-icon position-relative">
+                      <i className="fal fa-shopping-cart fs-4"></i>
+                      {cartCount > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {cartCount}
+                        </span>
+                      )}
+                    </Link>
+                  </div>
+                  <div className="header__hamburger d-lg-none">
+                    <button
+                      className="hamburger-btn"
+                      aria-label="Toggle menu"
+                      onClick={handleToggleMenu}
+                    >
+                      <i className="fal fa-bars fs-4"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -416,11 +459,11 @@ const Header = () => {
       </header>
 
       {/* Botón flotante de información - Diseño innovador */}
-      <div className="floating-info-btn">
+      <div className={`floating-info-btn ${showContactInfo ? 'hide-fab' : ''}`}>
         <button
           className="fab-button"
           aria-label="Información de contacto"
-          onClick={handleToggleMenu}
+          onClick={handleToggleContactInfo}
         >
           <i className="fas fa-address-card"></i>
           <span className="fab-tooltip">Ver información</span>
@@ -443,6 +486,38 @@ const Header = () => {
         }
         .cart-icon {
           color: inherit;
+        }
+
+        /* Botón hamburguesa para mobile */
+        :global(.hamburger-btn) {
+          background: none;
+          border: none;
+          color: inherit;
+          padding: 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: transform 0.3s ease;
+        }
+
+        :global(.hamburger-btn:hover) {
+          transform: scale(1.1);
+        }
+
+        :global(.hamburger-btn i) {
+          color: inherit;
+        }
+
+        /* Estilos para el botón hamburguesa cuando el header es transparente */
+        .header__transparent:not(.sticky) :global(.hamburger-btn i) {
+          color: #ffffff !important;
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos para el botón hamburguesa cuando el header tiene scroll */
+        .header__transparent.sticky :global(.hamburger-btn i) {
+          color: #ffffff !important;
         }
 
         /* Header transparente sobre Hero - Links blancos */
@@ -555,6 +630,19 @@ const Header = () => {
           background: rgba(4, 70, 240, 0.05) !important;
         }
 
+        /* IMPORTANTE: Asegurar que el submenu tenga texto oscuro también cuando hay scroll (sticky) */
+        .header__transparent.sticky :global(.main-menu ul li .submenu li a),
+        .header__transparent.sticky :global(.main-menu ul li .submenu li button) {
+          color: #333333 !important;
+          text-shadow: none !important;
+        }
+
+        .header__transparent.sticky :global(.main-menu ul li .submenu li a:hover),
+        .header__transparent.sticky :global(.main-menu ul li .submenu li button:hover) {
+          color: #0446F0 !important;
+          background: rgba(4, 70, 240, 0.05) !important;
+        }
+
         :global(.badge) {
           font-size: 11px;
           padding: 3px 6px;
@@ -566,6 +654,14 @@ const Header = () => {
           bottom: 120px;
           right: 30px;
           z-index: 9999;
+          transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+
+        :global(.floating-info-btn.hide-fab) {
+          opacity: 0;
+          visibility: hidden;
+          transform: translateX(100px);
+          pointer-events: none;
         }
 
         :global(.fab-button) {

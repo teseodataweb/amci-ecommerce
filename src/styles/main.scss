@@ -8,6 +8,7 @@
 @forward 'components/carousel';
 @forward 'components/animation';
 @forward 'components/preloader';
+@forward 'components/cta';
 @forward 'layout/meanmenu';
 @forward 'layout/header';
 @forward 'layout/hero';
@@ -33,6 +34,8 @@
 @forward 'layout/fact';
 @forward 'layout/footer';
 @forward 'layout/catalog';
+@forward 'layout/product-detail';
+@forward 'layout/quote';
 @import "./components/spacing";
 @import "./components/back-to-top";
 @import "./utils/my-custom";

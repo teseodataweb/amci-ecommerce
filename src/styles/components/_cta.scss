@@ -1,0 +1,153 @@
+@use '../utils' as *;
+
+// ============================================
+// CTA RESPONSIVE STYLES
+// ============================================
+
+.cta-content-wrapper {
+  flex: 1 1 400px;
+  text-align: left;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  // Solo cambios en móvil/tableta
+  @media (max-width: 991px) {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+}
+
+.cta-icon-box {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  i {
+    font-size: 40px;
+    color: #ffffff;
+  }
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+
+    i {
+      font-size: 35px;
+    }
+  }
+}
+
+.cta-text-box {
+  flex: 1;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+
+.cta__title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff !important;
+  margin: 0;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  line-height: 1.05 !important;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+}
+
+.cta__description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9) !important;
+  margin: 0;
+  line-height: 1.6;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+.cta__buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.cta-button-primary {
+  background: #ffffff !important;
+  color: #0446F0 !important;
+  padding: 14px 28px;
+  border-radius: 12px;
+  fontSize: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    padding: 16px 28px;
+  }
+}
+
+// Estilos para el botón secundario en CTAs (si existe)
+.cta-button-secondary {
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 14px 28px;
+  border-radius: 12px;
+  fontSize: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid #ffffff;
+
+  // Solo cambios en móvil
+  @media (max-width: 991px) {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    padding: 16px 28px;
+  }
+}
